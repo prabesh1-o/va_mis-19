@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="mis_sim_management">
+        <field name="name">MIS Sim</field>
+        <field name="description">Mis Sim Access</field>
+        <field name="parent_id" ref="mis_device_management_parent" />
+    </record>
+
+    <!--PRIVILEGE-->
+    <record id="privilege_mis_sim_user" model="res.groups.privilege">
+        <field name="name">MIS Sim Access</field>
+        <field name="category_id" ref="mis_sim_management"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- User: Own Documents Only -->
+    <record id="group_mis_sim_user" model="res.groups">
+        <field name="name">User: Read Only</field>
+        <field name="privilege_id" ref="privilege_mis_sim_user" />
+        <field name="comment">The user will have read only access </field>
+    </record>
+
+    <!-- manager: without delete option -->
+    <record id="group_mis_sim_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="privilege_mis_sim_user" />
+        <field name="implied_ids" eval="[(4, ref('group_mis_sim_user'))]" />
+        <field name="comment">The user will have create,read,update access to all records</field>
+    </record>
+
+    <!-- admin: all access rights -->
+    <record id="group_mis_sim_admin" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="privilege_id" ref="privilege_mis_sim_user" />
+        <field name="implied_ids" eval="[(4, ref('group_mis_sim_manager'))]" />
+        <field name="comment">The user will have all access to all records</field>
+    </record>
+
+</odoo>

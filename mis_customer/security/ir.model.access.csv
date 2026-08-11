@@ -1,0 +1,8 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_mis_customer_user,mis.customer.user,model_res_partner,group_mis_customer_user,1,0,0,0
+access_mis_customer_manager,mis.customer.manager,model_res_partner,group_mis_customer_manager,1,1,1,0
+access_mis_customer_admin,mis.customer.admin,model_res_partner,group_mis_customer_admin,1,1,1,1
+
+access_mis_customer_industry_user,mis.customer.industry.user,model_mis_customer_industry,group_mis_customer_user,1,0,0,0
+access_mis_customer_industry_manager,mis.customer.industry.manager,model_mis_customer_industry,group_mis_customer_manager,1,1,1,0
+access_mis_customer_industry_admin,mis.customer.industry.admin,model_mis_customer_industry,group_mis_customer_admin,1,1,1,1

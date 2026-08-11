@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="mis_products.mis_product_parent_menu" name="Products" parent="mis_services.mis_services_menu_menu" sequence="2"/>
+</odoo>

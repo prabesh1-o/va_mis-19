@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================= -->
+    <!-- Portal Home -->
+    <!-- ================================================= -->
+    <template id="customer_portal_my_home_devices"
+              inherit_id="portal.portal_my_home"
+              name="Customer Portal"
+              customize_show="True">
+
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+
+            <div class="my-3">
+                <button type="button"
+                        class="btn btn-primary js_open_customer_portal"
+                        id="custom_open_portal_btn">
+                    Open Customer Portal
+                </button>
+
+                <div class="mt-3">
+                    <h4>Portal Login</h4>
+                    <hr/>
+
+                    <a href="/my/portal/security">
+                        <i class="fa fa-pencil me-1"/>
+                        Edit Portal Settings
+                    </a>
+                </div>
+
+            </div>
+
+        </xpath>
+
+    </template>
+
+
+    <!-- ================================================= -->
+    <!-- Custom Portal Security Page -->
+    <!-- ================================================= -->
+    <template id="customer_portal_my_security">
+
+        <t t-call="portal.portal_layout">
+
+            <t t-set="my_details" t-value="True"/>
+
+            <div class="o_portal_security_body">
+
+                <t t-if="success">
+                    <div class="alert alert-success">
+                        Credentials Saved Successfully
+                    </div>
+                </t>
+
+                <t t-if="not success">
+
+                    <h3>Add Credentials</h3>
+
+                    <t t-if="failure">
+                        <div class="alert alert-danger">
+                            <t t-esc="error_message"/>
+                        </div>
+                    </t>
+
+                    <form action="/my/portal/security"
+                          method="post"
+                          class="oe_portal_credentails_form">
+
+                        <input type="hidden"
+                               name="csrf_token"
+                               t-att-value="request.csrf_token()"/>
+
+                        <div class="mb-3">
+                            <label>Username</label>
+
+                            <input type="text"
+                                   name="username"
+                                   class="form-control"
+                                   required="required"/>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Password</label>
+
+                            <input type="password"
+                                   name="password"
+                                   class="form-control"
+                                   required="required"/>
+                        </div>
+
+                        <button class="btn btn-secondary"
+                                type="submit">
+                            Save Credentials
+                        </button>
+
+                    </form>
+
+                </t>
+
+            </div>
+
+        </t>
+
+    </template>
+
+</odoo>

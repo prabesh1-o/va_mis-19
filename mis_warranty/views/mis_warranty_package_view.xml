@@ -1,0 +1,117 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="mis_warranty_package_kanban">
+            <field name="name">mis.warranty.package.kanban</field>
+            <field name="model">mis.warranty.package</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban o_emphasize_colors">
+                    <field name="name"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="card">
+                            <div t-att-class="'oe_kanban_card oe_kanban_global_click o_kanban_color_' + record.color.value">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title text-dark">
+                                                <h2>
+                                                    <field name="name"/>
+                                                </h2>
+                                            </strong>
+                                            <h4>
+                                                <i>
+                                                    <field name="warranty_type"/>
+                                                </i>
+                                            </h4>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_bottom">
+                                        <b>
+                                            <field name="warranty_period_with_type"/>
+                                        </b>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                    <div class="o_kanban_slides_card_manage_pane p-4">
+                                        <t t-if="widget.deletable">
+                                            <div role="menuitem">
+                                                <a type="delete">Delete</a>
+                                            </div>
+                                        </t>
+                                        <div role="menuitem">
+                                            <a role="menuitem" type="open">View</a>
+                                        </div>
+                                        <div role="separator" class="dropdown-divider"></div>
+                                    </div>
+                                    <div role="menuitem" aria-haspopup="true" class="o_no_padding_kanban_colorpicker">
+                                        <ul class="oe_kanban_colorpicker" data-field="color" role="popup" />
+                                    </div>
+                                </div>
+                                <a class="o_kanban_manage_toggle_button o_dropdown_kanban" href="#" groups="base.group_user">
+                                    <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                </a>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_warranty_package_list">
+            <field name="name">mis.warranty.package.list</field>
+            <field name="model">mis.warranty.package</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="warranty_type"/>
+                    <field name="warranty_period_with_type"/>
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_warranty_package_form">
+            <field name="name">mis.warranty.package.form</field>
+            <field name="model">mis.warranty.package</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet name="body">
+                        <group>
+                            <group name="body">
+                                <field name="name"/>
+                                <field name="warranty_type"/>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="warranty_period"/>
+                                </group>
+                                <group>
+                                    <field name="warranty_period_type" nolabel="1"/>
+                                </group>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Description" string="Description">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!-- Chatter -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_warranty_package_action_window">
+            <field name="name">Warranty Packages</field>
+            <field name="res_model">mis.warranty.package</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+        <menuitem name="Warranty Packages" id="mis_warranty_packages_menu_item" parent="warranty_menu_item" action="mis_warranty_package_action_window" sequence="2"/>
+
+    </data>
+</odoo>

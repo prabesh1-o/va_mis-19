@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="mis_services_menu_list">
+            <field name="name">mis.services.menu.list</field>
+            <field name="model">mis.services.menu</field>
+            <field name="arch" type="xml">
+                <list string="Service Menus">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="mis_services_menu_form" model="ir.ui.view">
+            <field name="name">mis.services.menu.form</field>
+            <field name="model">mis.services.menu</field>
+            <field name="arch" type="xml">
+                <form string="Service Menu">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" class="o_text_overflow" placeholder="e.g. Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                    </sheet>
+                    <!-- Chatter -->
+                    <chatter>
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </chatter>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_ticket_menu_kanban">
+            <field name="name">mis.services.menu.kanban</field>
+            <field name="model">mis.services.menu</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban o_emphasize_colors">
+                    <field name="name"/>
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="card">
+                            <!-- <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click o_has_icon oe_kanban_content oe_kanban_card"> -->
+                            <div t-attf-class="oe_kanban_color_#{record.color.raw_value} oe_kanban_global_click o_has_icon oe_kanban_content oe_kanban_card">
+                                <div class="o_project_kanban_main ">
+                                    <div class="o_kanban_card_content mw-100">
+                                        <div class="o_kanban_primary_left">
+
+                                            <div class="o_primary">
+                                                <span class="o_text_overflow" t-att-title="record.name.value">
+                                                    <t t-esc="record.name.value"/>
+                                                </span>
+                                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                        <div class="o_kanban_slides_card_manage_pane p-4">
+                                            <t t-if="widget.deletable">
+                                                <div role="menuitem">
+                                                    <a type="delete">Delete</a>
+                                                </div>
+                                            </t>
+                                            <div role="menuitem">
+                                                <a role="menuitem" type="open">View</a>
+                                            </div>
+                                            <div role="separator" class="dropdown-divider"></div>
+                                        </div>
+                                        <div role="menuitem" aria-haspopup="true" class="o_no_padding_kanban_colorpicker">
+                                            <ul class="oe_kanban_colorpicker" data-field="color" role="popup" />
+                                        </div>
+                                    </div>
+                                    <a class="o_kanban_manage_toggle_button o_dropdown_kanban" href="#" groups="base.group_user">
+                                        <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                    </a>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-3">
+                                    <div class="oe_kanban_bottom_left">
+                                        <div class="o_project_kanban_boxes d-flex align-items-baseline">
+                                            <a class="o_project_kanban_box" type="object">
+                                                <div>
+                                                    <span class="o_value">
+                                                        <field name="service_count"/>
+                                                    </span>
+                                                    <span class="o_label ms-1">Services</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="mis_services_menu_serch" model="ir.ui.view">
+            <field name="name">mis.services.menu.search</field>
+            <field name="model">mis.services.menu</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Service" />
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="mis_services_menu_action_window">
+            <field name="name">Service Menu</field>
+            <field name="res_model">mis.services.menu</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+        <menuitem name="Services &amp; Products" id="mis_services_menu_menu" parent="va_mis.mis_root_menu" sequence="4">
+            <menuitem name="Services" id="mis_services_menuitem" action="mis_services_menu_action_window" sequence="1"/>
+        </menuitem>
+    </data>
+</odoo>

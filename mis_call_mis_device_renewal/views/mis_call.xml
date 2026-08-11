@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_inherit_call_renewal" model="ir.ui.view">
+        <field name="name">mis_call.inherits.form.mis_call</field>
+        <field name="model">mis.call</field>
+        <field name="inherit_id" ref="mis_call.mis_call_view_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//sheet[@name='call_sheet']" position="before">
+                    <header>
+                        <div class="d-flex justify-content-between">
+                            <button name="action_create_renewal"
+                                    type="object"
+                                    class="oe_highlight"
+                                    string="Create Renewal"
+                                    confirm="Do you want to create a renewal?"
+                                    invisible="category != 'renewal' or has_renewal == True"
+                                    groups="va_mis.group_mis_operation"/>
+                            <button type="object"
+                                    string="Renewal created"
+                                    widget="statusbar"
+                                    name="action_view_renewal"
+                                    class="oe_stat_button"
+                                    icon="fa-microchip"
+                                    invisible="category != 'renewal' or has_renewal == False"
+                                    groups="va_mis.group_mis_operation"/>
+                        </div>
+                    </header>
+                </xpath>
+
+                <xpath expr="//group[@name='Call detail']" position="after">
+                    <group string="Renewal detail"
+                           invisible="category != 'renewal'"
+                           groups="va_mis.group_mis_operation">
+                        <field name="customer_id" required="category == 'renewal'"/>
+                        <field name="has_renewal" invisible="1"/>
+                        <field name="renewal_tag_ids" widget="many2many_tags"/>
+                        <field name="user_id" string="Assignee"/>
+                    </group>
+                </xpath>
+
+                <xpath expr="//page[@name='Description']" position="before">
+                    <page name="devices"
+                          string="Devices"
+                          invisible="category != 'renewal'"
+                          groups="va_mis.group_mis_operation">
+                        <field name="device_ids"
+                               required="category == 'renewal'"
+                               domain="[('customer_id','=', customer_id)] if customer_id else []">
+                            <list editable="bottom">
+                                <field name="company_currency_id" invisible="1"/>
+                                <field name="imei_no"/>
+                                <field name="device_model_id"/>
+                                <field name="expiration_time"/>
+                                <field name="renewal_package_id"/>
+                                <field name="renewal_price" widget="monetary" options="{'currency_field': 'company_currency_id'}" sum="Total Renewal Price amount"/>
+                                <field name="payment_date"/>
+                                <field name="tax_id"/>
+                                <field name="price_subtotal" widget="monetary" options="{'currency_field': 'company_currency_id'}" sum="Total amount"/>
+                                <field name="installed_date" optional="hide"/>
+                                <field name="state" optional="hide"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

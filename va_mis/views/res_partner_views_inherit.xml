@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_inherit_mis_list_view" model="ir.ui.view">
+        <field name="name">res.partner.inherits.list.va_mis.module</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='display_name']" position="after">
+                    <field name="username"/>
+                </xpath>
+                <xpath expr="//field[@name='country_id']" position="after">
+                    <field name="is_billed_customer" string="Billed Customer" optional="hide"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="res_partner_inherit_mis_module" model="ir.ui.view">
+        <field name="name">res.partner.inherits.form.va_mis.module</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//span[@name='address_name']" position="before">
+                    <field name="username"/>
+                </xpath>
+                <xpath expr="//field[@name='function']" position="before">
+                    <field name="is_customer" string="Customer"/>
+                    <field name="is_billed_customer" string="Billed Customer"/>
+                </xpath>
+                <xpath expr="//page[@name='internal_notes']" position="before">
+                    <page name="agreement" string="Agreement">
+                        <field name="agreement" widget="pdf_viewer"/>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="res_partner_inherit_va_mis_filter" model="ir.ui.view">
+        <field name="name">res.partner.inherits.search.va_mis</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='email']" position="before">
+                    <field name="username" string="Username" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

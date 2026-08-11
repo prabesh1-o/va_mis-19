@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="mis_renewal_list">
+        <field name="name">mis.device.renewal.list</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="arch" type="xml">
+            <list string="Renewal" multi_edit="1">
+                <field name="company_currency_id" invisible="1"/>
+                <field name="customer_ids" widget="many2many_tags" />
+                <field name="device_ids" widget="many2many_tags" domain="[('customer_id','in', customer_ids)] if customer_ids else []"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="employee_ids" widget="many2many_avatar_user"/>
+                <field name="total_renewal_amount" string="Renewal Amount" sum="Total Renewal Amount"/>
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="quick_create_renewal_form">
+        <field name="name">mis.device.renewal.quick.form</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="arch" type="xml">
+            <form string="Form">
+                <group>
+                    <field name="customer_ids" widget="many2many_tags" />
+                    <field name="device_ids" widget="many2many_tags" domain="[('customer_id','in', customer_ids)] if customer_ids else []"/>
+                    <field name="employee_ids" widget="many2many_avatar_user"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="mis_device_renewal_kanban_view">
+        <field name="name">mis.device.renewal.kanban.view</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column o_kanban_project_tasks" on_create="quick_create" quick_create_view="mis_device_renewal.quick_create_renewal_form" sample="1">
+                <field name="stage_id" options='{"group_by_tooltip": {"requirements": "Requirements"}}'/>
+                <progressbar field="stage_id" colors='{}'/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card oe_kanban_global_click border-2 rounded-3 mt-2">
+                            <div class="oe_kanban_content ">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title text-dark">
+                                            <field name="customer_ids"/>
+                                        </strong>
+                                    </div>
+                                    <t t-if="record.renewal_ticket_count.raw_value > '1'">
+                                        <small>
+                                            <span class="h5 text-info">
+                                                <i class="fa fa-check-square-o" title="Ticket Count" aria-hidden="true"/>
+                                                <field name="renewal_ticket_count"/>
+                                            </span>
+                                        </small>
+                                    </t>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                    <div class="text-muted">
+                                        <field name="company_currency_id" invisible="1"/>
+                                        Amount: <field name="total_renewal_amount" widget="monetary"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom " t-if="!selection_mode">
+                                    <div class="oe_kanban_bottom_left">
+                                        <t t-if="record.renewal_device_count.raw_value">
+                                            <span class="text-muted">
+                                                <small>
+                                                    <field name="renewal_device_count"/>
+                                                    <span> Devices</span>
+                                                </small>
+                                            </span>
+                                        </t>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right" t-if="!selection_mode">
+                                        <span class="text-muted">
+                                            <small>
+                                                <field name="create_date" widget="date"/>
+                                            </small>
+                                        </span>
+                                        <t t-if="record.employee_ids.raw_value">
+                                            <span class="p-1">
+                                                <field name="employee_ids" widget="many2many_avatar_user"/>
+                                            </span>
+                                        </t>
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="mis_renewal_form" model='ir.ui.view'>
+        <field name="name">mis.device.renewal.form</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="arch" type="xml">
+            <form string="Renewal">
+                <header>
+                    <button name="btn_create_invoice" type="object" confirm="Do you want to create invoice?" class="oe_highlight">Create Invoice</button>
+                    <button name="%(action_renewal_device_update_wizard)d" type="action">Break Renewal Card</button>
+                    <button name="action_pi_send" type="object">Send Pro Forma Invoice</button>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box" invisible="invoice_count == 0">
+                        <button name="action_view_renewal" type="object" class="oe_stat_button" context="{'xml_id':'account.action_move_out_invoice_type'}" icon="fa-pencil-square-o">
+                            <field name="invoice_count" widget="statinfo" />
+                        </button>
+                    </div>
+                    <group>
+                        <field name="invoice_count" invisible="1"/>
+                        <field name="customer_ids" widget="many2many_tags" domain="[('device_ids','in', device_ids)] if device_ids else []"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="employee_ids" widget="many2many_avatar_user"/>
+                        <field name="is_expiry_trigger" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page name="devices" string="Devices">
+                            <field name="device_ids" domain="[('customer_id','in', customer_ids)] if customer_ids else []">
+                                <list editable="bottom">
+                                    <field name="company_currency_id" invisible="1"/>
+                                    <field name="imei_no" readonly="1"/>
+                                    <field name="device_model_id" optional="hide"/>
+                                    <field name="expiration_time" readonly="1"/>
+                                    <field name="exp_expiration_date" readonly="expiry_date_type == 'automatic'"/>
+                                    <field name="expiry_date_type"/>
+                                    <field name="renewal_package_id" readonly="expiry_date_type == 'manual'"/>
+                                    <field name="grace_period_id"/>
+                                    <field name="renewal_price" widget="monetary" string="Package Price"/>
+                                    <field name="current_renewal_price" widget="monetary" string="Renewal Price"/>
+                                    <field name="payment_date"/>
+                                    <field name="tax_id"/>
+                                    <field name="tax_amount" widget="monetary" optional="hide"/>
+                                    <field name="price_subtotal" widget="monetary" readonly="0"/>
+                                    <field name="installed_date" optional="hide"/>
+                                    <field name="state" optional="hide"/>
+                                </list>
+                            </field>
+                            <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="renewal_total">
+                                    <field name="company_currency_id" invisible="1"/>
+                                    <label for="total_untaxed_amount" string="Untaxed amount"/>
+                                    <strong>
+                                        <field name="total_untaxed_amount" widget="monetary"/>
+                                    </strong>
+                                    <field name="tax_amount"/>
+                                    <label for="total_renewal_amount" string="Total"/>
+                                    <h5>
+                                        <strong>
+                                            <field name="total_renewal_amount" widget="monetary"/>
+                                        </strong>
+                                    </h5>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Chatter -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="mis_device_renewal_graph" model="ir.ui.view">
+        <field name="name">mis.device.renewal.graph</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="arch" type="xml">
+            <graph string="Renewal" sample="1">
+                <field name="customer_ids"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="mis_device_renewal_search" model="ir.ui.view">
+        <field name="name">mis.device.renewal.search</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="customer_ids" string="Customer"/>
+                <field name="device_ids" string="Device Imei"/>
+                <filter name="create_date" string="Created Today" domain="[('create_date','&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]" />
+                <filter name="last_updated_date" string="Updated Today" domain="[('write_date','&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]" />
+                <separator/>
+                <filter invisible="1" string="Late Activities" name="activities_overdue" domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter invisible="1" string="Today Activities" name="activities_today" domain="[('my_activity_date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter invisible="1" string="Future Activities" name="activities_upcoming_all" domain="[('my_activity_date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="mis_active_renewal_action">
+        <field name="name">Renewals</field>
+        <field name="res_model">mis.device.renewal</field>
+        <field name="view_mode">kanban,list,graph,form</field>
+    </record>
+
+    <menuitem id="mis_renewal_menu" name="Renewal" parent="mis_device.device_category_menu_item" sequence="3">
+        <menuitem id="active_renewal_menu" name="Renewals" action="mis_active_renewal_action" sequence="1"/>
+    </menuitem>
+
+</odoo>

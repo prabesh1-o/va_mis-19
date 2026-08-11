@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="renewal_pi_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <main>
+                    <t t-set="today" t-value="datetime.datetime.today().strftime('%m/%d/%Y')" />
+                    <t t-foreach="docs" t-as="doc">
+                        <t t-value="doc.with_context(lang=doc.customer_ids.lang)" />
+                        <div class="page">
+                            <div class="oe_structure" />
+                            <strong>
+                                <span t-field="doc.customer_ids" />
+                                <br />
+                                <span t-field="doc.customer_ids.street" />
+                                <span
+                                    t-if="doc.customer_ids.street2 and doc.customer_ids.street != doc.customer_ids.street2"
+                                    t-field="doc.customer_ids.street2" />
+                                <br />
+                                <span t-field="doc.customer_ids.city" />
+                                <br />
+                                <span t-field="doc.customer_ids.country_id.name" />
+                            </strong>
+                            <br />
+                            <div class="text-end">
+                                <strong>
+                                    <span>Issue Date: </span>
+                                </strong>
+                                <span t-esc="today" />
+                            </div>
+                            <br />
+                            <h5>
+                                <span>Pro-Forma Invoice # </span>
+                                <span t-field="doc.name" />
+                            </h5>
+                            <table class="table table-sm o_main_table table-borderless mt-4">
+                                <thead style="display: table-row-group">
+                                    <tr>
+                                        <th name="th_device" class="text-start">Device</th>
+                                        <th name="th_label" class="text-start">Label</th>
+                                        <t
+                                            t-if="(doc.stage_id.is_expiry_date_renewal_pi)">
+                                            <th name="th_expiry_date" class="text-end">Expiration
+                                                Date</th>
+                                        </t>
+                                        <th name="th_renewalprice" class="text-end">Renewal Price</th>
+                                        <th name="th_tax" class="text-end">Tax</th>
+                                        <th name="th_tax_amt" class="text-end">Tax Amount</th>
+                                        <th name="th_total" class="text-end">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="pi_tbody">
+                                    <t t-set="total_untaxed" t-value="0" />
+                                    <t t-set="total_tax" t-value="0" />
+                                    <t t-set="total_amount" t-value="0" />
+
+                                    <t t-foreach="doc.device_ids" t-as="device">
+                                        <t t-set="total_untaxed"
+                                            t-value="total_untaxed + device.renewal_price" />
+                                        <t t-set="total_tax" t-value="total_tax + device.tax_amount" />
+                                        <t t-set="total_amount"
+                                            t-value="total_amount + device.price_subtotal" />
+
+                                        <tr>
+                                            <td name="td_device">
+                                                <strong>
+                                                    <span t-field="device.imei_no" />
+                                                </strong>
+                                            </td>
+                                            <td name="td_label">
+                                                <span>Renewal(<span t-field="device.service_id.name" />
+                                                    )</span>
+                                            </td>
+                                            <t t-if="doc.stage_id.sequence not in [0,1,2]">
+                                                <td name="td_expiry_date" class="text-end">
+                                                    <span t-field="device.exp_expiration_date" />
+                                                </td>
+                                            </t>
+                                            <td name="td_renewalprice" class="text-end">
+                                                <span t-field="device.renewal_price" />
+                                            </td>
+                                            <td name="td_tax" class="text-end">
+                                                <span t-esc="round(device.tax_id.amount,2)" />
+                                                <span>%</span>
+                                            </td>
+                                            <td name="td_tax_amt" class="text-end">
+                                                <span t-field="device.tax_amount" />
+                                            </td>
+                                            <td name="td_total" class="text-end">
+                                                <span t-field="device.price_subtotal" />
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div style="text-align:right;">
+                                <hr style="width:35%; margin-left:65%;color:black;" />
+                                <div>
+                                    <strong>Untaxed Amount</strong>
+                                    <span
+                                        style="display:inline-block; min-width:150px; text-align:right;"
+                                        t-esc="total_untaxed"
+                                        t-options='{"widget": "monetary", "display_currency": doc.company_currency_id}' />
+                                </div>
+                                <div>
+                                    <strong>Taxes</strong>
+                                    <span
+                                        style="display:inline-block; min-width:150px; text-align:right;"
+                                        t-esc="total_tax"
+                                        t-options='{"widget": "monetary", "display_currency": doc.company_currency_id}' />
+                                </div>
+                                <hr style="width:35%; margin-left:65%;color:black;" />
+                                <div>
+                                    <strong>Total</strong>
+                                    <span
+                                        style="display:inline-block; min-width:150px; text-align:right;"
+                                        t-esc="total_amount"
+                                        t-options='{"widget": "monetary", "display_currency": doc.company_currency_id}' />
+                                </div>
+                                <hr style="width:35%; margin-left:65%;color:black;" />
+                            </div>
+                        </div>
+                    </t>
+                </main>
+            </t>
+        </t>
+    </template>
+</odoo>

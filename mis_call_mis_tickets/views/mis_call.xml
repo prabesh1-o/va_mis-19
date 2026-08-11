@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_inherit_call_ticket" model="ir.ui.view">
+        <field name="name">mis_call.inherits.form.mis_call</field>
+        <field name="model">mis.call</field>
+        <field name="inherit_id" ref="mis_call.mis_call_view_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//sheet[@name='call_sheet']" position="before">
+                    <header>
+                        <div class="d-flex justify-content-between">
+                            <button name="action_create_ticket"
+                                    type="object"
+                                    class="oe_highlight"
+                                    confirm="Do you want to open a ticket?"
+                                    string="Open ticket"
+                                    invisible="category != 'ticket' or has_ticket == True"/>
+                            <button type="object"
+                                    string="Ticket created"
+                                    name="action_view_ticket"
+                                    class="oe_stat_button"
+                                    icon="fa-microchip"
+                                    invisible="category != 'ticket' or has_ticket == False"/>
+                        </div>
+                    </header>
+                </xpath>
+                <xpath expr="//group[@name='Call detail']" position="after">
+                    <group string="Ticket detail" invisible="category != 'ticket'" name="ticket_detail">
+                        <field name="ticket_menu_id" required="category == 'ticket'"/>
+                        <field name="has_ticket" invisible="1"/>
+                        <field name="customer_id"/>
+                        <field name="user_id" string="Assignee"/>
+                        <field name="ticket_tag_ids" widget="many2many_tags"/>
+                        <field name="priority" required="category == 'ticket'"/>
+                    </group>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

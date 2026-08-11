@@ -1,0 +1,15 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_mis_call,mis.call,model_mis_call,base.group_user,1,1,1,1
+perm_mis_assign_call_create,mis.assign.call,model_mis_assign_call,group_able_to_create_assign_call,0,0,1,0
+perm_mis_assign_call_read,mis.assign.call,model_mis_assign_call,group_able_to_read_assign_call,1,0,0,0
+perm_mis_assign_call_delete,mis.assign.call,model_mis_assign_call,group_able_to_delete_assign_call,0,0,0,1
+perm_mis_assign_call_update,mis.assign.call,model_mis_assign_call,group_able_to_update_assign_call,0,1,0,0
+perm_read_mis_call_campaign_read,mis.call.campaign,model_mis_call_campaign,group_able_to_read_call_campaign,1,0,0,0
+access_mis_call_campaign_update,mis.call.campaign,model_mis_call_campaign,group_able_to_update_call_campaign,0,1,0,0
+access_mis_call_campaign_create,mis.call.campaign,model_mis_call_campaign,group_able_to_create_call_campaign,0,0,1,0
+access_mis_call_campaign_delete,mis.call.campaign,model_mis_call_campaign,group_able_to_delete_call_campaign,0,0,0,1
+access_mis_call_campaign_tags,mis.call.campaign.tags,model_mis_call_campaign_tags,base.group_user,1,1,1,1
+access_mis_call_generator,mis.call.generator,model_mis_call_generator,group_able_to_access_call_generator,1,1,1,1
+access_mis_call_tags,mis.call.tags,model_mis_call_tags,group_able_to_create_assign_call,1,1,1,1
+create_mis_call_batch,mis.call.batch,model_mis_call_batch,group_able_to_access_call_generator,0,0,1,0
+access_mis_call_batch,mis.call.batch,model_mis_call_batch,group_able_to_read_assign_call,1,1,0,0

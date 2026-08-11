@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_device_mis_service_form" model="ir.ui.view">
+        <field name="name">mis_device.inherits.form.mis.service</field>
+        <field name="model">mis.device.installation</field>
+        <field name="inherit_id" ref="mis_device_installation.mis_installation_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='total_installations']" position="after">
+                    <field name="total_services"/>
+                </xpath>
+                <xpath expr="//field[@name='installation_line_ids']/list/field[@name='installation_date']" position="after">
+                    <field name="service_id"/>
+                </xpath>
+                <xpath expr="//field[@name='installation_line_ids']/form/group/group/field[@name='installation_date']" position="before">
+                    <field name="service_id"/>
+                    <field name="sop" attrs="{'invisible':[('state','!=','progress')]}"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

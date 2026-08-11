@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+hr.access_hr_employee_user,hr.employee,model_hr_employee,va_mis.group_able_to_only_view_records,1,0,0,0
+hr.access_hr_employee_user_create,hr.employee,model_hr_employee,va_mis.group_able_to_create_employee,1,1,1,1
+access_res_partner_create,res.partner,model_res_partner,va_mis.group_able_to_create_customer,1,1,1,1
+access_res_partner_read,res.partner,model_res_partner,va_mis.group_able_to_only_view_records,1,0,0,0
+access_mis_note_template,mis.note.template,model_mis_note_template,base.group_user,1,1,1,1
+perm_access_fiscal_period,mis.fiscal.period,model_mis_fiscal_period,group_able_to_access_fiscal_period,1,1,1,1

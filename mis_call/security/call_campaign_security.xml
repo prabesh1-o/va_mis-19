@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="mis_call_campaign_management">
+        <field name="name">MIS Call Campaign</field>
+        <field name="description">MIS Call Campaign</field>
+    </record>
+
+    <record id="privilege_mis_call_campaign" model="res.groups.privilege">
+        <field name="name">MIS Call Campaign</field>
+        <field name="category_id" ref="mis_call_campaign_management"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_able_to_create_call_campaign" model="res.groups">
+        <field name="name">Call Campaign Create</field>
+        <field name="comment">
+            Users can create call campaign
+        </field>
+        <field name="privilege_id" ref="privilege_mis_call_campaign"/>
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="group_able_to_read_call_campaign" model="res.groups">
+        <field name="name">Able to read call campaign</field>
+        <field name="comment">Users can read call campaign</field>
+        <field name="privilege_id" ref="privilege_mis_call_campaign"/>
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+    
+    <record id="group_able_to_delete_call_campaign" model="res.groups">
+        <field name="name">Able to delete call campaign</field>
+        <field name="comment">Users can delete call campaign</field>
+        <field name="privilege_id" ref="privilege_mis_call_campaign"/>
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+    <record id="group_able_to_update_call_campaign" model="res.groups">
+        <field name="name">Able to update call campaign</field>
+        <field name="comment">Users can update call campaign</field>
+        <field name="privilege_id" ref="privilege_mis_call_campaign"/>
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+    <record id="group_able_to_access_assigned_call_campaign" model="res.groups">
+        <field name="name">Able to access only assigned call campaign</field>
+        <field name="comment">Users can access only assigned call campaign</field>
+        <field name="privilege_id" ref="privilege_mis_call_campaign"/>
+    </record>
+</odoo>

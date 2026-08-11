@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <record id="view_mis_device_sim_unassigned_list" model="ir.ui.view">
+            <field name="name">mis.device.sim.unassigned.list</field>
+            <field name="model">mis.inventory.sim</field>
+            <field name="arch" type="xml">
+                <list string="Unassigned SIMs">
+                    <field name="sim_no" />
+                    <field name="sim_carrier" />
+                    <field name="data_plan" />
+                    <field name="serial_no" />
+                    <field name="sim_id"/>
+                    <field name="puk1" optional="hide"/>
+                    <field name="puk2" optional="hide"/>
+                    <field name="pin1" optional="hide"/>
+                    <field name="pin2" optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="mis_device_sim_unassigned_form" model="ir.ui.view">
+            <field name="name">mis.device.sim.unassigned.form.form</field>
+            <field name="model">mis.inventory.sim</field>
+            <field name="arch" type="xml">
+                <form string="Mis Inventory Sim">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="sim_no" />
+                                <field name="sim_carrier" />
+                                <field name="data_plan" />
+                                <field name="serial_no" />
+                                <field name="location_id" />
+                            </group>
+                            <group>
+                                <field name="puk1" />
+                                <field name="puk2" />
+                                <field name="pin1" />
+                                <field name="pin2" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_mis_unassigned_sim_stock" model="ir.actions.act_window">
+            <field name="name">Stock SIM</field>
+            <field name="res_model">mis.inventory.sim</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_mis_inventory_stock_sim" name="Stock SIM" sequence="4" action="action_mis_unassigned_sim_stock" parent="mis_inventory.mis_menu_inventory_operations" />
+    </data>
+
+</odoo>

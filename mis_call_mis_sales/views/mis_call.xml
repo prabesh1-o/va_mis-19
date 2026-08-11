@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_inherit_call_quotation" model="ir.ui.view">
+        <field name="name">mis_call.inherits.form.mis_call</field>
+        <field name="model">mis.call</field>
+        <field name="inherit_id" ref="mis_call.mis_call_view_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//sheet[@name='call_sheet']" position="before">
+                    <header>
+                        <div class="d-flex justify-content-between">
+                            <button name="action_create_sale_order"
+                                    type="object"
+                                    class="oe_highlight"
+                                    string="Create Quotation"
+                                    confirm="Do you want to create a quotation?"
+                                    invisible="category != 'quotation' or has_quotation == True"/>
+                            <button type="object"
+                                    string="Quotation created"
+                                    widget="statusbar"
+                                    name="action_view_quotation"
+                                    class="oe_stat_button"
+                                    icon="fa-microchip"
+                                    invisible="category != 'quotation' or has_quotation == False"/>
+                        </div>
+                    </header>
+                </xpath>
+
+                <xpath expr="//group[@name='Call detail']" position="after">
+                    <group string="Quotation detail" invisible="category != 'quotation'">
+                        <field name="customer_id" required="category == 'quotation'"/>
+                        <field name="has_quotation" invisible="1"/>
+                        <field name="user_id"/>
+                        <field name="commitment_date"/>
+                    </group>
+                </xpath>
+
+                <xpath expr="//page[@name='Description']" position="before">
+                    <page name="Order lines" string="Order Lines" auto_join="True" invisible="category != 'quotation'">
+                        <field name="order_line_ids">
+                            <list editable="bottom">
+                                <field name="service_id"/>
+                                <field name="service_price" string="Unit price" widget="monetary"/>
+                                <field name="renewal_price" widget="monetary"/>
+                                <field name="discount_percentage"/>
+                                <field name="quantity"/>
+                                <field name="final_price" widget="monetary"/>
+                                <field name="amount" widget="monetary"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

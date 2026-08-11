@@ -1,0 +1,45 @@
+<odoo>
+    <record id="mis_hr_employee_attendance_self_form" model="ir.ui.view">
+        <field name="name">hr.employee.self.attendance.form</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="text-center o_hr_attendance_self_widget">
+                        <field name="avatar_128" widget="image" class="oe_avatar rounded-circle"
+                               options="{'size': [90, 90]}"/>
+                        <h2><field name="name" readonly="1" nolabel="1"/></h2>
+                        <h4>Welcome!</h4>
+                        <field name="attendance_state" invisible="1"/>
+                        <button name="action_self_attendance_toggle" type="object"
+                                string="Check IN" class="btn-success btn-lg"
+                                invisible="attendance_state == 'checked_in'"/>
+                        <button name="action_self_attendance_toggle" type="object"
+                                string="Check OUT" class="btn-danger btn-lg"
+                                invisible="attendance_state == 'checked_out'"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mis_action_self_checkin" model="ir.actions.server">
+        <field name="name">My Check-In/Check-Out</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">
+employee = env.user.employee_id
+if not employee:
+    raise UserError("No employee linked to your user account. Contact your administrator.")
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Check In / Check Out',
+    'res_model': 'hr.employee',
+    'view_mode': 'form',
+    'views': [(env.ref('mis_attendance.mis_hr_employee_attendance_self_form').id, 'form')],
+    'res_id': employee.id,
+    'target': 'new',
+}
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- LIST VIEW -->
+        <record id="mis_call_view_list" model="ir.ui.view">
+            <field name="name">mis.call.view.list</field>
+            <field name="model">mis.call</field>
+            <field name="arch" type="xml">
+                <list string="Calls">
+                    <field name="call_id"/>
+                    <field name="state"/>
+                    <field name="category"/>
+                    <field name="number"/>
+                    <field name="time"/>
+                    <field name="call_duration"/>
+                    <field name="employee"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- KANBAN VIEW -->
+        <record id="mis_call_view_kanban" model="ir.ui.view">
+            <field name="name">mis.call.view.kanban</field>
+            <field name="model">mis.call</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state">
+                    <field name="call_id"/>
+                    <field name="category"/>
+                    <field name="reporter"/>
+                    <field name="number"/>
+                    <field name="call_duration"/>
+                    <field name="employee"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_global_click">
+                                <strong><field name="call_id"/></strong>
+                                <div><field name="category"/></div>
+                                <div><field name="reporter"/></div>
+                                <div>
+                                    <b>Phone number: </b>
+                                    <field name="number"/>
+                                </div>
+                                <div>
+                                    <field name="call_duration"/> minute
+                                </div>
+                                <div><field name="employee"/></div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- SEARCH VIEW -->
+        <record id="mis_call_view_search" model="ir.ui.view">
+            <field name="name">mis.call.view.search</field>
+            <field name="model">mis.call</field>
+            <field name="arch" type="xml">
+                <search string="Calls">
+                    <field name="reporter"/>
+                    <field name="number"/>
+                    <field name="employee"/>
+                    <field name="department_id"/>
+
+                    <!-- ✅ uid in search domain -->
+                    <filter name="filter_employee"
+                            string="My Calls"
+                            domain="[('employee.user_id', '=', uid)]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="mis_call_view_form" model="ir.ui.view">
+            <field name="name">mis.call.view.form</field>
+            <field name="model">mis.call</field>
+            <field name="arch" type="xml">
+                <form string="Calls">
+                    <sheet name="call_sheet">
+                        <group>
+                            <group name="Call detail" string="Call detail">
+                                <field name="reporter"/>
+                                <field name="state"/>
+                                <field name="category" readonly="1"/>
+                                <field name="time"/>
+                                <field name="call_duration"/>
+                                <field name="number"/>
+                                <field name="employee"/>
+                                <field name="department_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Description"
+                                  string="Description"
+                                  invisible="category not in ['ticket', 'inquiry']">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <!-- ✅ Odoo 19 explicit chatter -->
+                    <chatter>
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </chatter>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="mis_calls_menu_action_window">
+            <field name="name">Calls</field>
+            <field name="res_model">mis.call</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="context">{'search_default_filter_employee': 1}</field>
+        </record>
+
+        <!-- MENUS -->
+        <menuitem
+            name="Calls"
+            id="calls_menuitem"
+            parent="va_mis.mis_root_menu"
+            sequence="1"
+        />
+        <menuitem
+            name="Calls"
+            id="mis_calls_menuitem"
+            parent="calls_menuitem"
+            action="mis_calls_menu_action_window"
+            sequence="1"
+        />
+
+    </data>
+</odoo>

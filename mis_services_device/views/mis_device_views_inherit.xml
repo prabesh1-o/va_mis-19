@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_device_inherit_from_mis_services" model="ir.ui.view">
+        <field name="name">mis_device.inherits.form.mis.service</field>
+        <field name="model">mis.device</field>
+        <field name="inherit_id" ref="mis_device.mis_device_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='customer_assigned_ids']" position="after">
+                    <field name="service_id" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="mis_device_tree_view_inherit" model="ir.ui.view">
+        <field name="name">mis_device.tree.view.inherits.form.mis.services</field>
+        <field name="model">mis.device</field>
+        <field name="inherit_id" ref="mis_device.mis_device_list" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='customer_assigned_ids']" position="before">
+                    <field name="service_id" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="mis_device_search_view_inherit" model="ir.ui.view">
+        <field name="name">mis_device.tree.view.inherits.form.mis.services</field>
+        <field name="model">mis.device</field>
+        <field name="inherit_id" ref="mis_device.mis_device_search" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='customer_assigned_ids']" position="after">
+                    <field name="service_id" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

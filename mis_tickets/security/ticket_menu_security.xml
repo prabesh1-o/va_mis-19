@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.module.category" id="mis_ticket_menu_management">
+        <field name="name">MIS Ticket Menu</field>
+        <field name="description">MIS Ticket Menu</field>
+        <field name="parent_id" ref="mis_ticket_management_parent" />
+    </record>
+
+    <record id="privilege_mis_ticket_menu_management" model="res.groups.privilege">
+        <field name="name">MIS Ticket Menu</field>
+        <field name="category_id" ref="mis_ticket_menu_management"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- User:read only-->
+    <record id="group_mis_ticket_menu_user_readonly" model="res.groups">
+        <field name="name">User: Read Only</field>
+        <field name="privilege_id" ref="privilege_mis_ticket_menu_management" />
+        <field name="comment">The user will have readonly access to records.</field>
+    </record>
+
+    <!-- manager -->
+    <record id="group_mis_ticket_menu_all_documents" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="privilege_mis_ticket_menu_management" />
+        <field name="implied_ids"
+            eval="[(4, ref('group_mis_ticket_menu_user_readonly'))]" />
+        <field name="comment">The user will have create,read,update access to records.</field>
+    </record>
+
+    <!-- admin -->
+    <record id="group_mis_ticket_menu_administrator" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="privilege_id" ref="privilege_mis_ticket_menu_management" />
+        <field name="implied_ids"
+            eval="[(4, ref('group_mis_ticket_menu_all_documents'))]" />
+        <field name="comment">The user will have all access to all records</field>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+    </record>
+
+</odoo>

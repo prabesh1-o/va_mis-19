@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_tickets" name="Show Tickets" customize_show="True" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Tickets</t>
+                <t t-set="url" t-value="'/my/tickets'"/>
+                <t t-set="placeholder_count" t-value="'ticket_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_tickets" name="My Tickets">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Tickets</t>
+            </t>
+            <t t-if="notification">
+                <div t-attf-class="alert alert-#{notification['type']} alert-dismissible fade show" role="alert">
+                    <t t-esc="notification['message']"/>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </t>
+            <a t-att-href="'/my/ticket/form'" class="btn btn-primary mb-2">
+                <strong>
+                    Open Ticket
+                </strong>
+            </a>
+            <t t-if="tickets" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Ticket #</th>
+                        <th class="text-end">Vehicle</th>
+                        <th class="text-center">Tags</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="tickets" t-as="ticket">
+                    <tr>
+                        <td>
+                            <a t-att-href="ticket.get_portal_url()">
+                                <t t-out="ticket.ticket_id"/>
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="ticket.vehicle_id.vehicle_number"/>
+                        </td>
+                        <td class="text-center">
+                            <t t-foreach="ticket.tag_ids" t-as="tag">
+                                <span class="badge rounded-pill fs-6 text-bg-info">
+                                    <t t-esc="tag.name"/>
+                                </span>
+                            </t>
+                        </td>
+                        <td class="text-center">
+                            <span t-attf-class="badge rounded-pill fs-6 #{'text-bg-success' if ticket.stage_id.name == 'Completed' or ticket.stage_id.name ==  'Archieved' else 'text-bg-warning'}">
+                                <t t-esc="ticket.stage_id.name"/>
+                            </span>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no any tickets.</p>
+        </t>
+    </template>
+
+    <template id="portal_my_home_menu_tickets" name="Tickets Breadcrumb" inherit_id="portal.portal_breadcrumbs" priority="60">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'tickets'" class="breadcrumb-item active">
+                <span>Tickets</span>
+            </li>
+            <t t-if="page_name == 'ticket_id'">
+                <li class="breadcrumb-item">
+                    <a href="/my/tickets">Tickets</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    Ticket <span t-out="ticket.ticket_id"/>
+                </li>
+            </t>
+            <t t-if="page_name == 'ticket_form'">
+                <li class="breadcrumb-item">
+                    <a href="/my/tickets">Tickets</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    Ticket
+                </li>
+            </t>
+        </xpath>
+    </template>
+
+
+    <template id="ticket_portal_template" name="Ticket Portal Template">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Tickets</t>
+            </t>
+            <div class="col-12 mt-3">
+                <div id="ticket_content" class="card shadow-sm p-4 mb-5">
+                    <h3 class="mb-1">
+                        <strong>Ticket <i>
+                            <span t-out="ticket.ticket_id"/>
+                        </i>
+                    </strong>
+                </h3>
+                <hr/>
+                <div class="row gy-3">
+                    <div class="col-md-6">
+                        <strong>Created By:</strong>
+                        <br/>
+                        <span t-out="ticket.customer_id.name"/>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Created On:</strong>
+                        <br/>
+                        <span t-out="created_datetime"/>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Vehicle:</strong>
+                        <br/>
+                        <span t-out="ticket.vehicle_id.vehicle_number"/>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Device IMEI:</strong>
+                        <br/>
+                        <span t-out="ticket.device_imei"/>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Category:</strong>
+                        <br/>
+                        <span t-out="ticket.ticket_menu_id.name"/>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Tags:</strong>
+                        <br/>
+                        <t t-foreach="ticket.tag_ids" t-as="tag">
+                            <span class="badge rounded-pill fs-6 text-bg-info me-1">
+                                <t t-esc="tag.name"/>
+                            </span>
+                        </t>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Priority:</strong>
+                        <br/>
+                        <span t-field="ticket.priority"/>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Status:</strong>
+                        <br/>
+                        <span t-attf-class="badge rounded-pill fs-6 #{'text-bg-success' if ticket.stage_id.name == 'Completed' or ticket.stage_id.name ==  'Archieved' else 'text-bg-warning'}" t-out="ticket.stage_id.name"/>
+                    </div>
+                    <div t-if="ticket.issue_reporter" class="col-md-12">
+                        <strong>Issue Reporter (Name and Contact):</strong>
+                        <br/>
+                        <div t-out="ticket.issue_reporter"/>
+                    </div>
+                    <div class="col-md-12">
+                        <strong>Description:</strong>
+                        <br/>
+                        <div class="bg-light border rounded p-3" t-out="ticket.description"/>
+                    </div>
+                    <div id="ticket_communication" class="mt-5">
+                        <h4 class="mb-3">History</h4>
+                        <t t-set="object" t-value="ticket"/>
+                        <t t-call="portal.message_thread"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
+
+
+<template id="ticket_portal_form_view" name="Open Ticket">
+    <t t-call="portal.portal_layout">
+        <t t-set="breadcrumbs_searchbar" t-value="True"/>
+        <t t-call="portal.portal_searchbar">
+            <t t-set="title">Tickets</t>
+        </t>
+        <div class="col-12">
+            <div class="card mt-2 p-4">
+                <h4 class="mb-4">
+                    <i>
+                        <strong>Open Ticket</strong>
+                    </i>
+                </h4>
+                <form class="ticket_portal_form" method="post" action="/my/ticket/submit">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="col-12 col-md-10 col-lg-5">
+                        <div class="mb-3">
+                            <label class="form-label">Vehicle</label>
+                            <select name="vehicle" class="select2">
+                                <option/>
+                                <t t-foreach="vehicles" t-as="vehicle">
+
+                                    <option t-att-value="vehicle.id">
+                                        <t t-esc="vehicle.vehicle_number"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tags</label>
+                            <select name="tags" class="select2" multiple="">
+                                <option/>
+                                <t t-foreach="tags" t-as="tag">
+                                    <option t-att-value="tag.id">
+                                        <t t-esc="tag.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Priority</label>
+                            <select name="priority" class="select2">
+                                <option value="0">Low</option>
+                                <option value="3">Normal</option>
+                                <option value="9">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description" rows="5"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a href="/my/tickets" class="btn btn-warning ms-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </t>
+</template>
+
+</odoo>

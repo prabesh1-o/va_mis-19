@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="open_stage" model="mis.device.renewal.stage">
+            <field name="name">Open</field>
+            <field name="sequence">0</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_open_stage">True</field>
+        </record>
+        <record id="ideal_stage" model="mis.device.renewal.stage">
+            <field name="name">Idle</field>
+            <field name="sequence">1</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_idle_stage">True</field>
+        </record>
+        <record id="grace_period_stage" model="mis.device.renewal.stage">
+            <field name="name">Grace Period</field>
+            <field name="sequence">2</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_grace_period_stage">True</field>
+        </record>
+        <record id="renewed_stage" model="mis.device.renewal.stage">
+            <field name="name">Billed and Renewed</field>
+            <field name="sequence">3</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_billed_renewed_stage">True</field>
+            <field name="is_expiry_date_renewal_pi">True</field>
+        </record>
+        <record id="payment_received_stage" model="mis.device.renewal.stage">
+            <field name="name">Payment Received</field>
+            <field name="sequence">4</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_payment_stage">True</field>
+            <field name="is_expiry_date_renewal_pi">True</field>
+        </record>
+        <record id="verification_stage" model="mis.device.renewal.stage">
+            <field name="name">Verification</field>
+            <field name="sequence">5</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_expiry_date_renewal_pi">True</field>
+        </record>
+        <record id="completed_stage" model="mis.device.renewal.stage">
+            <field name="name">Completed</field>
+            <field name="sequence">6</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_complete_stage">True</field>
+            <field name="is_expiry_date_renewal_pi">True</field>
+        </record>
+        <record id="discarded_stage" model="mis.device.renewal.stage">
+            <field name="name">Discarded</field>
+            <field name="sequence">7</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_discarded_stage">True</field>
+            <field name="is_expiry_date_renewal_pi">True</field>
+        </record>
+    </data>
+</odoo>

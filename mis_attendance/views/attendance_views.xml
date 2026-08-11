@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_inherit_hr_attendance" model="ir.ui.view">
+        <field name="name">hr_attendance.inherits.tree.hr_attendance</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//list" position="attributes">
+                    <attribute name="decoration-warning">is_late</attribute>
+                </xpath>
+                <xpath expr="//field[@name='worked_hours']" position="before">
+                    <field name="attendance_source" />
+                    <field name="is_late" invisible="1" />
+                    <field name="late_reason_ids" invisible="1" />
+                    <button name="action_add_reason" type="object"
+                        string="Add Late Reason"
+                         invisible="late_reason_ids or not is_late"
+                    />
+                    <button name="action_view_reason" type="object"
+                        string="View Reason"
+                         invisible="not late_reason_ids or not is_late" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="mis_inherit_hr_attendance_search" model="ir.ui.view">
+        <field name="name">hr.attendance.view.search.inherit</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//search" position="inside">
+                    <filter string="Late Attendance" name="is_late_filter" domain="[('is_late', '=', True)]"/>
+                    <filter string="Late Reason" name="is_late_reason_filter" domain="[('late_reason_ids', '!=', False)]"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <menuitem id="mis_attendance_menu" name="Attendances" parent="va_mis.mis_root_menu"
+        sequence="13">
+        <menuitem id="mis_checkin_checkout_sub_menu" name="Check-In / Check-Out"
+            action="mis_action_self_checkin" sequence="1" />
+        <menuitem id="mis_attendance_sub_menu" name="Attendances"
+            action="hr_attendance.hr_attendance_action" sequence="2" />
+        <menuitem id="mis_biometric_device_configuration_sub_menu" name="Device Configuration"
+            action="zk_machine_action" sequence="3" />
+        <menuitem id="mis_biometric_attendance" name="Attendance log"
+            action="action_zk_report_daily_attendance" sequence="4"
+            groups="hr_attendance.group_hr_attendance_user" />
+        <menuitem id="menu_hr_attendance_report" name="Reporting" sequence="30"
+            action="hr_attendance.hr_attendance_reporting"
+            groups="hr_attendance.group_hr_attendance_user" />
+    </menuitem>
+</odoo>

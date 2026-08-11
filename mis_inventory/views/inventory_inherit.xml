@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="mis_inventory_menu" name="Inventory" parent="va_mis.mis_root_menu" sequence="15"
+        groups="va_mis.group_mis_admin,va_mis.group_mis_account" />
+
+    <menuitem id="mis_menu_inventory_overviews" name="Overviews" parent="mis_inventory_menu"
+        sequence="1">
+        <menuitem id="mis_menu_inventory_overview" name="Overview" sequence="1"
+            action="stock.stock_picking_type_action" />
+    </menuitem>
+
+    <menuitem id="mis_menu_inventory_operations" name="Operations" parent="mis_inventory_menu"
+        sequence="2">
+        <menuitem id="mis_menu_inventory_replineshment" name="Replineshment"
+            action="stock.action_replenishment" sequence="1" />
+        <menuitem id="mis_menu_inventory_inv_adjustments" name="Inventory Adjustments"
+            action="stock.action_view_inventory_tree" sequence="2" />
+    </menuitem>
+
+    <menuitem id="mis_menu_inventory_reporting" name="Reporting" parent="mis_inventory_menu"
+        sequence="3">
+        <menuitem id="mis_menu_inventory_stock" name="Stock"
+            action="stock.action_product_stock_view" sequence="1" />
+        <menuitem id="mis_menu_inventory_locations" name="Locations"
+            action="stock.action_view_quants" sequence="2" />
+        <menuitem id="mis_menu_inventory_moves_history" name="Moves History"
+            action="stock.stock_move_line_action" sequence="3" />
+        <menuitem id="mis_menu_inventory_stock_moves" name="Stock Moves"
+            action="stock.stock_move_action" sequence="4" />
+    </menuitem>
+
+    <menuitem id="mis_menu_inventory_warehouse_management" name="Warehouse Management"
+        parent="mis_inventory_menu" sequence="4">
+        <menuitem id="mis_menu_whm_warehouse" name="Warehouses" action="stock.action_warehouse_form"
+            sequence="1" />
+        <menuitem id="mis_menu_whm_locations" name="Locations" action="stock.action_location_form"
+            sequence="2" />
+        <menuitem id="mis_menu_whm_routes" name="Routes" action="stock.action_routes_form"
+            sequence="3" />
+        <menuitem id="mis_menu_whm_operation_types" name="Operations Types"
+            action="stock.action_picking_type_list" sequence="4" />
+        <menuitem id="mis_menu_whm_putaway_rules" name="Putaway Rules"
+            action="stock.action_putaway_tree" sequence="5" />
+    </menuitem>
+</odoo>

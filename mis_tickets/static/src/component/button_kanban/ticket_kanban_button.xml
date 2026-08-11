@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <t t-name="button_ticket.KanbanView.Buttons">
+        <button type="button"
+                t-if="state.showButton"
+                class="btn btn-primary ms-2"
+                t-on-click="OnHideClick">
+            Hide completed
+        </button>
+    </t>
+</odoo>

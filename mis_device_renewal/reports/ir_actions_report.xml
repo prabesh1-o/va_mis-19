@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_pro_forma_invoice_renewal" model="ir.actions.report">
+        <field name="name">PRO-FORMA Invoice</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mis_device_renewal.renewal_pi_document</field>
+        <field name="report_file">mis_device_renewal.renewal_pi_document</field>
+        <field name="print_report_name">'PRO-FORMA - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_mis_device_renewal"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

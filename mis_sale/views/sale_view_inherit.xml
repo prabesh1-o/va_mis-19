@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale.action_quotations_with_onboarding" model="ir.actions.act_window">
+            <field name="domain">[('state', 'in', ('draft','sent'))]</field>
+        </record>
+
+        <record id="mis_sale_inherits_sale_order_form_view" model="ir.ui.view">
+            <field name="name">mis.sale.inherits.sale.order.form.view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//header/button[@name='action_draft']" position="before">
+                        <button name="%(action_sale_order_line_update_wizard)d" type="action" string="Update Lines" groups="mis_sale.group_able_to_update_lines_sale_order" />
+                    </xpath>
+                    <xpath expr="//field[@name='order_line']/list/field[@name='product_uom_qty']" position="before">
+                        <field name="renewal_price" widget="monetary" />
+                    </xpath>
+                    <xpath expr="//field[@name='client_order_ref']" position="before">
+                        <field name="poc_name" />
+                        <field name="poc_phone" />
+                    </xpath>
+                    <xpath expr="//field[@name='product_template_id']" position="attributes">
+                        <attribute name="string">Services</attribute>
+                    </xpath>
+                    <xpath expr="(//field[@name='product_id'])[2]" position="attributes">
+                        <attribute name="domain">[('service_id','!=',False),('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='partner_id']" position="attributes">
+                        <attribute name="domain">[("is_customer","=",True)]</attribute>
+                    </xpath>
+                    <xpath expr="//create[@name='add_product_control']" position="attributes">
+                        <attribute name="string">Add a Service</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='tax_totals']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='tax_totals']" position="after">
+                        <field name="discount" style="width: 100px;" />
+                        <field name="discount_amount" string="Total Disc." invisible="discount_amount == 0.0" />
+                        <field name="amount_untaxed" widget="monetary" string="Untaxed Amount" invisible="amount_tax == 0.0" />
+                        <field name="amount_tax" widget="monetary" string="Taxes" invisible="amount_tax == 0.0" />
+                        <field name="amount_total" widget="monetary" class="oe_subtotal_footer_separator" string="Total" />
+                        <field name="amount_residual" widget="monetary" invisible="state not in ['sale']" />
+                    </xpath>
+                    <xpath expr="//list//field[@name='discount']" position="attributes">
+                        <attribute name="groups">base.group_user</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='payment_term_id']" position="after">
+                        <field name="fiscal_period_id"/>
+                    </xpath>
+                    <xpath expr="//field[@name='price_unit']" position="before">
+                        <field name="is_downpayment" column_invisible="1"/>
+                    </xpath>
+                    <xpath expr="//field[@name='is_downpayment']" position="after">
+                        <field name="discount_amount" string="Disc Amt." optional="hide" />
+                        <field name="price_tax" string="Tax Amt." optional="hide" />
+                    </xpath>
+                    <xpath expr="(//field[@name='price_subtotal'])[2]" position="after">
+                        <field name="price_total" string="Total" optional="hide" readonly="0" />
+                    </xpath>
+                    <xpath expr="//field[@name='note']" position="before">
+                        <field name="note_id" />
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="mis_sale_inherits_sale_order_list_view" model="ir.ui.view">
+            <field name="name">mis.sale.inherits.sale.order.list.view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree" />
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='invoice_status']" position="attributes">
+                        <attribute name="decoration-warning">invoice_status == 'partially_invoiced'</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='amount_total']" position="before">
+                        <field name="product_uom_qty" optional="hide" />
+                        <field name="qty_delivered" optional="hide" />
+                        <field name="qty_invoiced" optional="hide" />
+                        <field name="amount_invoiced" widget="monetary" sum="Total Invoiced Amount" optional="hide" />
+                        <field name="amount_residual" widget="monetary" sum="Total Amount Due" optional="hide" />
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="mis_sale_inherits_sale_order_filter" model="ir.ui.view">
+            <field name="name">mis.sale.inherits.sale.order.filter</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter" />
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                        <filter string="Ongoing Sales Order" domain="[('invoice_status', '!=', 'invoiced')]" name="ongoing_sales_order_filter" />
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+        <record id="sale.action_orders" model="ir.actions.act_window">
+            <field name="context">{'search_default_ongoing_sales_order_filter': 1}</field>
+        </record>
+    </data>
+</odoo>

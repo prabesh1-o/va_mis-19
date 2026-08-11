@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account_move_see_own" model="ir.rule">
+            <field name="name">Own Journal Entries</field>
+            <field ref="model_account_move" name="model_id"/>
+            <field name="domain_force">[('invoice_user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_account_invoice_own'))]"/>
+        </record>
+    </data>
+</odoo>

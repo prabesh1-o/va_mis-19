@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_raw_lead_form_view_inherit" model="ir.ui.view">
+        <field name="name">mis.raw.lead.form.view.inherti</field>
+        <field name="model">lead.raw.data</field>
+        <field name="inherit_id" ref="mis_lead.lead_raw_data_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//page[@name='contact_person']" position="before">
+                    <page name="services" string="Services">
+                        <group>
+                            <field name="required_service_ids" widget="many2many_tags"/>
+                        </group>
+                        <field name="raw_lead_service_line_ids">
+                            <list string="products" editable="bottom" no_open="True">
+                                <field name="company_currency_id" invisible="1"/>
+                                <field name="service_domain_ids" invisible="1"/>
+                                <field name="service_id"/>
+                                <field name="service_price" widget="monetary"/>
+                                <field name="discount_percentage" widget="product_discount"/>
+                                <field name="final_price" widget="monetary" />
+                                <field name="quantity"/>
+                                <field name="amount" sum="Total amount" widget="monetary" decoration-bf="1"/>
+                                <field name="renewal_price" widget="monetary" />
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

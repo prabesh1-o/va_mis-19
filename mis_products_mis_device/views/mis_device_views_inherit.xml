@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_device_inherit_from_mis_product" model="ir.ui.view">
+        <field name="name">mis_device.inherits.form.mis_product</field>
+        <field name="model">mis.device</field>
+        <field name="inherit_id" ref="mis_device.mis_device_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='sim']" position="before">
+                    <field name="product_id" />
+                </xpath>
+                <xpath expr="//field[@name='sim']" position="after">
+                    <field name="manufacturer" groups="va_mis.group_mis_admin,va_mis.group_mis_operation"/>
+                    <field name="device_protocol" groups="va_mis.group_mis_admin,va_mis.group_mis_operation"/>
+                    <field name="device_port" groups="va_mis.group_mis_admin,va_mis.group_mis_operation" />
+                </xpath>
+                <xpath expr="//field[@name='imei_no']" position="after">
+                    <field name="device_model_id"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="mis_device_tree_view_inherit" model="ir.ui.view">
+        <field name="name">mis_device.tree.view.inherits.form.mis_product</field>
+        <field name="model">mis.device</field>
+        <field name="inherit_id" ref="mis_device.mis_device_list" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='sim']" position="before">
+                    <field name="manufacturer" />
+                    <field name="device_protocol" optional="show"/>
+                    <field name="device_port" optional="show"/>
+                </xpath>
+                <xpath expr="//field[@name='imei_no']" position="after">
+                    <field name="device_model_id"/>
+                </xpath>
+                <xpath expr="//field[@name='imei_no']" position="after">
+                    <field name="product_id" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="mis_device_search_view_inherit" model="ir.ui.view">
+        <field name="name">mis_device.tree.view.inherits.form.mis_product</field>
+        <field name="model">mis.device</field>
+        <field name="inherit_id" ref="mis_device.mis_device_search" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//search" position="inside">
+                    <filter name="device_model_id" string="Model" context="{'group_by': 'device_model_id'}" />
+                    <filter name="product_id" string="Product" context="{'group_by': 'product_id'}" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

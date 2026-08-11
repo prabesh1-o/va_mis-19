@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="buttonbox_inherit_from_mis_service" model="ir.ui.view">
+            <field name="name">buttonbox.inherit.from.mis_service</field>
+            <field name="model">mis.services</field>
+            <field name="inherit_id" ref="mis_services.mis_services_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" name="action_view_mis_services_sold"
+                        type="object" icon="fa-signal">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="sale_unit_count" widget="statinfo" nolabel="1"
+                                    class="mr4" />
+                                <field name="uom_name" />
+                            </span>
+                            <span class="o_stat_text">Sold</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="action_sellable" type="object"
+                        icon="fa-cubes">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="sellable_units" widget="statinfo" nolabel="1"
+                                    class="mr4" />
+                                <field name="uom_name" />
+                            </span>
+                            <span class="o_stat_text">On Hand</span>
+                        </div>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

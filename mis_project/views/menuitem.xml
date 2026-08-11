@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <menuitem id="mis_project_main_menu" name="Projects" sequence="9" parent="va_mis.mis_root_menu">
+        <menuitem id="mis_project_sub_menu" name="Project" action="project.open_view_project_all" sequence="1"/>
+        <menuitem id="mis_my_tasks" name="My Tasks" action="project.action_view_all_task" sequence="2"/>
+        <menuitem id="mis_task_analysis" name="Task Analysis" action="project.action_project_task_user_tree" sequence="3"/>
+    </menuitem>
+</odoo>

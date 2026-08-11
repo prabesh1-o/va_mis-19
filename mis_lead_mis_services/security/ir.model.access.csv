@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lead_raw_data_service_line_user_readonly,lead.raw.data.service.line.user.readonly,model_lead_raw_data_service_line,mis_lead.group_mis_raw_lead_user_readonly,1,0,0,0
+access_lead_raw_data_service_line_own,lead.raw.data.service.line.user.own,model_lead_raw_data_service_line,mis_lead.group_mis_raw_lead_user_own_documents,1,1,1,0
+access_lead_raw_data_service_line_all,lead.raw.data.service.line.all,model_lead_raw_data_service_line,mis_lead.group_mis_raw_lead_all_documents,1,1,1,0
+access_lead_raw_data_service_line_admin,lead.raw.data.service.line.admin,model_lead_raw_data_service_line,mis_lead.group_mis_raw_lead_administrator,1,1,1,1

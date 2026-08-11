@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="lead_raw_data_campaign_view_kanban" model="ir.ui.view">
+        <field name="name">lead_raw_data_campaign.view.kanban</field>
+        <field name="model">lead.raw.data.campaign</field>
+        <field name="arch" type="xml">
+            <kanban action="mis_raw_lead_actions" type="object" sample="1">
+                <templates>
+                    <t t-name="card">
+                        <div
+                            t-attf-class="oe_kanban_global_click o_has_icon oe_kanban_content oe_kanban_card">
+                            <div class="o_dropdown_kanban dropdown">
+                                <a role="button" class="dropdown-toggle o-no-caret btn"
+                                    data-bs-toggle="dropdown" data-bs-display="static" href="#"
+                                    aria-label="Dropdown menu" title="Dropdown menu">
+                                    <span class="fa fa-ellipsis-v" />
+                                </a>
+                                <div class="dropdown-menu" role="menu">
+                                    <a role="menuitem" type="edit" class="dropdown-item">Edit</a>
+                                    <a role="menuitem" type="delete" class="dropdown-item">
+                                        Delete</a>
+                                </div>
+                            </div>
+                            <b>
+                                <field name="name" />
+                            </b>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="lead_raw_data_campaign_view_list" model="ir.ui.view">
+        <field name="name">lead_raw_data_campaign.view.list</field>
+        <field name="model">lead.raw.data.campaign</field>
+        <field name="arch" type="xml">
+            <list string="">
+                <field name="name" />
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="campaigns_action">
+        <field name="name">Raw Lead</field>
+        <field name="res_model">lead.raw.data.campaign</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <record id="action_lead_raw_data_kanban" model="ir.actions.act_window">
+        <field name="name">Lead Raw Data</field>
+        <field name="res_model">lead.raw.data</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="target">current</field>
+        <field name="domain">[('campaign_id', '=', active_id)]</field>
+    </record>
+</odoo>

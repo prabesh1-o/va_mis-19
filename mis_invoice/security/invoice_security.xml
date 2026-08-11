@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Create the privilege first -->
+        <record id="privilege_account_invoice_own" model="res.groups.privilege">
+            <field name="name">Billing Access</field>
+            <field name="category_id" ref="base.module_category_accounting_accounting"/>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Create the group and reference the privilege -->
+        <record id="group_account_invoice_own" model="res.groups">
+            <field name="name">Billing: Own Document</field>
+            <field name="privilege_id" ref="privilege_account_invoice_own"/>
+            <field name="comment">Users who can view their own invoices</field>
+        </record>
+    </data>
+</odoo>

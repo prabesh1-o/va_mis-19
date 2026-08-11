@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_service_list_inherit" model="ir.ui.view">
+        <field name="name">mis.service.list.inherit</field>
+        <field name="model">mis.services</field>
+        <field name="inherit_id" ref="mis_services.mis_services_list_view" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='tag_ids']" position="after">
+                    <field name="total_price"/>
+                    <field name="total_component_count"/>
+                    <field name="service_menu_id"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="mis_service_kanban_inherit" model="ir.ui.view">
+        <field name="name">mis.service.kanban.inherit</field>
+        <field name="model">mis.services</field>
+        <field name="inherit_id" ref="mis_services.mis_services_kanban_view" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//div[@name='service_header']" position="after">
+                    <div class="container o_kanban_card_content mt0">
+                        <div class="row mb16">
+                            <div class="col o_kanban_primary_right">
+                                <div class="d-flex">
+                                    <field name="total_component_info"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-primary">
+                            <div class="col-6 border-end">
+                                <div class="d-flex flex-column align-items-center">
+                                    <span>
+                                        <label for="total_price" class="mb0">Total Price</label>
+                                    </span>
+                                    <field name="company_currency_id" invisible="1"/>
+                                    <field name="total_price"/>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="d-flex flex-column align-items-center">
+                                    <span>
+                                        <label for="total_component_count" class="mb0">Total Component</label>
+                                    </span>
+                                    <field name="total_component_count"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="mis_service_form_inherit" model="ir.ui.view">
+        <field name="name">mis.service.form.inherit</field>
+        <field name="model">mis.services</field>
+        <field name="inherit_id" ref="mis_services.mis_services_form_view" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//div[@name='service_information']" position="after">
+                    <div class="mt-3">
+                        <label for="component_ids"/>
+                        <field name="component_ids" class="mt-1">
+                            <list string="product_services" no_open="True">
+                                <field name="name"/>
+                                <field name="component_type"/>
+                                <field name="company_currency_id" invisible="1"/>
+                                <field name="price" widget="monetary"/>
+                                <field name="quantity" />
+                                <field name="price_subtotal" widget="monetary" sum="Total Amount" />
+                            </list>
+                        </field>
+                    </div>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+</odoo>

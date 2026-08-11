@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_installation_form_inherit" model="ir.ui.view">
+        <field name="name">mis.device.installation.form.inherit</field>
+        <field name="model">mis.device.installation</field>
+        <field name="inherit_id" ref="mis_device_installation.mis_installation_form" />
+        <field name="priority">17</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="object"
+                    name="action_view_delivery"
+                    class="oe_stat_button"
+                    icon="fa-truck"
+                    invisible="delivery_count == 0">
+                    <field name="delivery_count" widget="statinfo" string="Delivery"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='completeness']" position="after">
+                <field name="source_location_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

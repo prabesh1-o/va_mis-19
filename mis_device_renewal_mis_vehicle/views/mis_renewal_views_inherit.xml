@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_renewal_form_inherit_device" model="ir.ui.view">
+        <field name="name">mis.renewal.form.inherit.device</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="inherit_id" ref="mis_device_renewal.mis_renewal_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='imei_no']" position="after">
+                    <field name="vehicle_id" readonly="1" options="{'no_open': True}"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

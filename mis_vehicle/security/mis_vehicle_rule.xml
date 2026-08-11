@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_vehicle_manager" model="ir.rule">
+        <field name="name">User can see all vehicles</field>
+        <field name="model_id" ref="model_mis_vehicle" />
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_mis_vehicle_manager'))]" />
+    </record>
+
+</odoo>

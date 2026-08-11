@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_template_inherit_from_mis_product" model="ir.ui.view">
+            <field name="name">product.template.inherit.from.mis_product</field>
+            <field name="model">mis.product</field>
+            <field name="inherit_id" ref="mis_products.mis_product_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='price']" position="before">
+                    <field name="detailed_type" />
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

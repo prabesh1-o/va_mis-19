@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="blacklist_customer_view_list" model="ir.ui.view">
+            <field name="name">blacklist.customer.view.list</field>
+            <field name="model">mis.blacklist.customer</field>
+            <field name="arch" type="xml">
+                <list string="Blacklist" decoration-danger="stage == 'request'" decoration-muted="stage == 'approved'" decoration-warning="stage== 'rejected'">
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="request_date"/>
+                    <field name="requested_by"/>
+                    <field name="stage"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="blacklist_customer_view_kanban" model="ir.ui.view">
+            <field name="name">blacklist.customer.view.kanban</field>
+            <field name="model">mis.blacklist.customer</field>
+            <field name="arch" type="xml">
+                <kanban string="Blacklist" default_group_by="stage">
+                    <templates>
+                        <t t-name="card">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_details">
+                                    <div>
+                                        <strong>
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <div>
+                                        <h4>
+                                            <field name="customer_id"/>
+                                        </h4>
+                                    </div>
+                                    <div>
+                                        <field name="request_date"/>
+                                    </div>
+                                    <div>
+                                        <field name="requested_by"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <!-- <record id="blacklist_customer_view_search" model="ir.ui.view">
+            <field name="name">blacklist.customer.view.search</field>
+            <field name="model">mis.blacklist.customer</field>
+            <field name="arch" type="xml">
+                <search string="Blacklist">
+                    <field name="customer_id"/>
+                    <field name="name"/>
+                    <field name="request_date"/>
+                    <field name="approved_date"/>
+                    <field name="requested_by"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Customer" name="group_by_customer_id" context="{'group_by':'customer_id'}"/>
+                        <filter string="Requested By" name="group_by_requested_by" context="{'group_by':'requested_by'}"/>
+                    </group>
+                    <separator />
+                    <filter invisible="1" string="Late Activities" name="activities_overdue" domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]" />
+                    <filter invisible="1" string="Today Activities" name="activities_today" domain="[('my_activity_date_deadline', '=', context_today().strftime('%Y-%m-%d'))]" />
+                    <filter invisible="1" string="Future Activities" name="activities_upcoming_all" domain="[('my_activity_date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]" />
+                    <separator />
+                </search>
+            </field>
+        </record> -->
+        <record id="blacklist_customer_view_search" model="ir.ui.view">
+            <field name="name">blacklist.customer.view.search</field>
+            <field name="model">mis.blacklist.customer</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="blacklist_customer_view_form" model="ir.ui.view">
+            <field name="name">blacklist.customer.view.form</field>
+            <field name="model">mis.blacklist.customer</field>
+            <field name="arch" type="xml">
+                <form string="Blacklist">
+                    <header>
+                        <button string="Confirm" name="action_btn" type="object" class="oe_highlight" invisible="stage != 'request'"/>
+                        <button string="Validate" name="action_btn" type="object" groups="va_mis.group_mis_admin,va_mis.group_mis_account" class="oe_highlight" invisible="stage != 'verification'"/>
+                        <button string="Approve" name="action_btn" type="object" class="oe_highlight" groups="va_mis.group_mis_admin" invisible="stage != 'approval'"/>
+                        <button string="Reject" name="action_reject" type="object" groups="va_mis.group_mis_admin,va_mis.group_mis_account" invisible="stage in ['approved', 'rejected']"/>
+                        <button string="Mark as request" name="action_reset" type="object" invisible="stage in ['request', 'approved']"/>
+                        <field name="stage" widget="statusbar" statusbar_visible="request,verification,approval,approved"/>
+                    </header>
+                    <div invisible="stage != 'rejected'">
+                        <div class="alert alert-info mb-0" role="alert" style="background-color: #ffefb8;" invisible="rejection_reason">
+                            The rejection reason is empty! Add a reason.
+                        </div>
+                    </div>
+                    <sheet>
+                        <widget name="web_ribbon" title="Blacklisted" invisible="stage != 'approved'" bg_color="bg-danger"/>
+                        <widget name="web_ribbon" title="Rejected" invisible="stage != 'rejected'" bg_color="bg-warning"/>
+                        <div class="oe_title">
+                            <h2>
+                                <field name="name"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <field name="customer_id" readonly="stage == 'approved'"/>
+                            <field name="request_date" readonly="stage == 'approved'"/>
+                            <field name="requested_by" readonly="stage == 'approved'"/>
+                            <field name="reason" readonly="stage == 'approved'"/>
+                            <field name="verify_date" invisible="stage not in ['approval', 'approved']" readonly="stage == 'approved'"/>
+                            <field name="verified_by" invisible="stage not in ['approval', 'approved']" readonly="stage == 'approved'"/>
+                            <field name="approved_date" invisible="stage != 'approved'" readonly="stage == 'approved'"/>
+                            <field name="approved_by" invisible="stage != 'approved'" readonly="stage == 'approved'"/>
+                            <field name="rejection_reason" invisible="stage != 'rejected'"/>
+                        </group>
+                        <notebook>
+                            <page name="Description" string="Description">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!-- Chatter -->
+                    <chatter>
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </chatter>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="blacklist_customer_action_window">
+            <field name="name">Blacklist Requests</field>
+            <field name="res_model">mis.blacklist.customer</field>
+            <field name="view_mode">list,kanban,form</field>
+        </record>
+        <menuitem name="Blacklist Requests" id="blacklist_customer_menuitem" parent="va_mis.res_partner_menu_customers" action="blacklist_customer_action_window" sequence="2"/>
+    </data>
+</odoo>

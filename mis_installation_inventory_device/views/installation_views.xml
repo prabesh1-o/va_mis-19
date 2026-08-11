@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_installation_line_form_inherit" model="ir.ui.view">
+        <field name="name">mis.installation.form.inherit</field>
+        <field name="model">mis.device.installation</field>
+        <field name="priority">19</field>
+        <field name="inherit_id" ref="mis_device_installation.mis_installation_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='installation_line_ids']/list/field[@name='state']"
+                    position="after">
+                    <field name="stock_device_id"/>
+                    <field name="stock_sim_id" />
+                </xpath>
+                <xpath
+                    expr="//field[@name='installation_line_ids']/form/group/group[@name='installation_information']"
+                    position="inside">
+                    <field name="stock_device_id" />
+                    <field name="stock_sim_id" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

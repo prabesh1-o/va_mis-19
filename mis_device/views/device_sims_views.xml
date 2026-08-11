@@ -1,0 +1,66 @@
+<odoo>
+    <data>
+        <record id='device_sims_view_list' model='ir.ui.view'>
+            <field name="name">mis.device.sim.list</field>
+            <field name="model">mis.device.sim</field>
+            <field name="arch" type="xml">
+                <list string="Sims" export_xlsx="false">
+                    <field name="sim_no" />
+                    <field name="sim_carrier" />
+                    <field name="data_plan" />
+                    <field name="serial_no" />
+                    <field name="sim_recharge_id" />
+                    <field name="automatic_recharge" widget="boolean_toggle" optional="1" />
+                    <field name="puk1" optional="hide"/>
+                    <field name="puk2" optional="hide"/>
+                    <field name="pin1" optional="hide"/>
+                    <field name="pin2" optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <record id='device_sims_view_form' model='ir.ui.view'>
+            <field name="name">mis.device.sim.form</field>
+            <field name="model">mis.device.sim</field>
+            <field name="arch" type="xml">
+                <form string="Sims">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_recharge_history" type="object" class="oe_stat_button" icon="fa-history" context="{'xml_id':'mis_device.mis_device_sim_recharge_history_action'}">
+                                <field name="sim_recharge_history_count" widget="statinfo" nolabel="1"/>
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Recharge</span>
+                                    <span class="o_stat_text">History</span>
+                                </div>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="sim_no"/>
+                                <field name="sim_carrier"/>
+                                <field name="data_plan"/>
+                                <field name="serial_no"/>
+                                <field name="automatic_recharge" widget="boolean_toggle" />
+                            </group>
+                            <group>
+                                <field name="puk1"/>
+                                <field name="puk2"/>
+                                <field name="pin1"/>
+                                <field name="pin2"/>
+                                <field name="sim_recharge_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="device_sims_action">
+            <field name="name">SIM</field>
+            <field name="res_model">mis.device.sim</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem id="device_sims_root_menu" name="SIM" parent="device_category_menu_item" sequence="5" groups="va_mis.group_mis_admin,va_mis.group_mis_operation,va_mis.group_mis_account"/>
+        <menuitem id="device_sims_menu" name="SIM" action="device_sims_action" parent="device_sims_root_menu"/>
+    </data>
+</odoo>

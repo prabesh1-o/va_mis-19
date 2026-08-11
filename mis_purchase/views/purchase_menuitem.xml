@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="mis_purchase_menu" name="Purchases" parent="va_mis.mis_root_menu" sequence="7">
+        <menuitem id="mis_purchase_rfq" name="Requests For Quotation" action="purchase.purchase_rfq" />
+        <menuitem id="mis_purchase_orders" name="Purchase Orders"
+            action="purchase.purchase_form_action" />
+    </menuitem>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="mis_nepali_date_picker_inherits_mis_device_tree" model="ir.ui.view">
+        <field name="name">mis.nepali.date.picker.inherit.mis_device.tree</field>
+        <field name="model">mis.device</field>
+        <field name="inherit_id" ref="mis_device.mis_device_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='installed_date']" position="attributes">
+                <attribute name="widget">nepali_datepicker</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

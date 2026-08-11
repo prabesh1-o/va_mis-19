@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_lead_view_only_own_record" model="ir.rule">
+            <field name="name">User can only see their own created lead</field>
+            <field name="model_id" ref="model_lead_raw_data"/>
+            <field name="domain_force">[('create_uid','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_mis_raw_lead_user_readonly'))]"/>
+        </record>
+
+        <record id="mis_raw_lead_manager" model="ir.rule">
+            <field name="name">User can see all raw lead</field>
+            <field name="model_id" ref="model_lead_raw_data" />
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mis_raw_lead_all_documents'))]" />
+        </record>
+    </data>
+</odoo>

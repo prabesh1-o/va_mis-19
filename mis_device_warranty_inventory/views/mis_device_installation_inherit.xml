@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mis_installation_form_inherit_warranty" model="ir.ui.view">
+        <field name="name">mis.device.installation.warranty.form.inherit</field>
+        <field name="model">mis.device.installation</field>
+        <field name="inherit_id" ref="mis_device_installation.mis_installation_form"/>
+        <field name="priority">18</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_delivery_warranty"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-truck"
+                        invisible="warranty_delivery_count == 0">
+
+                    <field name="warranty_delivery_count"
+                           widget="statinfo"
+                           string="Delivery"/>
+                </button>
+
+                <field name="warranty_delivery_count" invisible="1"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

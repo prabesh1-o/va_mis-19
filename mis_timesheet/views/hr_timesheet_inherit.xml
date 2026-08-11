@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="timesheet_menu_root" name="Timesheets" sequence="11" parent="va_mis.mis_root_menu">
+        <menuitem id="timesheet_menu_activity_user" name="My Timesheets" action="hr_timesheet.act_hr_timesheet_line" sequence="4"/>
+        <menuitem id="menu_timesheets_reports" name="Reporting" sequence="5" groups="va_mis.group_mis_admin">
+            <menuitem id="menu_hr_activity_analysis" action="hr_timesheet.act_hr_timesheet_report" groups="hr_timesheet.group_hr_timesheet_approver" name="By Employee" sequence="1"/>
+            <menuitem id="timesheet_menu_report_timesheet_by_project" action="hr_timesheet.timesheet_action_report_by_project" name="By Project" sequence="2"/>
+            <menuitem id="timesheet_menu_report_timesheet_by_task" action="hr_timesheet.timesheet_action_report_by_task" name="By Task" sequence="3"/>
+        </menuitem>
+    </menuitem>
+</odoo>

@@ -1,0 +1,115 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="mis_driver_list">
+      <field name="name">mis.driver.list</field>
+      <field name="model">mis.driver</field>
+      <field name="arch" type="xml">
+        <list string="Drivers">
+          <field name="name"/>
+          <field name="address"/>
+          <field name="contact_no"/>
+          <field name="date_of_birth"/>
+          <field name="license_no"/>
+        </list>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="mis_driver_kanban">
+      <field name="name">mis.driver.kanban</field>
+      <field name="model">mis.driver</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <templates>
+            <t t-name="card">
+              <div class="oe_kanban_global_click">
+                <div class="o_kanban_image">
+                  <field name="image" widget='image' class="oe_avatar"/>
+                </div>
+                <div class="oe_kanban_details">
+                  <strong class="o_kanban_record_title">
+                    <field name="name"/>
+                  </strong>
+                  <div class="o_kanban_tags_section">
+                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                  </div>
+                  <ul>
+                    <li name="license">
+                      <t t-if="record.license_no.raw_value">
+                        <field name="license_no"/>
+                      </t>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="mis_driver_form">
+      <field name="name">mis.driver.form</field>
+      <field name="model">mis.driver</field>
+      <field name="arch" type="xml">
+        <form string="Form">
+          <sheet>
+            <field name="image" widget='image' class="oe_avatar"/>
+            <div class="oe_title col-3">
+              <label for="name"/>
+              <h1>
+                <field name="name" placeholder="Name"/>
+              </h1>
+              <label for="tag_ids"/>
+              <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            </div>
+            <group col="2">
+              <group string="Driver">
+                <field name="gender"/>
+                <field name="contact_no"/>
+                <field name="country_id"/>
+                <field name="address"/>
+                <field name="date_of_birth"/>
+              </group>
+              <group string="Contract" name="contract">
+                <field name="contract_type"/>
+              </group>
+              <notebook>
+                <page string="License">
+                  <group col="3">
+                    <field name="license_no"/>
+                    <field name="registered_date"/>
+                    <field name="registered_address"/>
+                    <field name="allowed_vehicles"/>
+                    <field name="expiry_date"/>
+                  </group>
+                </page>
+                <page string="Note">
+                  <field name="description" nolabel="1" placeholder="Write here any other information related to Driver"/>
+                </page>
+              </notebook>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="mis_driver_search" model="ir.ui.view">
+      <field name="name">mis.driver.search</field>
+      <field name="model">mis.driver</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name" string="Driver's Name"/>
+          <field name="license_no" string="License No"/>
+          <filter name="group_contract_type" string="Contract Type" context="{'group_by': 'contract_type'}"/>
+        </search>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="driver_detail_section_window">
+      <field name="name">Drivers</field>
+      <field name="res_model">mis.driver</field>
+      <field name="view_mode">kanban,list,form</field>
+    </record>
+  </data>
+  <menuitem id="mis_driver_menu" name="Drivers" action="driver_detail_section_window" parent="va_mis.res_partner_menu_customers" sequence="4"/>
+</odoo>

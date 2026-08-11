@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_inherit_mis" model="ir.ui.view">
+        <field name="name">res.partner.inherits.form.va_mis</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//page[@name='contact_addresses']" position="before">
+                    <page string="Devices" name="devices">
+                        <field name="device_ids" />
+                    </page>
+                    <page string="Installed Devices" name="installed_devices">
+                        <field name="installed_device_history_ids">
+                            <list decoration-success="is_active == True" decoration-warning="is_active == False" create="0">
+                                <field name="device_id"/>
+                                <field name="is_active" invisible="1"/>
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="device_count"/>
+                    <field name="company_currency_id" invisible="1"/>
+                    <field name="total_amount_residual" widget="monetary" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

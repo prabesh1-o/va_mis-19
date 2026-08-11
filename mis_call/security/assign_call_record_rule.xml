@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_calls_view_only_assigned_record" model="ir.rule">
+            <field name="name">User can only see their assigned calls</field>
+            <field name="model_id" ref="model_mis_assign_call"/>
+            <field name="domain_force">[('assignee.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('mis_call.group_able_to_access_assigned_calls'))]"/>
+        </record>
+    </data>
+</odoo>

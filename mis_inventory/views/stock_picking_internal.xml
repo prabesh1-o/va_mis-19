@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_form_picking_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <data>
+
+                <xpath expr="//div[@name='button_box']" position="after">
+                    <field name="is_received" invisible="1" />
+                    <widget name="web_ribbon"
+                            title="Received"
+                            invisible="not is_received"
+                            bg_color="bg-success" />
+                </xpath>
+
+                <xpath expr="//page[@name='note']" position="before">
+                    <page name="shipping_info"
+                          string="Shipping Info"
+                          invisible="picking_type_code != 'internal'">
+
+                        <group>
+                            <group>
+                                <field name="carrier_name" />
+                                <field name="contact_info" />
+                                <field name="route" />
+                                <field name="tracking_number" />
+                            </group>
+
+                            <group>
+                                <field name="tracking_url" />
+                                <field name="shipping_fee" />
+                                <field name="received_date" />
+                                <field name="received_by" />
+                            </group>
+
+                            <group>
+                                <button name="action_received_return"
+                                        type="object"
+                                        string="RECEIVED"
+                                        class="btn-primary"
+                                        invisible="is_received" />
+                            </group>
+                        </group>
+
+                    </page>
+                </xpath>
+
+            </data>
+        </field>
+    </record>
+
+
+    <record id="view_picking_tree_received_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.tree.received.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//list" position="inside">
+                <field name="is_received"
+                       string="Received"
+                       optional="hide"
+                       widget="boolean_toggle"
+                       invisible="picking_type_code != 'internal'"
+                       readonly="1" />
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

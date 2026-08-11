@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_template_inherit_from_mis_product" model="ir.ui.view">
+            <field name="name">product.template.inherit.from.mis_product</field>
+            <field name="model">mis.product</field>
+            <field name="inherit_id" ref="mis_products.mis_product_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" name="action_view_mis_product_forcasted"
+                        type="object" icon="fa-cubes">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="forcasted_units" widget="statinfo" nolabel="1"
+                                    class="mr4" />
+                                <field name="uom_name" />
+                            </span>
+                            <span class="o_stat_text">Forecasted</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="action_view_mis_product_onhand"
+                        type="object" icon="fa-cubes">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="qty_available" widget="statinfo" nolabel="1"
+                                    class="mr4" />
+                                <field name="uom_name" />
+                            </span>
+                            <span class="o_stat_text">On Hand</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="action_view_mis_product_moves"
+                        type="object" icon="fa-exchange">
+                        <div class="o_field_widget o_stat_info mr4">
+                            <span class="o_stat_text">In:</span>
+                            <span class="o_stat_text">Out:</span>
+                        </div>
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="nbr_moves_in" />
+                            </span>
+                            <span class="o_stat_value">
+                                <field name="nbr_moves_out" />
+                            </span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="action_view_mis_product_sold" type="object"
+                        icon="fa-signal">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="sales_count" widget="statinfo" nolabel="1" class="mr4" />
+                                <field name="uom_name" />
+                            </span>
+                            <span class="o_stat_text">Sold</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" name="action_view_mis_product_purchase"
+                        type="object" icon="fa-credit-card">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="purchased_product_qty" widget="statinfo" nolabel="1"
+                                    class="mr4" />
+                                <field name="uom_name" />
+                            </span>
+                            <span class="o_stat_text">Purchased</span>
+                        </div>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

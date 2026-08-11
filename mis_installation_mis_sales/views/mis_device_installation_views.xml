@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_installation_form_inherit" model="ir.ui.view">
+        <field name="name">mis.installation.form.inherit</field>
+        <field name="model">mis.device.installation</field>
+        <field name="inherit_id" ref="mis_device_installation.mis_installation_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='total_installations']" position="before">
+                    <field name="sale_order_id" invisible="sale_order_id == False"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="mis_installation_serch_inherit" model="ir.ui.view">
+        <field name="name">mis.installation.search.inherit</field>
+        <field name="model">mis.device.installation</field>
+        <field name="inherit_id" ref="mis_device_installation.mis_device_installation_search" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='customer_id']" position="after">
+                    <field name="sale_order_id" string="Sales Order"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

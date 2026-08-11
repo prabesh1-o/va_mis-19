@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="completed_menu" model="mis.ticket.menu">
+            <field name="name">Completed</field>
+            <field name="sequence">4</field>
+            <field name="active">False</field>
+            <field name="is_completed">True</field>
+        </record>
+        <record id="completed_stage" model="mis.ticket.stage">
+            <field name="name">Archieved</field>
+            <field name="is_completed">True</field>
+        </record>
+    </data>
+</odoo>

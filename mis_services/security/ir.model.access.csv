@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_mis_services_menu_user,mis.services.menu.user,model_mis_services_menu,group_mis_services_user,1,0,0,0
+access_mis_services_menu_manager,mis.services.menu.manager,model_mis_services_menu,group_mis_services_manager,1,1,1,0
+access_mis_services_menu_admin,mis.services.menu.admin,model_mis_services_menu,group_mis_services_administrator,1,1,1,1
+
+access_mis_services_menu_tags_user,mis.services.menu.tags.user,model_mis_services_menu_tags,group_mis_services_user,1,0,0,0
+access_mis_services_menu_tags_manager,mis.services.menu.tags.manager,model_mis_services_menu_tags,group_mis_services_manager,1,1,1,0
+access_mis_services_menu_tags_admin,mis.services.menu.tags.admin,model_mis_services_menu_tags,group_mis_services_administrator,1,1,1,1
+
+access_mis_services_user,mis.services.user,model_mis_services,group_mis_services_user,1,0,0,0
+access_mis_services_manager,mis.services.manager,model_mis_services,group_mis_services_manager,1,1,1,0
+access_mis_services_admin,mis.services.tags.admin,model_mis_services,group_mis_services_administrator,1,1,1,1
+
+access_mis_services_tags_user,mis.services.tags.user,model_mis_services_tags,group_mis_services_user,1,0,0,0
+access_mis_services_tags_manager,mis.services.tags.manager,model_mis_services_tags,group_mis_services_manager,1,1,1,0
+access_mis_services_tags_admin,mis.services.tags.admin,model_mis_services_tags,group_mis_services_administrator,1,1,1,1

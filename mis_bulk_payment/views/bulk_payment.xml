@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_bulk_payment_view_form" model="ir.ui.view">
+            <field name="name">mis.bulk.payment.view.form</field>
+            <field name="model">mis.bulk.payment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_open_payment" type="object" string="Add Credits"
+                            class="btn-primary" create="false" edit="false" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="customers" />
+                            <field name="customer_invoice_ids">
+                                <list create="False" delete="False">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="invoice_date" />
+                                    <field name="name" />
+                                    <field name="amount_total" sum="Total" />
+                                    <field name="amount_residual" sum="Total Remaining"/>
+                                    <field name="payment_state" widget="badge"
+                                        decoration-danger="payment_state == 'not_paid'"
+                                        decoration-warning="payment_state in ('partial', 'in_payment')" />
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'posted'"
+                                        decoration-info="state == 'draft'" />
+                                </list>
+                            </field>
+                            <field name="outbound_payment_ids">
+                                <list create="False" delete="False" >
+                                    <field name="sequence" widget="handle" />
+                                    <field name="date" />
+                                    <field name="name" />
+                                    <field name="journal_id" />
+                                    <field name="payment_method_line_id" />
+                                    <field name="partner_id" />
+                                    <field name="amount_company_currency_signed" sum="total unsigned" string="Total"/>
+                                    <field name="remaining_credit"/>
+                                    <field name="state" widget="badge"
+                                        decoration-info="state == 'draft'"
+                                        decoration-success="state == 'posted'" />
+                                </list>
+                            </field>
+                        </group>
+                        <group>
+                            <button name="action_pay" type="object" string="Pay"
+                            class="btn-primary "></button>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="mis_bulk_payment_view_list" model="ir.ui.view">
+            <field name="name">mis.bulk.payment.view.list</field>
+            <field name="model">mis.bulk.payment</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="customers" />
+                    <field name="create_date"/>
+                    <field name="create_date"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="mis_bulk_payment_action" model="ir.actions.act_window">
+            <field name="name">MIS Bulk Payment</field>
+            <field name="res_model">mis.bulk.payment</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="mis_bulk_payment_menu" name="Bulk Payments" action="mis_bulk_payment_action"
+            parent="mis_invoice.mis_invoice_menu" sequence="4" />
+    </data>
+</odoo>

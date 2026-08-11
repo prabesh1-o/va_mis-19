@@ -1,0 +1,11 @@
+# Defaults for all Prettier-supported languages.
+# Compatible with Prettier 3.x
+
+bracketSpacing: false
+printWidth: 100
+proseWrap: preserve
+semi: true
+singleQuote: true
+trailingComma: all
+arrowParens: always
+xmlWhitespaceSensitivity: strict

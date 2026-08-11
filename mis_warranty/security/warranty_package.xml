@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- warranty package -->
+        <record model="ir.module.category" id="mis_warranty_package_management">
+            <field name="name">MIS Warranty Package</field>
+            <field name="description">MIS Warranty Package</field>
+            <field name="parent_id" ref="mis_warranty_management_parent" />
+        </record>
+
+        <record id="privilege_warranty_package" model="res.groups.privilege">
+            <field name="name">Mis Warranty Package</field>
+            <field name="category_id" ref="mis_warranty_package_management"/>
+            <field name="sequence">10</field>
+        </record>
+
+
+        <!-- warranty package user:readonly  -->
+        <record id="group_mis_warranty_package_user" model="res.groups">
+            <field name="name">User: Read Only</field>
+            <field name="privilege_id" ref ="privilege_warranty_package" />
+            <field name="comment">The user will have readonly access to records.</field>
+        </record>
+
+        <!-- warranty package administrator -->
+        <record id="group_mis_warranty_package_administrator" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="privilege_id" ref ="privilege_warranty_package" />
+            <field name="implied_ids" eval="[(4, ref('group_mis_warranty_package_user'))]" />
+            <field name="comment">Administrator has full access to all records</field>
+            <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+        </record>
+
+        <!-- warranty type -->
+        <record model="ir.module.category" id="mis_warranty_type_management">
+            <field name="name">MIS Warranty Type</field>
+            <field name="description">MIS Warranty Type</field>
+            <field name="parent_id" ref="mis_warranty_management_parent" />
+        </record>
+
+        <record id="privilege_warranty_type" model="res.groups.privilege">
+            <field name="name">Warranty Type Privilege</field>
+            <field name="category_id" ref="mis_warranty_type_management"/>
+        </record>
+
+        <!-- warranty type user:readonly  -->
+        <record id="group_mis_warranty_type_user" model="res.groups">
+            <field name="name">User: Read Only</field>
+            <field name="privilege_id" ref ="privilege_warranty_type" />
+            <field name="comment">The user will have readonly access to records.</field>
+        </record>
+
+        <!-- warranty type administrator -->
+        <record id="group_mis_warranty_type_administrator" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="privilege_id" ref ="privilege_warranty_type" />
+            <field name="implied_ids" eval="[(4, ref('group_mis_warranty_type_user'))]" />
+            <field name="comment">dministrator has full access to all records</field>
+            <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,50 @@
+<odoo>
+    <data noupdate="1">
+
+        <record id="action_expired_device_list" model="ir.actions.server">
+            <field name="name">Subscription Expired Device List</field>
+            <field name="model_id" ref="model_mis_device_renewal"/>
+            <field name="state">code</field>
+            <field name="code">model.update_expired_device_list()</field>
+        </record>
+
+        <record id="action_update_renewal_card_stage" model="ir.actions.server">
+            <field name="name">Mis Device Renewal: Update Renewal Card Stage</field>
+            <field name="model_id" ref="model_mis_device_renewal"/>
+            <field name="state">code</field>
+            <field name="code">model.update_stage_grace_period_renewal_card()</field>
+        </record>
+
+        <record id="action_update_completed_renewal_card" model="ir.actions.server">
+            <field name="name">Mis Device Renewal: Update Completed Renewal Card</field>
+            <field name="model_id" ref="model_mis_device_renewal"/>
+            <field name="state">code</field>
+            <field name="code">model.update_inactive_renewals()</field>
+        </record>
+
+        <record id="expired_device_list" model="ir.cron">
+            <field name="name">Subscription Expired Device List</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="ir_actions_server_id" ref="action_expired_device_list"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="update_renewal_card_stage" model="ir.cron">
+            <field name="name">Mis Device Renewal: Update Renewal Card Stage</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="ir_actions_server_id" ref="action_update_renewal_card_stage"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="update_completed_renewal_card" model="ir.cron">
+            <field name="name">Mis Device Renewal: Update Completed Renewal Card</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="ir_actions_server_id" ref="action_update_completed_renewal_card"/>
+            <field name="active" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

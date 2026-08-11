@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="va_mis.clear_login_layout" inherit_id="web.login" name="mis_inherit_web_login_template">
+        <xpath expr="//button[@type='submit']/following-sibling::*" position="replace">
+        </xpath>
+        <xpath expr="//button[@type='submit']/following-sibling::*" position="replace">
+            <t t-set="disable_footer">1</t>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mis_device_installation_history_view_list" model="ir.ui.view">
+        <field name="name">mis.device.installation.history.view.list</field>
+        <field name="model">mis.device.installation.history</field>
+        <field name="arch" type="xml">
+            <list string="Installation History" create="0">
+                <field name="device_id" />
+                <field name="vehicle_id" />
+                <field name="customer_id" />
+                <field name="installed_date" />
+                <field name="installed_by" widget="many2many_avatar_user"/>
+                <field name="installation_price" />
+                <field name="installation_id" optional="hide" />
+            </list>
+        </field>
+    </record>
+
+    <record id="mis_device_installation_history_view_form" model="ir.ui.view">
+        <field name="name">mis.device.installation.history.view.form</field>
+        <field name="model">mis.device.installation.history</field>
+        <field name="arch" type="xml">
+            <form string="Installation History">
+                <sheet>
+                    <group>
+                        <field name="device_id" />
+                        <field name="installed_date" />
+                        <field name="installed_by" widget="many2many_avatar_user"/>
+                        <field name="installation_price" />
+                        <field name="vehicle_id" />
+                        <field name="customer_id" />
+                        <field name="installation_id" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="mis_device_installation_history_action">
+        <field name="name">Installation History</field>
+        <field name="res_model">mis.device.installation.history</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

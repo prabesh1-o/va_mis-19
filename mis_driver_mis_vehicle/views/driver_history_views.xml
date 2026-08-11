@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- List View -->
+        <record id="mis_vehicle_assignation_log_view_list" model="ir.ui.view">
+            <field name="name">mis.driver.history.list</field>
+            <field name="model">mis.driver.history</field>
+            <field name="arch" type="xml">
+                <list string="Assignment Logs" create="0" editable="bottom">
+                    <field name="driver_id"/>
+                    <field name="vehicle_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="mis_vehicle_assignation_log_view_form" model="ir.ui.view">
+            <field name="name">mis.driver.history.form</field>
+            <field name="model">mis.driver.history</field>
+            <field name="arch" type="xml">
+                <form string="Driver History">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="driver_id"/>
+                                <field name="vehicle_id"/>
+                            </group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="driver_history_search" model="ir.ui.view">
+            <field name="name">mis.driver.history.search</field>
+            <field name="model">mis.driver.history</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="driver_id"/>
+                    <field name="vehicle_id"/>
+
+                    <filter string="Assigned" name="assigned" domain="[('end_date','=',False)]"/>
+
+                    <separator/>
+
+                    <filter string="Driver" name="group_by_driver" domain="[]" context="{'group_by':'driver_id'}"/>
+
+                    <filter string="Vehicle" name="group_by_vehicle" domain="[]" context="{'group_by':'vehicle_id'}"/>
+                </search>
+            </field>
+        </record>
+        <!-- Action -->
+        <record id="driver_history_action" model="ir.actions.act_window">
+            <field name="name">Driver History</field>
+            <field name="res_model">mis.driver.history</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="driver_history_search"/>
+        </record>
+
+    </data>
+</odoo>
+
+
+

@@ -1,0 +1,63 @@
+<odoo>
+    <data>
+        <record id='mis_supplier_list_view' model='ir.ui.view'>
+            <field name="name">mis.supplier.list</field>
+            <field name="model">mis.supplier</field>
+            <field name="arch" type="xml">
+                <list string="Supplier" export_xlsx="false">
+                    <field name="name" />
+                    <field name="address" />
+                    <field name="contact_no" />
+                    <field name="email" />
+                    <field name="website" />
+                    <field name="state" />
+                </list>
+            </field>
+        </record>
+
+        <record id='mis_supplier_view_form' model='ir.ui.view'>
+            <field name="name">mis.supplier.form</field>
+            <field name="model">mis.supplier</field>
+            <field name="arch" type="xml">
+                <form string="Supplier">
+                    <header>
+                        <field name="state" widget="statusbar" options="{'clickable': 1}"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="address" />
+                            <field name="contact_no" />
+                            <field name="email" widget="email"/>
+                            <field name="website" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="mis_supplier_search" model="ir.ui.view">
+            <field name="name">mis.supplier.search</field>
+            <field name="model">mis.supplier</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Supplier"/>
+                    <field name="address" string="Address"/>
+                    <field name="contact_no" string="Contact"/>
+                    <filter name="state" string="Active Supplier" domain="[('state','=','active')]" />
+                    <filter name="state" string="Inactive Supplier" domain="[('state','=','inactive')]" />
+                    
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}" />
+                    
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_supplier_action">
+            <field name="name">Supplier</field>
+            <field name="res_model">mis.supplier</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem id="mis_supplier_menu" name="Supplier" action="mis_supplier_action" parent="mis_product_parent_menu" sequence="3"/>
+    </data>
+</odoo>

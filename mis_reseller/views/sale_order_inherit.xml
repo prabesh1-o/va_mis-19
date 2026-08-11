@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <record id="mis_installation_sale_service_inherits_form_view" model="ir.ui.view">
+
+            <field name="name">mis.installation.sale.service.inherits.form.view</field>
+            <field name="model">sale.order</field>
+
+            <field name="inherit_id"
+                ref="mis_installation_sale_service.mis_installation_sale_service_sale_inherits_sale_order_form_view"/>
+
+            <field name="arch" type="xml">
+
+                <xpath expr="//form" position="inside">
+                    <field name="reseller_id" invisible="1"/>
+                </xpath>
+
+
+                <xpath expr="//button[@name='action_create_installation_order']"
+                       position="attributes">
+
+                    <attribute name="invisible">
+                        state != 'sale' or reseller_id != False
+                    </attribute>
+
+                </xpath>
+
+
+            </field>
+
+        </record>
+
+    </data>
+</odoo>

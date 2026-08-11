@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_tickets_view_only_assigned_record" model="ir.rule">
+            <field name="name">User can only see their assigned tickets</field>
+            <field name="model_id" ref="model_mis_ticket"/>
+            <field name="domain_force">[('employee_ids.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_mis_ticket_user_readonly'))]"/>
+        </record>
+
+        <record id="mis_ticket_manager" model="ir.rule">
+            <field name="name">User can see all warrantys</field>
+            <field name="model_id" ref="model_mis_ticket" />
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mis_ticket_all_documents'))]" />
+        </record>
+
+        <record id="mis_ticket_menu_manager" model="ir.rule">
+            <field name="name">User can see all mis ticket menu</field>
+            <field name="model_id" ref="model_mis_ticket_menu" />
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mis_ticket_menu_all_documents'))]" />
+        </record>
+    </data>
+</odoo>

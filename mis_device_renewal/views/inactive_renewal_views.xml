@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.actions.act_window" id="mis_renewal_inactive_action">
+        <field name="name">Inactive renewals</field>
+        <field name="res_model">mis.device.renewal</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('active', '=', False)]</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <menuitem id="inactive_renewal_menu" name="Archieved Renewals" parent="mis_renewal_menu" action="mis_renewal_inactive_action" sequence="2"/>
+
+</odoo>

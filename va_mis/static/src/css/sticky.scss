@@ -1,0 +1,36 @@
+.o_kanban_group .o_kanban_header {
+  position: sticky;
+  z-index: 1;
+  background-color: white;
+}
+
+.o_list_view .o_list_table thead {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.o_account_reports_page .table-responsive {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.table-responsive {
+  overflow: visible;
+}
+
+.o_notebook_content {
+  .table-responsive {
+    overflow: scroll;
+  }
+}
+
+.o_list_view .table-responsive .table thead {
+  z-index: 1;
+}
+
+.o_list_renderer .o_list_table thead {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}

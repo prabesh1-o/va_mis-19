@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_inherit_mis_device" model="ir.ui.view">
+        <field name="name">res.partner.inherits.form.mis.device</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="mis_device.res_partner_inherit_mis" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='is_active']" position="after">
+                    <field name="product_id"/>
+                    <field name="model_id"/>
+                    <field name="manufacturer"/>
+                    <field name="port"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

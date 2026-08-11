@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_call_form_inherit_vehicle" model="ir.ui.view">
+        <field name="name">mis.call.form.inherit.device</field>
+        <field name="model">mis.call</field>
+        <field name="inherit_id" ref="mis_call.mis_call_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='ticket_detail']/field[@name='customer_id']" position="after">
+                <field name="vehicle_id" required="category == 'ticket'" domain="[('device_ids.customer_id','in', customer_id)] if customer_id else []"/>
+            </xpath>
+            <xpath expr="//group[@name='ticket_detail']/field[@name='customer_id']" position="attributes">
+                <attribute name="domain">[('device_ids.vehicle_id','=', vehicle_id)] if vehicle_id else []</attribute>
+            </xpath>
+            <xpath expr="//field[@name='imei_no']" position="after">
+                <field name="vehicle_id" readonly="1" options="{'no_open': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

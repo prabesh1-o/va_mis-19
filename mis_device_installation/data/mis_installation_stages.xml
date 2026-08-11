@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="requests_stage" model="mis.device.installation.stage">
+            <field name="name">Requests</field>
+            <field name="sequence">0</field>
+            <field name="is_default_stage">True</field>
+        </record>
+        <record id="in_progress_stage" model="mis.device.installation.stage">
+            <field name="name">In Progress</field>
+            <field name="sequence">1</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_in_progress_stage">True</field>
+        </record>
+        <record id="verification_stage" model="mis.device.installation.stage">
+            <field name="name">Verification</field>
+            <field name="sequence">2</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_verification_stage">True</field>
+        </record>
+        <record id="completed_stage" model="mis.device.installation.stage">
+            <field name="name">Completed</field>
+            <field name="sequence">3</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_complete_stage">True</field>
+        </record>
+        <record id="canceled_stage" model="mis.device.installation.stage">
+            <field name="name">Canceled</field>
+            <field name="sequence">4</field>
+            <field name="is_default_stage">True</field>
+            <field name="is_canceled_stage">True</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_mis_bulk_payment,mis.bulk.payment,model_mis_bulk_payment,base.group_user,1,1,1,1
+access_mis_bulk_payment_read,mis.bulk.payment,model_mis_bulk_payment,group_able_to_read_bulk_payment,1,0,0,0
+access_mis_bulk_payment_update,mis.bulk.payment,model_mis_bulk_payment,group_able_to_update_bulk_payment,0,1,0,0
+access_mis_bulk_payment_create,mis.bulk.payment,model_mis_bulk_payment,group_able_to_create_bulk_payment,0,0,1,0
+access_mis_bulk_payment_delete,mis.bulk.payment,model_mis_bulk_payment,group_able_to_delete_bulk_payment,0,0,0,1

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id='mis_component_list_view' model='ir.ui.view'>
+        <field name="name">service_component.list.form</field>
+        <field name="model">mis.service.components</field>
+        <field name="arch" type="xml">
+            <list string="components" export_xlsx="false">
+                <field name="name" />
+                <field name="component_type" />
+                <field name="price" />
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="mis_component_kanban_view">
+        <field name="name">service_component.kanban.form</field>
+        <field name="model">mis.service.components</field>
+        <field name="arch" type="xml">
+            <kanban string="components" class="o_kanban_component_template" sample="1">
+                <field name="name"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+
+                            <div class="oe_kanban_details">
+                                <div class="o_kanban_record_top mb-0">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <div class="d-flex justify-content-between">
+                                                <t t-if="record.name.raw_value">
+                                                    <field name="name" />
+                                                </t>
+                                            </div>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div name="component_type">
+                                    <t t-if="record.component_type.raw_value">
+                                        <field name="component_type"/>
+                                    </t>
+                                </div>
+                                <div name="component_price" class="mt-1">
+                                    <strong>Price: </strong>
+                                    <field name="price" widget="monetary"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="service_component_view_form" model="ir.ui.view">
+        <field name="name">service_component.view.form</field>
+        <field name="model">mis.service.components</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group class="col-6">
+                        <field name="name" />
+                        <field name="component_type" />
+                        <field name="price" />
+                        <field name="description" />
+                    </group>
+                </sheet>
+                <chatter>
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </chatter>
+            </form>
+        </field>
+    </record>
+
+    <record id="service_component_action" model="ir.actions.act_window">
+        <field name="name">Service Components</field>
+        <field name="res_model">mis.service.components</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <menuitem id="service_component_main_menu" name="Service Component" action="service_component_action" parent="va_mis.mis_root_menu"/>
+
+</odoo>

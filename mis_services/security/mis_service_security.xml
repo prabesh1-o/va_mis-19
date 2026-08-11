@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="mis_service_management_parent">
+            <field name="name">MIS Services</field>
+            <field name="description">MIS Services related modules</field>
+            <field name="sequence">11</field>
+        </record>
+
+        <record model="ir.module.category" id="mis_service_management">
+            <field name="name">MIS Services</field>
+            <field name="description">Mis Service Access</field>
+            <field name="parent_id" ref="mis_service_management_parent"/>
+        </record>
+
+        <record id="privilege_service_access" model="res.groups.privilege">
+        <field name="name">MIS Service</field>
+        <field name="sequence">10</field>
+        <field name="category_id" ref="mis_service_management"/>
+        </record>
+
+        <!-- User: Own Documents Only -->
+        <record id="group_mis_services_user" model="res.groups">
+            <field name="name">User: Read Only</field>
+            <field name="privilege_id" ref="privilege_service_access" />
+            <field name="comment">The user will have readonly access to mis services.</field>
+        </record>
+
+        <!-- manager: without delete option -->
+        <record id="group_mis_services_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="privilege_id" ref="privilege_service_access" />
+            <field name="implied_ids"
+                eval="[(4, ref('group_mis_services_user'))]" />
+            <field name="comment">The user will have read,create,update access to all mis services</field>
+        </record>
+
+        <!-- admin: all access rights -->
+        <record id="group_mis_services_administrator" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="privilege_id" ref="privilege_service_access" />
+            <field name="implied_ids"
+                eval="[(4, ref('group_mis_services_manager'))]" />
+            <field name="comment">The user will have all access to mis services</field>
+        </record>
+    </data>
+</odoo>

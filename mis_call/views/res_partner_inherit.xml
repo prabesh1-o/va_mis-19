@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_inherit_mis_call" model="ir.ui.view">
+        <field name="name">res.partner.inherits.form.mis_call</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='contact_addresses']" position="before">
+
+                <page string="Calls" name="calls">
+
+                    <!-- Normal Calls -->
+                    <div>
+                        <span modifiers='{"invisible": [["call_ids", "=", []]]}'>
+                            <strong>Normal Calls:</strong>
+                        </span>
+
+                        <sheet modifiers='{"invisible": [["call_ids", "=", []]]}'>
+                            <field name="call_ids" readonly="1"/>
+                        </sheet>
+                    </div>
+
+                    <!-- Campaign Calls -->
+                    <div groups="mis_call.group_able_to_read_assign_call">
+                        <span modifiers='{"invisible": [["assign_call_ids", "=", []]]}'>
+                            <strong>Campaign Calls:</strong>
+                        </span>
+
+                        <sheet modifiers='{"invisible": [["assign_call_ids", "=", []]]}'>
+                            <field name="assign_call_ids" readonly="1"/>
+                        </sheet>
+                    </div>
+
+                </page>
+
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

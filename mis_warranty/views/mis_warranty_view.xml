@@ -1,0 +1,196 @@
+<odoo>
+    <data>
+
+        <!-- ===================== KANBAN ===================== -->
+        <record model="ir.ui.view" id="mis_warranty_kanban">
+            <field name="name">mis.warranty.kanban</field>
+            <field name="model">mis.warranty</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="stage">
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_card oe_kanban_global_click border-2 rounded-3 mt-2">
+
+                                <div class="oe_kanban_content">
+
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong>
+                                                <field name="name"/>
+                                            </strong>
+                                            <br/>
+                                            <strong class="text-dark">
+                                                <field name="customer_id"/>
+                                            </strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="o_kanban_record_bottom">
+
+                                        <div class="oe_kanban_bottom_left">
+                                            <field name="charge"/>
+                                            <field name="company_currency_id" invisible="1"/>
+                                        </div>
+
+                                        <div class="oe_kanban_bottom_right">
+                                            <small class="text-muted">
+                                                <field name="create_date" widget="date"/>
+                                            </small>
+                                            <span class="p-1">
+                                                <field name="employee_ids" widget="many2many_avatar_user"/>
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- ===================== LIST ===================== -->
+        <record model="ir.ui.view" id="mis_warranty_list">
+            <field name="name">mis.warranty.list</field>
+            <field name="model">mis.warranty</field>
+            <field name="arch" type="xml">
+                <list decoration-success="stage == 'resolved'">
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="stage"/>
+                    <field name="employee_ids" widget="many2many_avatar_user"/>
+                    <field name="charge" sum="Total Charge"/>
+                    <field name="company_currency_id" invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ===================== GRAPH ===================== -->
+        <record id="mis_warranty_graph" model="ir.ui.view">
+            <field name="name">mis.warranty.graph</field>
+            <field name="model">mis.warranty</field>
+            <field name="arch" type="xml">
+                <graph string="Warranty" sample="1">
+                    <field name="customer_id"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- ===================== SEARCH ===================== -->
+        <record id="mis_warranty_search" model="ir.ui.view">
+            <field name="name">mis.warranty.search</field>
+            <field name="model">mis.warranty</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ===================== FORM ===================== -->
+        <record model="ir.ui.view" id="mis_warranty_form">
+            <field name="name">mis.warranty.form</field>
+            <field name="model">mis.warranty</field>
+            <field name="arch" type="xml">
+
+                <form string="Warranty">
+
+                    <!-- HEADER -->
+                    <header>
+                        <field name="stage" widget="statusbar"
+                               options="{'clickable': True}"/>
+                    </header>
+
+                    <sheet>
+
+                        <div class="oe_button_box" name="button_box"/>
+
+                        <!-- Ribbon -->
+                        <widget name="web_ribbon"
+                                title="Resolved"
+                                bg_color="bg-success"
+                                invisible="stage != 'resolved'"/>
+
+                        <!-- Title -->
+                        <div class="oe_title">
+                            <h2>
+                                <field name="name"/>
+                            </h2>
+                        </div>
+
+                        <!-- Main Fields -->
+                        <group>
+                            <group>
+                                <field name="customer_id"/>
+                                <field name="company_currency_id" invisible="1"/>
+                                <field name="charge"/>
+
+                                <field name="resolution"
+                                       required="stage == 'resolved'"
+                                       invisible="stage in ['claimed','verification','extraction']"/>
+                            </group>
+
+                            <group>
+                                <field name="verified_by" invisible="stage == 'claimed'"/>
+                                <field name="verification_date" invisible="stage == 'claimed'"/>
+                                <field name="employee_ids" widget="many2many_tags"/>
+
+                                <field name="is_extracted"
+                                       invisible="stage in ['claimed','verification']"/>
+
+                                <field name="extraction_date"
+                                       invisible="stage in ['claimed','verification'] or not is_extracted"/>
+
+                                <field name="received_date"
+                                       invisible="stage in ['claimed','verification','extraction'] or not is_extracted"/>
+
+                                <field name="resolution_date"
+                                       invisible="stage != 'resolved'"/>
+                            </group>
+                        </group>
+
+                        <!-- Notebook -->
+                        <notebook>
+                            <page string="Description">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+
+                        <!-- CHATTTER (CORRECT) -->
+                        <chatter>
+                            <field name="message_follower_ids" groups="base.group_user"/>
+                            <field name="activity_ids"/>
+                            <field name="message_ids"/>
+                        </chatter>
+
+                    </sheet>
+
+                </form>
+
+            </field>
+        </record>
+
+        <!-- ===================== ACTION ===================== -->
+        <record model="ir.actions.act_window" id="mis_warranty_action_window">
+            <field name="name">Warranties</field>
+            <field name="res_model">mis.warranty</field>
+            <field name="view_mode">kanban,list,graph,form</field>
+        </record>
+
+        <!-- ===================== MENU ===================== -->
+        <menuitem name="Warranty"
+                  id="warranty_menu_item"
+                  parent="va_mis.mis_root_menu"
+                  sequence="4">
+
+            <menuitem name="Warranties"
+                      id="mis_warranty_menu_item"
+                      action="mis_warranty_action_window"
+                      sequence="1"/>
+        </menuitem>
+
+    </data>
+</odoo>

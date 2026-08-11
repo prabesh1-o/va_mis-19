@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="remove_products_href" name="Remove All Products Href" inherit_id="website_sale.product">
+        <xpath expr="//ol[hasclass('o_wsale_breadcrumb')]/li[1]" position="replace">
+            <li class="breadcrumb-item d-none d-lg-inline-block">
+                <a href="/product">All Products</a>
+            </li>
+        </xpath>
+    </template>
+    <template id="remove_address_inputs" name="Remove Address Inputs" inherit_id="website_sale.address_form_fields">
+        <xpath expr="//div[@id='div_street2']" position="replace"/>
+        <xpath expr="//div[@id='div_city']/preceding-sibling::t[1]" position="replace"/>
+        <xpath expr="//div[@id='div_city']/following-sibling::t[1]" position="replace"/>
+    </template>
+</odoo>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ========================= -->
+        <!-- LIST VIEW -->
+        <!-- ========================= -->
+        <record id="mis_assign_call_view_tree" model="ir.ui.view">
+            <field name="name">mis.assign.call.view.tree</field>
+            <field name="model">mis.assign.call</field>
+            <field name="arch" type="xml">
+
+                <list decoration-success="is_resolved == True" decoration-info="state == 'draft'" decoration-warning="state == 'extended'" string="Assigned Calls" multi_edit="1">
+
+                    <field name="is_resolved" column_invisible="1"/>
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="number"/>
+                    <field name="state"/>
+                    <field name="time"/>
+                    <field name="call_duration"/>
+                    <field name="campaign_id"/>
+                    <field name="tag_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="assigned_by"/>
+                    <field name="assignee"/>
+
+                </list>
+
+            </field>
+        </record>
+
+
+        <!-- ========================= -->
+        <!-- KANBAN VIEW -->
+        <!-- ========================= -->
+        <record id="mis_assign_call_view_kanban" model="ir.ui.view">
+            <field name="name">mis.assign.call.view.kanban</field>
+            <field name="model">mis.assign.call</field>
+            <field name="arch" type="xml">
+
+                <kanban default_group_by="state">
+
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="number"/>
+                    <field name="tag_ids"/>
+                    <field name="assignee"/>
+
+                    <templates>
+
+                        <t t-name="kanban-card">
+                            <div class="oe_kanban_global_click">
+
+                                <strong>
+                                    <field name="name"/>
+                                </strong>
+
+                                <div>
+                                    <field name="customer_id"/>
+                                </div>
+
+                                <div>
+                                    <b>Phone number: </b>
+                                    <field name="number"/>
+                                </div>
+
+                                <div>
+                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                </div>
+
+                                <div>
+                                    <field name="assignee"/>
+                                </div>
+
+                            </div>
+                        </t>
+
+                    </templates>
+
+                </kanban>
+
+            </field>
+        </record>
+
+
+        <record id="mis_call_assign_view_search" model="ir.ui.view">
+            <field name="name">mis.call.assign.view.search</field>
+            <field name="model">mis.assign.call</field>
+
+            <field name="arch" type="xml">
+
+                <search string="Calls">
+
+                    <!-- FIELDS -->
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="number"/>
+                    <field name="campaign_id"/>
+                    <field name="assignee"/>
+                    <field name="assigned_by"/>
+
+                    <!-- FILTERS -->
+                    <filter name="extended_state" string="Extended" domain="[('state', '=', 'extended')]"/>
+
+                    <filter name="progress_state" string="Progress" domain="[('state', '=', 'progress')]"/>
+
+                    <filter name="completed_state" string="Completed" domain="[('state', '=', 'completed')]"/>
+
+                    <!-- GROUP BY (FIXED - NO string attribute!) -->
+                    <group>
+
+                        <filter name="group_by_campaign" string="Campaign" context="{'group_by': 'campaign_id'}"/>
+
+                        <filter name="group_by_assigned_by" string="Assigned By" context="{'group_by': 'assigned_by'}"/>
+
+                        <filter name="group_by_assignee" string="Assignee" context="{'group_by': 'assignee'}"/>
+
+                    </group>
+
+                </search>
+
+            </field>
+        </record>
+
+        <!-- ========================= -->
+        <!-- FORM VIEW -->
+        <!-- ========================= -->
+        <record id="mis_call_assign_view_form" model="ir.ui.view">
+            <field name="name">mis.call.assign.view.form</field>
+            <field name="model">mis.assign.call</field>
+            <field name="arch" type="xml">
+
+                <form string="Calls">
+
+                    <header>
+
+                        <button name="btn_confirm" string="Confirm" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+
+                        <button name="btn_resolve" string="Resolve" type="object" class="oe_highlight" invisible="state not in ('progress', 'extended') or is_resolved == True"/>
+
+                        <button name="btn_create_child_call" string="Create Follow Up" type="object" invisible="not has_follow_up or is_resolved"/>
+
+                        <field name="state" widget="statusbar"/>
+
+                    </header>
+
+                    <sheet>
+
+                        <group>
+
+                            <group>
+                                <field name="customer_id"/>
+                                <field name="number"/>
+                                <field name="time"/>
+                                <field name="call_duration"/>
+                                <field name="response" required="state in ('extended', 'completed')"/>
+                            </group>
+
+                            <group>
+                                <field name="campaign_id"/>
+                                <field name="assignee"/>
+                                <field name="assigned_by"/>
+                                <field name="tag_ids" widget="many2many_tags"/>
+                            </group>
+
+                        </group>
+
+                    </sheet>
+
+                    <chatter>
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </chatter>
+
+                </form>
+
+            </field>
+        </record>
+
+
+        <!-- ========================= -->
+        <!-- ACTION -->
+        <!-- ========================= -->
+        <record id="mis_assigned_call_menu_action_window" model="ir.actions.act_window">
+            <field name="name">Assigned Calls</field>
+            <field name="res_model">mis.assign.call</field>
+            <field name="view_mode">list,kanban,form</field>
+        </record>
+
+
+        <!-- ========================= -->
+        <!-- MENU -->
+        <!-- IMPORTANT: ADD GROUP IF NEEDED -->
+        <!-- ========================= -->
+        <menuitem id="mis_assigned_call_menuitem" name="Assigned Calls" parent="mis_call.calls_menuitem" action="mis_assigned_call_menu_action_window" sequence="2" />
+
+    </data>
+</odoo>

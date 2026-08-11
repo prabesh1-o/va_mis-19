@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="mis_call_generator_management">
+        <field name="name">MIS Call Generator</field>
+        <field name="description">MIS Call Generator</field>
+    </record>
+
+    <record id="mis_privilige_call_generator" model="res.groups.privilege">
+        <field name="name">Call Generator</field>
+        <field name="sequence">10</field>
+         <field name="category_id" ref="mis_call.mis_call_generator_management"/>
+    </record>
+    <record id="group_able_to_access_call_generator" model="res.groups">
+        <field name="name">Able to access call generator</field>
+        <field name="comment">Users can create call generator</field>
+        <field name="privilege_id" ref = "mis_call.mis_privilige_call_generator"/>
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>
+
+

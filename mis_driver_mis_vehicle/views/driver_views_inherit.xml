@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_driver_inherit_from_vehicle" model="ir.ui.view">
+        <field name="name">mis.vehicle.inherit.driver.form</field>
+        <field name="model">mis.driver</field>
+        <field name="inherit_id" ref="mis_driver.mis_driver_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='image']" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button name="return_action_to_open" type="object" class="oe_stat_button" context="{'xml_id':'mis_driver_mis_vehicle.driver_history_action','is_vehicle_history':True}" icon="fa-history">
+                        <field name="vehicle_history_count" widget="statinfo" string="Vehicle History"/>
+                    </button>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='date_of_birth']" position="after">
+                <field name="assigned_vehicle" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_driver_search_inherit_from_vehicle" model="ir.ui.view">
+        <field name="name">mis.vehicle.inherit.driver.search</field>
+        <field name="model">mis.driver</field>
+        <field name="inherit_id" ref="mis_driver.mis_driver_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='license_no']" position="after">
+                <filter name="is_vehicle_assigned" string="Assigned Drivers" domain="[('is_vehicle_assigned', '=', 'true')]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

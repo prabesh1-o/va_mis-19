@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_service_inherit_from_instlallation" model="ir.ui.view">
+        <field name="name">mis.service.inherit.from.installtion</field>
+        <field name="model">mis.services</field>
+        <field name="inherit_id" ref="mis_services.mis_services_form_view" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='active']" position="before">
+                    <field name="is_installable" widget="boolean_toggle"/>
+                </xpath>
+                <xpath expr="//notebook[@name='service']" position="inside">
+                    <page name="sop" string="SOP">
+                        <field name="sop"/>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

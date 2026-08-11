@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mis_invoice_own,account.move.own,model_account_move,group_account_invoice_own,1,1,1,0
+access_mis_invoice_tags_readonly,account.move.tags,model_account_move_tag,group_account_invoice_own,1,0,0,0
+access_mis_invoice_tags_read,account.move.tags.readonly,model_account_move_tag,account.group_account_invoice,1,0,0,0
+access_mis_invoice__tags_all,account.move.tags.all,model_account_move_tag,account.group_account_manager,1,1,1,1

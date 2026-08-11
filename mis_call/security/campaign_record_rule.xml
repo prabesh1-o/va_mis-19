@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_call_campaign_assignees_rule" model="ir.rule">
+            <field name="name">Campaign Assignees Rule</field>
+            <field name="model_id" ref="model_mis_call_campaign"/>
+            <field name="domain_force">[('assignees', 'in', [user.employee_id.id])]</field>
+            <field name="groups" eval="[(4, ref('group_able_to_access_assigned_call_campaign'))]"/>
+        </record>
+        <record id="mis_call_batch_assignees_rule" model="ir.rule">
+            <field name="name">Batch Assignees Rule</field>
+            <field name="model_id" ref="model_mis_call_batch"/>
+            <field name="domain_force">[('campaign_id.assignees', 'in', [user.employee_id.id])]</field>
+            <field name="groups" eval="[(4, ref('group_able_to_access_assigned_call_campaign'))]"/>
+        </record>
+    </data>
+</odoo>

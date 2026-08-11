@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_sale_order_line_update_wizard_form" model="ir.ui.view">
+        <field name="name">sale.order.line.update.wizard.form</field>
+        <field name="model">sale.order.line.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Sale Order Lines">
+                <sheet>
+                    <group>
+                        <field name="sale_order_id"/>
+                    </group>
+                    <group>
+                        <field name="line_ids">
+                            <list editable="bottom">
+                                <field name="sale_order_line_id"/>
+                                <field name="product_uom_qty" readonly="1"/>
+                                <field name="qty_delivered"/>
+                                <field name="qty_cancelled"/>
+                                <field name="price_unit" />
+                                <field name="discount"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Apply Changes" type="object" name="apply_changes" class="btn-primary"/>
+                    <button string="Cancel" type="object" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open the wizard -->
+    <record id="action_sale_order_line_update_wizard" model="ir.actions.act_window">
+        <field name="name">Update SO Line</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line.update.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sale_order_line_update_wizard_form"/>
+        <field name="target">new</field>
+        <field name="context">{"default_sale_order_id":active_id}</field>
+    </record>
+</odoo>

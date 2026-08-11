@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_create_blacklist_request" model="ir.actions.server">
+        <field name="name">Create Blacklist Request</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="binding_model_id" ref="model_res_partner"/>
+        <field name="state">code</field>
+        <field name="binding_view_types">form</field>
+        <field name="code">
+            action = records.btn_request_blacklist()
+        </field>
+    </record>
+
+    <record id="res_partner_kanban_inherit_blacklist" model="ir.ui.view">
+        <field name="name">res.partner.inherits.kanban.blacklist</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//t[@t-name='card']" position="inside">
+                <field name="is_blacklist" invisible="1"/>
+                <widget name="web_ribbon" title="Blacklisted" invisible="not is_blacklist" bg_color="bg-danger"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_partner_filter_inherit_blacklist" model="ir.ui.view">
+        <field name="name">res.partner.inherits.filter.blacklist</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='type_company']" position="after">
+                <filter string="Blacklist" name="type_blacklist" domain="[('is_blacklist', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_partner_form_inherit_blacklist" model="ir.ui.view">
+        <field name="name">res.partner.inherits.form.blacklist</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="after">
+                <field name="is_blacklist" invisible="1"/>
+                <widget name="web_ribbon" title="Blacklisted" invisible="not is_blacklist" bg_color="bg-danger"/>
+            </xpath>
+            <xpath expr="//field[@name='function']" position="before">
+                <field name="is_blacklist" invisible="not is_blacklist" groups="va_mis.group_mis_admin,va_mis.group_mis_account"/>
+            </xpath>
+            <xpath expr="//page[@name='contact_addresses']" position="after">
+                <page string="Blacklist Requests" name="blacklists">
+                    <field name="blacklist_ids" readonly="1"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

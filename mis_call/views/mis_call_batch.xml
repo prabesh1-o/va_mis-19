@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_call_batch_form_view" model="ir.ui.view">
+            <field name="name">mis.call.batch.form</field>
+            <field name="model">mis.call.batch</field>
+            <field name="arch" type="xml">
+                <form string="Call Batches">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1 class="d-flex flex-row">
+                                <field name="name" class="o_text_overflow" placeholder="e.g. Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="description"/>
+                                <field name="create_date" string="Created At"/>
+                            </group>
+                            <group>
+                                <field name="assigned_by" widget="many2one_avatar_user"/>
+                                <field name="campaign_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_call_batch_list_view">
+            <field name="name">mis.call.batch.list</field>
+            <field name="model">mis.call.batch</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="create_date" string="Created At"/>
+                    <field name="campaign_id"/>
+                    <field name="call_count"/>
+                    <field name="assigned_by"/>
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_call_batch_kanban_view">
+            <field name="name">mis.call.batch.kanban</field>
+            <field name="model">mis.call.batch</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban" sample="1">
+                    <field name="name"/>
+                    <field name="call_count"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="o_project_kanban_main ">
+                                <div>
+                                    <div class="o_kanban_primary_left">
+                                        <div class="o_primary">
+                                            <span class="o_text_overflow" t-att-title="record.name.value">
+                                                <t t-esc="record.name.value"/>
+                                            </span>
+                                            <span class="o_text_overflow" t-if="record.description.value">
+                                                <small>
+                                                    <field name="description"/>
+                                                </small>
+                                            </span>
+                                            <div>
+                                                <field name="create_date"/>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <button name="action_view_assigned_calls" class="oe_highlight" type="object">
+                                                <span class="o_value">
+                                                    <t t-esc="record.call_count.value"/>
+                                                </span>
+                                                <span class="o_label ms-1">Assigned Calls</span>
+                                            </button>
+                                            <field name="assigned_by" widget="many2one_avatar_user" t-if="record.assigned_by.raw_value"/>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                        <div class="o_kanban_slides_card_manage_pane p-2">
+                                            <div role="menuitem">
+                                                <a role="menuitem" type="open">View</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a class="o_kanban_manage_toggle_button o_dropdown_kanban" href="#" groups="base.group_user">
+                                        <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_call_batch_action_window">
+            <field name="name">Call Batch</field>
+            <field name="res_model">mis.call.batch</field>
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+    </data>
+</odoo>

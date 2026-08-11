@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="stock_location_tree_inherit" model="ir.ui.view">
+            <field name="name">stock.location.tree.view.inherit</field>
+            <field name="model">stock.quant</field>
+            <field name="inherit_id" ref="stock.view_stock_quant_tree_editable" />
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//button[@name='action_view_orderpoints']" position="after">
+                        <button name="action_view_devices" string="Devices" type="object" class="btn-link" icon="fa-microchip"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+
+</odoo>

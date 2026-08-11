@@ -1,0 +1,67 @@
+<odoo>
+    <data>
+        <record id="mis_device_warranty_kanban_view_inherit" model="ir.ui.view">
+            <field name="name">mis.device.warranty.kanban</field>
+            <field name="model">mis.warranty</field>
+            <field name="inherit_id" ref="mis_warranty.mis_warranty_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='o_kanban_record_bottom']" position="before">
+                    <div class="o_kanban_record_body">
+                        <field name="device_id"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mis_device_warranty_list_view_inherit" model="ir.ui.view">
+            <field name="name">mis.device.warranty.list</field>
+            <field name="model">mis.warranty</field>
+            <field name="inherit_id" ref="mis_warranty.mis_warranty_list"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='customer_id']" position="after">
+                    <field name="device_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mis_device_warranty_search_view_inherit" model="ir.ui.view">
+            <field name="name">mis.device.warranty.search</field>
+            <field name="model">mis.warranty</field>
+            <field name="inherit_id" ref="mis_warranty.mis_warranty_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='customer_id']" position="before">
+                    <field name="device_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mis_device_warranty_form_view_inherit" model="ir.ui.view">
+            <field name="name">mis.device.warranty.form</field>
+            <field name="model">mis.warranty</field>
+            <field name="inherit_id" ref="mis_warranty.mis_warranty_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/header" position="after">
+                    <div class="alert alert-info mb-0" role="alert" style="background-color: #ffefb8;" invisible="not device_id or warranty_package_id">
+                        The device does not have a warranty package. First, set the warranty package in the device.
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='customer_id']" position="attributes">
+                    <attribute name="domain">[('device_ids.id','=', device_id)] if device_id else []</attribute>
+                </xpath>
+                <xpath expr="//field[@name='customer_id']" position="after">
+                    <field name="device_id" domain="[('customer_id','=', customer_id)] if customer_id else []"/>
+                    <field name="warranty_package_id" invisible="not device_id"/>
+                    <field name="warranty_expiry_date" invisible="not device_id"/>
+                </xpath>
+                <xpath expr="//field[@name='customer_id']" position="before">
+                    <field name="is_bypass_warranty" />
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem name="Warranty" id="mis_warranty.warranty_menu_item" parent="mis_device.device_category_menu_item" sequence="4">
+            <menuitem name="Warranties" id="mis_warranty.mis_warranty_menu_item" action="mis_warranty.mis_warranty_action_window" sequence="1"/>
+            <menuitem name="Warranty Packages" id="mis_warranty.mis_warranty_packages_menu_item" action="mis_warranty.mis_warranty_package_action_window" sequence="2"/>
+        </menuitem>
+    </data>
+</odoo>

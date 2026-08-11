@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+
+        <record id="sales_view_order_form_inherit" model="ir.ui.view">
+            <field name="name">sale.view.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="source_location_id" options="{'no_open': True, 'no_create': True}" readonly="1" string="Source Location"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_sales_order_filter_inherit" model="ir.ui.view">
+            <field name="name">sale.order.list.select.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <group position="inside">
+                    <filter string="Source Location" name="source_location" domain="[]" context="{'group_by': 'source_location_id'}"/>
+                </group>
+            </field>
+        </record>
+    </data>
+</odoo>

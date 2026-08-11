@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="mis_raw_lead_management_parent">
+        <field name="name">MIS Raw Lead</field>
+        <field name="description">Mis Raw Lead Acess</field>
+        <field name="sequence">19</field>
+    </record>
+
+    <record model="ir.module.category" id="mis_raw_lead_management">
+        <field name="name">MIS Raw Lead</field>
+        <field name="description">MIS Raw Lead Access</field>
+        <field name="parent_id" ref="mis_raw_lead_management_parent" />
+    </record>
+
+    <record model="res.groups.privilege" id="privilege_mis_raw_lead">
+        <field name="name">MIS Raw Lead</field>
+        <field name="category_id" ref="mis_raw_lead_management"/>
+    </record>
+
+    <!-- User: read own document Only -->
+    <record id="group_mis_raw_lead_user_readonly" model="res.groups">
+        <field name="name">User: Read Only</field>
+        <field name="privilege_id" ref="privilege_mis_raw_lead" />
+        <field name="comment">The user will have readonly access to their own
+            records.</field>
+    </record>
+
+    <!-- User: own document  -->
+    <record id="group_mis_raw_lead_user_own_documents" model="res.groups">
+        <field name="name">User: Own Documents</field>
+        <field name="implied_ids" eval="[(4, ref('group_mis_raw_lead_user_readonly'))]" />
+        <field name="privilege_id" ref="privilege_mis_raw_lead" />
+        <field name="comment">The user will have create,read,update access to their own records.</field>
+    </record>
+
+    <!-- manager -->
+    <record id="group_mis_raw_lead_all_documents" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="privilege_mis_raw_lead" />
+        <field name="implied_ids" eval="[(4, ref('group_mis_raw_lead_user_own_documents'))]" />
+        <field name="comment">The user will have create,read,update access for all records.</field>
+    </record>
+
+    <!-- admin -->
+    <record id="group_mis_raw_lead_administrator" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="privilege_id" ref="privilege_mis_raw_lead" />
+        <field name="implied_ids" eval="[(4, ref('group_mis_raw_lead_all_documents'))]" />
+        <field name="comment">The user will have all access to all records</field>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+    </record>
+</odoo>

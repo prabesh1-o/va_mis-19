@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_warranty_device_installation_form_inherit" model="ir.ui.view">
+        <field name="name">mis.warranty.device.installation.form.inherit</field>
+        <field name="model">mis.device.installation</field>
+        <field name="inherit_id" ref="mis_device_installation.mis_installation_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='total_installations']" position="before">
+                    <field name="warranty_id"  invisible="not warranty_id" readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='installation_line_ids']/list/field[@name='employee_ids']" position="after">
+                    <field name="warranty_package" optional="hide"/>
+                    <field name="warranty_expiry" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='installation_line_ids']/form/group/group[@name='installation_information']" position="inside">
+                    <field name="warranty_package" />
+                    <field name="warranty_expiry"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

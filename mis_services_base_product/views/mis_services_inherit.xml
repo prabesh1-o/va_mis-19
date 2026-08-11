@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_services_view_inherit_from_mis_services" model="ir.ui.view">
+        <field name="name">mis.services.inherit.from.mis_services</field>
+        <field name="model">mis.services</field>
+        <field name="inherit_id" ref="mis_services.mis_services_form_view" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='active']" position="after">
+                    <field name="tax_mandatory" widget="boolean_toggle"/>
+                    <field name="tax_ids" widget="many2many_tags" invisible="not tax_mandatory" required="tax_mandatory"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

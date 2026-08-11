@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="mis_attendance.mis_attendance_menu" name="Attendances" parent="mis_employee.menu_mis_hr" sequence="2"></menuitem>
+    <menuitem id="mis_time_off.mis_time_off_menu" name="Time Off" parent="mis_employee.menu_mis_hr" sequence="3"></menuitem>
+</odoo>

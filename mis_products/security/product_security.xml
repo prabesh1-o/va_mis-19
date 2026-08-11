@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.module.category" id="mis_product_management_parent">
+        <field name="name">MIS product</field>
+        <field name="description">MIS Product related modules</field>
+        <field name="sequence">11</field>
+    </record>
+
+    <record model="ir.module.category" id="mis_product_management">
+        <field name="name">MIS Product</field>
+        <field name="description">Mis Product Access</field>
+        <field name="parent_id" ref="mis_product_management_parent"/>
+    </record>
+
+     <record id="privilege_product_access" model="res.groups.privilege">
+        <field name="name">MIS Product</field>
+        <field name="sequence">10</field>
+        <field name="category_id" ref="mis_product_management"/>
+    </record>
+
+    <!-- User: Own Documents Only -->
+    <record id="group_mis_product_user" model="res.groups">
+        <field name="name">User: Read Only</field>
+        <field name="privilege_id" ref="privilege_product_access" />
+        <field name="comment">The user will have readonly access to mis products</field>
+    </record>
+
+    <!-- manager: without delete option -->
+    <record id="group_mis_product_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="privilege_product_access" />
+        <field name="implied_ids"
+            eval="[(4, ref('group_mis_product_user'))]" />
+        <field name="comment">The user will have create,read,update access to all mis products</field>
+    </record>
+
+    <!-- admin: all access rights -->
+    <record id="group_mis_product_admin" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="privilege_id" ref="privilege_product_access" />
+        <field name="implied_ids"
+            eval="[(4, ref('group_mis_product_manager'))]" />
+        <field name="comment">The user will have all access to  mis products</field>
+    </record>
+
+</odoo>

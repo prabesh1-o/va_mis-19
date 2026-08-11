@@ -1,0 +1,51 @@
+[MASTER]
+load-plugins=pylint_odoo
+score=n
+
+[ODOOLINT]
+manifest_required_keys=license
+manifest_deprecated_keys=description,active
+license_allowed=AGPL-3,LGPL-3,GPL-3,GPL-3 or any later version
+valid_odoo_versions=19.0
+
+[MESSAGES CONTROL]
+disable=all
+
+enable=
+    anomalous-backslash-in-string,
+    assignment-from-none,
+    attribute-deprecated,
+    class-camelcase,
+    development-status-allowed,
+    duplicate-id-csv,
+    duplicate-key,
+    duplicate-xml-fields,
+    duplicate-xml-record-id,
+    eval-referenced,
+    eval-used,
+    incoherent-interpreter-exec-perm,
+    method-compute,
+    method-inverse,
+    method-required-super,
+    method-search,
+    pointless-statement,
+    pointless-string-statement,
+    print-used,
+    redundant-keyword-arg,
+    redundant-modulename-xml,
+    reimported,
+    relative-import,
+    return-in-init,
+    rst-syntax-error,
+    sql-injection,
+    too-few-format-args,
+    translation-field,
+    translation-required,
+    unreachable,
+    wrong-tabs-instead-of-spaces,
+    xml-syntax-error
+
+[REPORTS]
+msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
+output-format=colorized
+reports=no

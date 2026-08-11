@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="mis_device_inherit_tree_vehicle" model="ir.ui.view">
+        <field name="name">mis.device.inherit.tree.vehicle</field>
+        <field name="model">mis.device</field>
+        <field name="inherit_id" ref="mis_device.mis_device_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='imei_no']" position="after">
+                <field name="vehicle_id" />
+            </xpath>
+        </field>
+    </record>
+    <record id="mis_device_inherit_from_vehicle" model="ir.ui.view">
+        <field name="name">mis.device.inherit.from.vehicle</field>
+        <field name="model">mis.device</field>
+        <field name="inherit_id" ref="mis_device.mis_device_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='imei_no']" position="after">
+                <field name="vehicle_id" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

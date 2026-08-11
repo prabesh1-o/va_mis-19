@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_raw_lead_form_view_inherit" model="ir.ui.view">
+            <field name="name">mis.raw.lead.form.view.inherit.sales_order</field>
+            <field name="model">lead.raw.data</field>
+            <field name="inherit_id" ref="mis_lead.lead_raw_data_form" />
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//button[@name='btn_lost_lead']" position="before">
+                        <button name="btn_create_quotation" confirm="This creates Quotation. Do you want to continue?" type="object" class="oe_highlight" invisible="state == 'quotation'">Create Quotation</button>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

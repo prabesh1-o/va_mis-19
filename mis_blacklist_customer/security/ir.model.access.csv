@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mis_blacklist_customer_user,mis.blacklist.customer.user,model_mis_blacklist_customer,group_mis_blacklist_customer_user,1,0,0,0
+access_mis_blacklist_customer_manager,mis.blacklist.customer.manager,model_mis_blacklist_customer,group_mis_blacklist_customer_manager,1,1,1,0
+access_mis_blacklist_customer_admin,mis.blacklist.customer.admin,model_mis_blacklist_customer,group_mis_blacklist_customer_administrator,1,1,1,1

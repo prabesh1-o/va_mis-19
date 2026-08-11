@@ -1,0 +1,7 @@
+<data>
+    <record id="report_layout_mis" model="report.layout">
+        <field name="name">MIS</field>
+        <field name="sequence">5</field>
+        <field name="view_id" ref="external_layout_mis"/>
+    </record>
+</data>

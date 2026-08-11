@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_customer_manager" model="ir.rule">
+            <field name="name">User can see all customer</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mis_customer_manager'))]" />
+        </record>
+
+        <record id="mis_customer_industry_manager" model="ir.rule">
+            <field name="name">User can see all industry</field>
+            <field name="model_id" ref="model_mis_customer_industry"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mis_customer_manager'))]" />
+        </record>
+    </data>
+
+</odoo>

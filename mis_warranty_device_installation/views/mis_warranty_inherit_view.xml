@@ -1,0 +1,37 @@
+<odoo>
+    <data>
+        <record id="mis_warranty_device_installation_form_view_inherit" model="ir.ui.view">
+            <field name="name">mis.warranty.device.installation.form</field>
+            <field name="model">mis.warranty</field>
+            <field name="inherit_id" ref="mis_warranty.mis_warranty_form"/>
+            <field name="arch" type="xml">
+
+                <!-- Header -->
+                <xpath expr="//form/header" position="inside">
+                    <button
+                        name="btn_create_installation_order"
+                        type="object"
+                        confirm="Do you want to create Installation order?"
+                        invisible="not is_extracted or stage not in ['received', 'resolved'] or not resolution">
+                        Create Installation Order
+                    </button>
+                </xpath>
+
+                <!-- Button Box -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button
+                        name="action_view_installation_order"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-microchip"
+                        invisible="not installation_id">
+                        Installation
+                    </button>
+
+                    <field name="installation_id" invisible="1"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

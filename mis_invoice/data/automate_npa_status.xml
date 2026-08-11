@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+
+        <!-- =========================
+             SERVER ACTION
+        ========================== -->
+        <record id="npa_action" model="ir.actions.server">
+            <field name="name">Set NPA Status</field>
+            <field name="model_id" ref="mis_invoice.model_account_move"/>
+            <field name="state">code</field>
+
+            <field name="code"><![CDATA[
+records.write({'npa': True})
+            ]]></field>
+
+            <field name="binding_model_id" ref="mis_invoice.model_account_move"/>
+        </record>
+
+
+        <!-- =========================
+             CRON JOB
+        ========================== -->
+        <record id="cron_npa_status" model="ir.cron">
+            <field name="name">Set NPA status on overdue invoices</field>
+            <field name="model_id" ref="mis_invoice.model_account_move"/>
+            <field name="state">code</field>
+
+            <field name="code"><![CDATA[
+records = env['account.move'].search([
+    ('npa', '=', False),
+    ('payment_state', '!=', 'paid'),
+    ('npa_date', '!=', False),
+    ('npa_date', '<=', datetime.date.today())
+])
+records.write({'npa': True})
+            ]]></field>
+
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="active">True</field>
+        </record>
+
+    </data>
+</odoo>

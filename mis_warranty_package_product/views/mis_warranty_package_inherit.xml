@@ -1,0 +1,38 @@
+<odoo>
+    <data>
+
+        <record id="mis_warranty_package_product_form_view_inherit" model="ir.ui.view">
+            <field name="name">mis.warranty.package.form</field>
+            <field name="model">mis.warranty.package</field>
+            <field name="inherit_id" ref="mis_warranty.mis_warranty_package_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//sheet" position="before">
+                    <header>
+
+                        <button
+                            name="btn_create_product"
+                            type="object"
+                            invisible="product_id"
+                            confirm="Do you want to create a product?">
+                            Create Product
+                        </button>
+
+                        <button
+                            name="action_view_product"
+                            type="object"
+                            invisible="not product_id"
+                            icon="fa-microchip">
+                            Product
+                        </button>
+
+                        <field name="product_id" invisible="1"/>
+
+                    </header>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

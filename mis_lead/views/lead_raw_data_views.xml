@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="lead_raw_data_list">
+        <field name="name">lead.raw.data.list</field>
+        <field name="model">lead.raw.data</field>
+        <field name="arch" type="xml">
+            <list string="Raw Data" multi_edit="1">
+                <field name="customer_id"/>
+                <field name="company_name"/>
+                <field name="email"/>
+                <field name="phone_no"/>
+                <field name="address"/>
+                <field name="campaign_id"/>
+                <field name="remarks"/>
+                <field name="activity_ids" widget="list_activity"/>
+            </list>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="lead_raw_data_kanban">
+        <field name="name">lead.raw.data.kanban</field>
+        <field name="model">lead.raw.data</field>
+        <field name="arch" type="xml">
+            <kanban string="Raw Lead" sample="1">
+                <field name="activity_ids"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_card_content mw-100">
+                                <div class="o_kanban_record_top mb-0">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <t t-if="record.name">
+                                                <field name="customer_id"/>
+                                            </t>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div>
+                                        <t t-if="record.phone_no.value">
+                                            <field name="phone_no"/>
+                                        </t>
+                                    </div>
+                                    <div>
+                                        <t t-if="record.email.value">
+                                            <field name="email"/>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_content o_hr_employee_kanban_bottom position-absolute bottom-0 start-0 end-0 me-2 pe-none">
+                                    <div class="o_kanban_record_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <t t-if="record.activity_date_deadline.value">
+                                                <strong>
+                                                    <field name="activity_date_deadline"/>
+                                                </strong>
+                                            </t>
+                                            <field name="activity_ids" widget="kanban_activity"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="lead_raw_data_form" model='ir.ui.view'>
+        <field name="name">lead.raw.data.form</field>
+        <field name="model">lead.raw.data</field>
+        <field name="arch" type="xml">
+            <form string="Raw Data">
+                <header>
+                    <button name="btn_lost_lead" type="object" invisible="state != 'open'">
+                                        Lost
+                    </button>
+                    <field name="state" widget="statusbar" class="o_field_statusbar" options="{'fold_field': 'fold'}" statusbar_visible="open"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Lost" bg_color="bg-danger" invisible="state in ['open', 'sale_ordered']"/>
+                    <widget name="web_ribbon" title="Quotation" bg_color="bg-success" invisible="state in ['open', 'lost']"/>
+                    <div>
+                        <field name="is_company" widget="radio" nolabel="1" options="{'horizontal': true}"/>
+                    </div>
+                    <group name="lead_details">
+                        <group string="Contact Information">
+                            <field name="customer_id"/>
+                            <field name="company_name"/>
+                            <field name="phone_no"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                        </group>
+                        <group string="General Information">
+                            <field name="company_currency_id" invisible="1"/>
+                            <field name="campaign_id"/>
+                            <field name="medium_id"/>
+                            <field name="industry_id"/>
+                            <field name="no_of_vehicle"/>
+                            <field name="is_existing_gps_user"/>
+                            <field name="gps_company_name" class="text-muted" invisible="is_existing_gps_user == False"/>
+                            <field name="existing_renewal_price" invisible="not is_existing_gps_user"/>
+                            <field name="remarks"/>
+                            <field name="lost_reason" invisible="remarks != 'not_interested'"/>
+                        </group>
+                        <notebook>
+                            <page name="contact_person" string="Point of Contact">
+                                <field name="contact_person_ids" mode="kanban" required="is_company == 'company'">
+                                    <kanban>
+                                        <templates>
+                                            <t t-name="card">
+                                                <div class="oe_kanban_global_click">
+                                                    <div class="oe_kanban_details">
+                                                        <strong>
+                                                            <span>Name: </span>
+                                                        </strong>
+                                                        <field name="name"/>
+                                                        <div t-if="record.email.value">
+                                                            <field name="email" widget="email"/>
+                                                        </div>
+                                                        <div t-if="record.phone.value">
+                                                            <strong>
+                                                                <span>Phone no.: </span>
+                                                            </strong>
+                                                            <field name="phone"/>
+                                                        </div>
+                                                        <div t-if="record.address.value">
+                                                            <strong>
+                                                                <span>Address: </span>
+                                                            </strong>
+                                                            <field name="address"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                    <form string="Contact / Address">
+                                        <sheet>
+                                            <group>
+                                                <field name="email" widget="email"/>
+                                                <field name="phone" widget="phone"/>
+                                                <field name="address"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="internal_notes" string="Internal Notes">
+                                <field name="internal_note" />
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+                <!-- Chatter -->
+                <chatter>
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </chatter>
+            </form>
+        </field>
+    </record>
+
+    <record id="lead_raw_data_search" model="ir.ui.view">
+        <field name="name">lead.raw.data.search</field>
+        <field name="model">lead.raw.data</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="customer_id" string="customer" />
+                <field name="email" string="E-mail"/>
+                <field name="phone_no" string="Phone No."/>
+                <filter name="create_date" string="Created Today" domain="[('create_date','&gt;', (context_today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]" />
+                <separator/>
+                <filter invisible="1" string="Late Activities" name="activities_overdue" domain="[('my_activity_date_deadline', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter invisible="1" string="Today Activities" name="activities_today" domain="[('my_activity_date_deadline', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter invisible="1" string="Future Activities" name="activities_upcoming_all" domain="[('my_activity_date_deadline', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="lead_raw_data_action">
+        <field name="name">Raw Lead</field>
+        <field name="res_model">lead.raw.data</field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+
+
+    <menuitem id="mis_lead_menu" name="Raw Lead" parent="va_mis.mis_root_menu" action="lead_raw_data_action" sequence="11"/>
+
+</odoo>

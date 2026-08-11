@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.module.category" id="mis_raw_lead_campaign_medium_industry_management">
+        <field name="name">MIS Lead Campaign,Medium and Industry</field>
+        <field name="description">Access related to campaign,medium and industry</field>
+        <field name="parent_id" ref="mis_raw_lead_management_parent" />
+    </record>
+
+    <record model="res.groups.privilege" id="privilege_mis_lead_campaign_medium">
+        <field name="name">MIS Lead Campaign,Medium and Industry</field>
+        <field name="category_id" ref="mis_raw_lead_campaign_medium_industry_management"/>
+    </record>
+
+    <!-- user read only  -->
+    <record id="group_mis_raw_lead_campaign_readonly" model="res.groups">
+        <field name="name">User: Read Only</field>
+        <field name="privilege_id" ref="privilege_mis_lead_campaign_medium" />
+        <field name="comment">The user will have readonly access to mis raw lead's campaign,medium and industry</field>
+    </record>
+
+    <!-- manager  -->
+    <record id="group_mis_raw_lead_campaign_all_documents" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="privilege_mis_lead_campaign_medium" />
+        <field name="implied_ids"
+            eval="[(4, ref('group_mis_raw_lead_campaign_readonly'))]" />
+        <field name="comment">The user will have create,update,read access to mis raw lead's campaign,medium and industry</field>
+    </record>
+
+    <!-- admin -->
+    <record id="group_mis_raw_lead_campaign_administrator" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="privilege_id" ref="privilege_mis_lead_campaign_medium" />
+        <field name="implied_ids"
+            eval="[(4, ref('group_mis_raw_lead_campaign_all_documents'))]" />
+        <field name="comment">Administrator has full access</field>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+    </record>
+
+</odoo>

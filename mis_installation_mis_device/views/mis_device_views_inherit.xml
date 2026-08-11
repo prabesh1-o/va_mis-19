@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="mis_device_installation_inherits_mis_device_form" model="ir.ui.view">
+            <field name="name">mis.device.installation.inherit.mis_device.form</field>
+            <field name="model">mis.device</field>
+            <field name="inherit_id" ref="mis_device.mis_device_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="return_action_to_open"
+                            type="object"
+                            class="oe_stat_button"
+                            context="{'xml_id':'mis_installation_mis_device.mis_device_installation_history_action'}"
+                            icon="fa-microchip">
+
+                        <field name="installation_history_count"
+                               widget="statinfo"
+                               nolabel="1"/>
+
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Installation</span>
+                            <span class="o_stat_text">History</span>
+                        </div>
+
+                    </button>
+                </xpath>
+
+                <xpath expr="//field[@name='installation_price']" position="after">
+
+                    <span class="ms-2"
+                          invisible="not has_tax_installation"/>
+
+                    <field name="installation_tax_string"
+                           nolabel="1"
+                           invisible="not has_tax_installation"/>
+
+                    <field name="has_tax_installation"
+                           readonly="1"/>
+
+                    <field name="employee_ids"
+                           widget="many2many_tags"
+                           optional="hide"/>
+
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="mis_device_installation_inherits_mis_device_tree" model="ir.ui.view">
+            <field name="name">mis.device.installation.inhertis.mis.device.tree</field>
+            <field name="model">mis.device</field>
+            <field name="inherit_id" ref="mis_device.mis_device_list"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='installation_price']" position="after">
+                    <field name="employee_ids"
+                           widget="many2many_tags"
+                           optional="hide"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

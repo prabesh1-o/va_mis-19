@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_mis_product_user,mis.product.user,model_mis_product,group_mis_product_user,1,0,0,0
+access_mis_product_manager,mis.product.manager,model_mis_product,group_mis_product_manager,1,1,1,0
+access_mis_product_admin,mis.product.admin,model_mis_product,group_mis_product_admin,1,1,1,1
+
+access_mis_product_model_user,mis.product.model.user,model_mis_product_model,group_mis_product_user,1,0,0,0
+access_mis_product_model_manager,mis.product.model.manager,model_mis_product_model,group_mis_product_manager,1,1,1,0
+access_mis_product_model_admin,mis.product.model.admin,model_mis_product_model,group_mis_product_admin,1,1,1,1
+
+access_mis_product_type_user,mis.product.type,model_mis_product_type,group_mis_product_user,1,0,0,0
+access_mis_product_type_manager,mis.product.type,model_mis_product_type,group_mis_product_manager,1,1,1,0
+access_mis_product_type_admin,mis.product.type,model_mis_product_type,group_mis_product_admin,1,1,1,1
+
+access_mis_manufacturer,mis.manufacturer,model_mis_manufacturer,group_mis_product_manager,1,1,1,1
+access_mis_supplier,mis.supplier,model_mis_supplier,group_mis_product_manager,1,1,1,1

@@ -1,0 +1,87 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="mis_device_list">
+            <field name="name">mis.device.list</field>
+            <field name="model">mis.device</field>
+            <field name="arch" type="xml">
+                <list string="Devices" multi_edit="1" export_xlsx="false">
+                    <field name="company_currency_id" invisible="1" />
+                    <field name="imei_no" />
+                    <field name="sim" />
+                    <field name="expiration_time" />
+                    <field name="customer_id" widget="many2many_tags" />
+                    <field name="customer_assigned_ids" optional="hide" />
+                    <field name="installed_date" optional="hide" />
+                    <field name="state" optional="hide" />
+                    <field name='installation_price' optional='hide' sum="Total Installation Price" />
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_device_form">
+            <field name="name">mis.device.form</field>
+            <field name="model">mis.device</field>
+            <field name="arch" type="xml">
+                <form string="Form">
+                    <header>
+                        <field name="state" widget="statusbar" options="{'clickable': 1}" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button string="Customers" name="action_view_customers" class="oe_stat_button" icon="fa-user" type="object" />
+                        </div>
+                        <group name="device_form_group" col="2">
+                            <group string="Device Informations">
+                                <field name="company_currency_id" invisible="1" />
+                                <field name="imei_no" />
+                                <field name="sim" />
+                            </group>
+                            <group string="Installation and Renewal">
+                                <field name="customer_id" widget="many2many_tags" groups="va_mis.group_mis_admin,va_mis.group_mis_operation,va_mis.group_mis_sales" />
+                                <field name="customer_assigned_ids" widget="many2many_tags" groups="va_mis.group_mis_admin,va_mis.group_mis_operation,va_mis.group_mis_sales" />
+                                <field name="expiration_time" readonly="id != False" />
+                                <field name="installed_date" />
+                                <field name="installation_price" />
+                            </group>
+                        </group>
+                    </sheet>
+                    <!-- Chatter -->
+                    <chatter>
+                        <field name="message_follower_ids" groups="base.group_user" />
+                        <field name="activity_ids" />
+                        <field name="message_ids" />
+                    </chatter>
+                </form>
+            </field>
+        </record>
+
+        <record id="mis_device_search" model="ir.ui.view">
+            <field name="name">mis.device.search</field>
+            <field name="model">mis.device</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="imei_no" string="IMEI" />
+                    <field name="customer_id" string="Customer" />
+                    <field name="customer_assigned_ids" string="Customer Assigned" />
+                    <filter name="expiration_time" string="Expiring In a Week" domain="[('expiration_time','>=', context_today())]" />
+                    <filter name="active_devices" string="Active Devices" domain="[('state','=','active')]" />
+                    <filter name="inactive_devices" string="Inactive Devices" domain="[('state','=','inactive')]" />
+                    <filter name="filter_live" string="Live Devices" domain="[('active', '=', True)]" />
+                    <filter name="group_by_state" string="Group by Status" context="{'group_by':'state'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_device_action_window">
+            <field name="name">Devices</field>
+            <field name="res_model">mis.device</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'active_test':False,'search_default_filter_live':1}</field>
+        </record>
+
+        <menuitem name="Devices" id="device_category_menu_item" parent="va_mis.mis_root_menu" sequence="3">
+            <menuitem name="Devices" id="mis_devices_menu_item" action="mis_device_action_window" sequence="1" groups="va_mis.group_mis_admin,va_mis.group_mis_operation,va_mis.group_mis_account" />
+        </menuitem>
+
+    </data>
+</odoo>

@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="mis_tickets_inherit_tree_vehicle" model="ir.ui.view">
+        <field name="name">mis.tickets.inherit.tree.vehicle</field>
+        <field name="model">mis.ticket</field>
+        <field name="inherit_id" ref="mis_tickets.mis_tickets_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='device_imei']" position="before">
+                <field name="vehicle_id" domain="[('device_ids.customer_id','in', customer_id)] if customer_id else []"/>
+            </xpath>
+            <xpath expr="//field[@name='customer_id']" position="attributes">
+                <attribute name="domain">[('device_ids.vehicle_id','=', vehicle_id)] if vehicle_id else []</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mis_tickets_inherit_quick_from_vehicle" model="ir.ui.view">
+        <field name="name">mis.tickets.inherit.quick.from.vehicle</field>
+        <field name="model">mis.ticket</field>
+        <field name="inherit_id" ref="mis_tickets.quick_create_ticket_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='customer_id']" position="after">
+                <field name="vehicle_id" domain="[('device_ids.customer_id','in', customer_id)] if customer_id else []"/>
+            </xpath>
+            <xpath expr="//field[@name='customer_id']" position="attributes">
+                <attribute name="domain">[('device_ids.vehicle_id','=', vehicle_id)] if vehicle_id else []</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mis_tickets_inherit_kanban_vehicle" model="ir.ui.view">
+        <field name="name">mis.tickets.inherit.kanban.vehicle</field>
+        <field name="model">mis.ticket</field>
+        <field name="inherit_id" ref="mis_tickets.mis_ticket_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//strong[@name='customer_section']" position="after">
+                <div>
+                    <t t-if="record.vehicle_id.value">
+                        <span name="vehicle_no">
+                            <strong>Vehicle No.: </strong>
+                        </span>
+                        <field name="vehicle_id"/>
+                    </t>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mis_tickets_inherit_from_vehicle" model="ir.ui.view">
+        <field name="name">mis.tickets.inherit.from.vehicle</field>
+        <field name="model">mis.ticket</field>
+        <field name="inherit_id" ref="mis_tickets.mis_tickets_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='customer_id']" position="attributes">
+                <attribute name="domain">[('device_ids.vehicle_id','=', vehicle_id)] if vehicle_id else []</attribute>
+            </xpath>
+            <xpath expr="//field[@name='device_imei']" position="before">
+                <field name="vehicle_id" domain="[('device_ids.customer_id','in', customer_id)] if customer_id else []"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

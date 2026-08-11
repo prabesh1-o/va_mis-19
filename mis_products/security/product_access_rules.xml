@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_products_manager" model="ir.rule">
+            <field name="name">User can see all products</field>
+            <field name="model_id" ref="model_mis_product"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mis_product_manager'))]" />
+        </record>
+    </data>
+
+</odoo>

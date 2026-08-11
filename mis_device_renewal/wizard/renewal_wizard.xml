@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Separate list view for mis.device used in wizard -->
+    <record id="view_mis_device_list_renewal" model="ir.ui.view">
+        <field name="name">mis.device.list.renewal</field>
+        <field name="model">mis.device</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="imei_no"/>
+                <field name="expiration_time"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_renewal_device_update_wizard" model="ir.ui.view">
+        <field name="name">mis.device.renewal.wizard.form</field>
+        <field name="model">mis.device.renewal.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Renewal Devices">
+                <sheet>
+                    <group>
+                        <field name="customer_ids" widget="many2many_tags"/>
+                        <field name="renewal_id"/>
+                        <field name="devices" invisible="1"/>
+                        <field name="device_ids"
+                               options="{'no_open': True, 'no_create': True}"
+                               context="{'list_view_ref': 'mis_device_renewal.view_mis_device_list_renewal'}"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Break" type="object" name="action_break_renewal_card" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_renewal_device_update_wizard" model="ir.actions.act_window">
+        <field name="name">Separate Renewal Devices</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mis.device.renewal.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_renewal_device_update_wizard"/>
+        <field name="target">new</field>
+        <field name="context">{"default_renewal_id":active_id}</field>
+    </record>
+</odoo>

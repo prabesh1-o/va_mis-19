@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+        <record id="view_vehicle_inherit_from_driver" model="ir.ui.view">
+            <field name="name">mis.driver.inherit.vehicle</field>
+            <field name="model">mis.vehicle</field>
+            <field name="inherit_id" ref="mis_vehicle.mis_vehicle_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='image']" position="before">
+                    <div class="oe_button_box" name="button_box">
+                        <button name="return_action_to_open" type="object" class="oe_stat_button" context="{'xml_id':'mis_driver_mis_vehicle.driver_history_action'}" icon="fa-history">
+                            <field name="driver_history_count" widget="statinfo" string="Driver History"/>
+                        </button>
+                    </div>
+                </xpath>
+                <xpath expr="//group[@name='vehicle']" position="before">
+                    <group string="Driver">
+                        <field name="driver_id" options="{'no_open': True, 'no_create': True}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_vehicle_kanban_inherit_from_driver" model="ir.ui.view">
+            <field name="name">mis.driver.kanban.inherit.vehicle</field>
+            <field name="model">mis.vehicle</field>
+            <field name="inherit_id" ref="mis_vehicle.mis_vehicle_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('o_kanban_tags_section')]" position="after">
+                    <ul>
+                        <li>
+                            <t t-if="record.driver_id.raw_value">
+                                <strong>
+                                    <field name="driver_id"/>
+                                </strong>
+                            </t>
+                        </li>
+                    </ul>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

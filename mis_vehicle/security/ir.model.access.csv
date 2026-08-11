@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mis_vehicle_user,mis.vehicle.user,model_mis_vehicle,group_mis_vehicle_user,1,0,0,0
+access_mis_vehicle_manager,mis.vehicle.manager,model_mis_vehicle,group_mis_vehicle_manager,1,1,1,0
+access_mis_vehicle_admin,mis.vehicle.admin,model_mis_vehicle,group_mis_vehicle_administrator,1,1,1,1
+
+access_mis_vehicle_tag_user,mis.vehicle.tag.user,model_mis_vehicle_tag,group_mis_vehicle_user,1,0,0,0
+access_mis_vehicle_tag_manager,mis.vehicle.tag.manager,model_mis_vehicle_tag,group_mis_vehicle_manager,1,1,1,0
+access_mis_vehicle_tag_admin,mis.vehicle.tag.admin,model_mis_vehicle_tag,group_mis_vehicle_administrator,1,1,1,1

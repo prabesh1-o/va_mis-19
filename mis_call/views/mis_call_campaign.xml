@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- FORM VIEW -->
+        <record id="mis_call_campaign_form_view" model="ir.ui.view">
+            <field name="name">mis.call.campaign.form</field>
+            <field name="model">mis.call.campaign</field>
+            <field name="arch" type="xml">
+                <form string="Call Campaigns">
+                    <sheet string="Call Campaigns">
+                        <div class="oe_title">
+                            <h1 class="d-flex flex-row">
+                                <field name="name" class="o_text_overflow" placeholder="e.g. Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                <field name="stage"/>
+                            </group>
+                            <group>
+                                <field name="manager" widget="many2one_avatar_user"/>
+                                <label for="start_date" string="Planned Date"/>
+                                <div name="dates" class="o_row">
+                                    <field name="start_date" widget="daterange" options='{"related_end_date": "end_date"}'/>
+                                    <i class="fa fa-long-arrow-right mx-2 oe_edit_only" aria-label="Arrow icon" title="Arrow"/>
+                                    <!-- ✅ attrs replaced with inline invisible -->
+                                    <i class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow" invisible="not start_date and not end_date"/>
+                                    <field name="end_date" widget="daterange" options='{"related_start_date": "start_date"}'/>
+                                </div>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="description" string="Description">
+                                <field name="description" options="{'resizable': false}" placeholder="Campaign description..."/>
+                            </page>
+                            <page name="assignees" string="Campaign Assignees">
+                                <field name="assignees"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <!-- ✅ oe_chatter div replaced with chatter tag -->
+                    <chatter>
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </chatter>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- LIST VIEW (tree → list) -->
+        <record model="ir.ui.view" id="mis_call_campaign_list_view">
+            <field name="name">mis.call.campaign.list</field>
+            <field name="model">mis.call.campaign</field>
+            <field name="arch" type="xml">
+                <!-- ✅ tree renamed to list -->
+                <list>
+                    <field name="name"/>
+                    <field name="stage"/>
+                    <field name="call_count"/>
+                    <field name="tag_ids"/>
+                    <field name="manager"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- KANBAN VIEW -->
+        <record model="ir.ui.view" id="mis_call_campaign_kanban_view">
+            <field name="name">mis.call.campaign.kanban</field>
+            <field name="model">mis.call.campaign</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban o_emphasize_colors" default_group_by="stage" sample="1">
+                    <field name="name"/>
+                    <field name="color"/>
+                    <field name="call_count"/>
+                    <field name="end_date"/>
+                    <field name="tag_ids"/>
+                    <field name="manager"/>
+                    <templates>
+                        <!-- ✅ kanban-box → card -->
+                        <t t-name="card" t-att-class="'oe_kanban_card oe_kanban_global_click o_kanban_color_' + record.color.value">
+                            <div class="o_project_kanban_main">
+                                <div>
+                                    <div class="o_kanban_primary_left">
+                                        <div class="o_primary">
+                                            <!-- ✅ t-esc → t-out -->
+                                            <span class="o_text_overflow" t-att-title="record.name.value">
+                                                <t t-out="record.name.value"/>
+                                            </span>
+                                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <button name="action_view_batches" class="oe_highlight" type="object">
+                                                <span class="o_value">
+                                                    <!-- ✅ t-esc → t-out -->
+                                                    <t t-out="record.call_count.value"/>
+                                                </span>
+                                                <span class="o_label ms-1">Assigned Calls</span>
+                                            </button>
+                                            <!-- ✅ raw_value → value -->
+                                            <field name="manager" widget="many2one_avatar_user" t-if="record.manager.value"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- ✅ Odoo 19 manage pane -->
+                                    <div class="o_kanban_manage_pane" role="menu">
+                                        <a role="menuitem" type="open">View</a>
+                                        <a role="menuitem" name="action_view_batches" type="object">Tasks</a>
+                                        <t t-if="widget.deletable">
+                                            <a role="menuitem" type="delete">Delete</a>
+                                        </t>
+                                        <div role="separator" class="dropdown-divider"/>
+                                        <ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>
+                                    </div>
+
+                                    <a class="o_kanban_manage_toggle_button" href="#" groups="base.group_user">
+                                        <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="mis_call_campaign_action_window">
+            <field name="name">Call Campaign</field>
+            <field name="res_model">mis.call.campaign</field>
+            <!-- ✅ tree → list in view_mode -->
+            <field name="view_mode">kanban,list,form</field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem name="Call Campaigns" id="mis_call_campaign_menuitem" parent="mis_call.calls_menuitem" action="mis_call_campaign_action_window" sequence="3" />
+
+    </data>
+</odoo>

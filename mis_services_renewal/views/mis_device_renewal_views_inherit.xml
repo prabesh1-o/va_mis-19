@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_device_renewal_inherits_from_mis_services" model="ir.ui.view">
+        <field name="name">mis_device.renewal.inherits.from.mis.service</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="inherit_id" ref="mis_device_renewal.mis_renewal_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='renewal_package_id']" position="after">
+                    <field name="service_id" optional="show" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="mis_device_renewal_inherit_mis_services" model="ir.ui.view">
+        <field name="name">mis.device.renewal.view.form.inherit</field>
+        <field name="model">mis.device.renewal</field>
+        <field name="inherit_id" ref="mis_device_renewal.mis_device_renewal_search"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='device_ids']" position="after">
+                    <field name="service_id" string="Service" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

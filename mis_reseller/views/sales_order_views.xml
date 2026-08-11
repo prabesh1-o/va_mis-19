@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sale.action_quotations" model="ir.actions.act_window">
+        <field name="domain">[('is_reseller_order', '=', False)]</field>
+    </record>
+
+    <record id="sale.action_orders" model="ir.actions.act_window">
+        <field name="domain">[('is_reseller_order', '=', False)]</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,33 @@
+[flake8]
+max-line-length = 100
+max-complexity = 16
+
+# B = flake8-bugbear
+# B9 = bugbear opinionated warnings
+select = C,E,F,W,B,B9
+
+# Ignored rules
+# E203, W503 -> compatible with Black
+# E501 -> handled by B950
+ignore =
+    E203,
+    E501,
+    W503,
+    F402,
+    B006,
+    B007,
+    E231
+
+per-file-ignores =
+    __init__.py:F401
+    __manifest__.py:E231
+
+exclude =
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    node_modules,
+    build,
+    dist,
+    migrations

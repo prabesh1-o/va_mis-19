@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_devices" name="Show Devices" customize_show="True" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Devices</t>
+                <t t-set="url" t-value="'/my/devices'"/>
+                <t t-set="placeholder_count" t-value="'device_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_menu_devices" name="Devices Page" inherit_id="portal.portal_breadcrumbs" priority="600">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'devices'" class="breadcrumb-item active">
+                <span>Devices</span>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_devices" name="My Devices">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Devices</t>
+            </t>
+            <t t-if="devices" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Device #</th>
+                        <th class="text-end">Service</th>
+                        <th class="text-end">Sim</th>
+                        <th class="text-end">Installation Date</th>
+                        <th class="text-end">Expiry Date</th>
+                    </tr>
+                </thead>
+                <t t-foreach="devices" t-as="device">
+                    <tr t-att-class="(datetime.date.today() + datetime.timedelta(days=7) >= device.expiration_time) and 'text-danger' or ''">
+                        <td>
+                            <span t-field="device.imei_no"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="device.service_id"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="device.sim"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="device.installed_date"/>
+                        </td>
+                        <td class="text-end">
+                            <span t-field="device.expiration_time"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+            <p t-else="">There are currently no any devices.</p>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="mis_timesheet.timesheet_menu_root" name="Timesheets" sequence="4" parent="mis_project.mis_project_main_menu"/>
+</odoo>

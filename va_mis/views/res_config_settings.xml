@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.va.mis</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="100"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <div class="app_settings_block" data-string="MIS" string="MIS" data-key="va_mis">
+                    <div name="mis_config_holder">
+                        <div class="mis">
+                            <h2> MIS Note Template</h2>
+                            <div class="row mt16 o_settings_container">
+                                <div class="col-12 col-lg-6 o_setting_box">
+                                    <div class="o_setting_right_pane">
+                                        <button name="%(mis_note_template_menu_action_window)d" icon="fa-arrow-right" type="action" string="Manage Note Templates" class="btn-link o_web_settings_access_rights"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mis_fiscal_period">
+                            <h2> MIS Fiscal Periods</h2>
+                            <div class="row mt16 o_settings_container">
+                                <div class="col-12 col-lg-6 o_setting_box">
+                                    <div class="o_setting_right_pane">
+                                        <button name="%(fiscal_period_action)d" icon="fa-arrow-right" type="action" string="Manage Fiscal Periods" class="btn-link o_web_settings_access_rights"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_mis_config" model="ir.actions.act_window">
+        <field name="name">MIS Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module' : 'va_mis'}</field>
+    </record>
+
+    <menuitem id="mis_config_menu" name="Configurations" parent="va_mis.mis_root_menu" sequence="16"/>
+    <menuitem id="mis_config_settings_menu" name="Settings" parent="va_mis.mis_config_menu" action="action_mis_config" sequence="16"/>
+</odoo>

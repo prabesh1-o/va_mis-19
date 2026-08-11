@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="transportation" model="mis.customer.industry">
+            <field name="name">Transportation and Logistics</field>
+            <field name="prefix">TRL</field>
+        </record>
+        <record id="construction" model="mis.customer.industry">
+            <field name="name">Construction</field>
+            <field name="prefix">CON</field>
+        </record>
+        <record id="utilities" model="mis.customer.industry">
+            <field name="name">Utilities</field>
+            <field name="prefix">UTI</field>
+        </record>
+        <record id="security_services" model="mis.customer.industry">
+            <field name="name">Security Services</field>
+            <field name="prefix">SEC</field>
+        </record>
+        <record id="government" model="mis.customer.industry">
+            <field name="name">Government and Public Sector</field>
+            <field name="prefix">GOV</field>
+        </record>
+        <record id="personal_use" model="mis.customer.industry">
+            <field name="name">Personal Use</field>
+            <field name="prefix">PER</field>
+        </record>
+        <record id="retail" model="mis.customer.industry">
+            <field name="name">Retail</field>
+            <field name="prefix">RET</field>
+        </record>
+        <record id="healthcare" model="mis.customer.industry">
+            <field name="name">Healthcare</field>
+            <field name="prefix">HLT</field>
+        </record>
+        <record id="education" model="mis.customer.industry">
+            <field name="name">Education</field>
+            <field name="prefix">EDU</field>
+        </record>
+        <record id="agriculture" model="mis.customer.industry">
+            <field name="name">Agriculture</field>
+            <field name="prefix">AGR</field>
+        </record>
+        <record id="rental_leasing" model="mis.customer.industry">
+            <field name="name">Rental and Leasing</field>
+            <field name="prefix">RNT</field>
+        </record>
+        <record id="field_services" model="mis.customer.industry">
+            <field name="name">Field Services</field>
+            <field name="prefix">FLS</field>
+        </record>
+        <record id="telecommunications" model="mis.customer.industry">
+            <field name="name">Telecommunications</field>
+            <field name="prefix">TEL</field>
+        </record>
+        <record id="oil_gas" model="mis.customer.industry">
+            <field name="name">Oil and Gas</field>
+            <field name="prefix">OIL</field>
+        </record>
+        <record id="emergency_services" model="mis.customer.industry">
+            <field name="name">Emergency Services</field>
+            <field name="prefix">EMS</field>
+        </record>
+        <record id="mining" model="mis.customer.industry">
+            <field name="name">Mining</field>
+            <field name="prefix">MIN</field>
+        </record>
+        <record id="marine_shopping" model="mis.customer.industry">
+            <field name="name">Marine and Shipping</field>
+            <field name="prefix">MAR</field>
+        </record>
+        <record id="hospitality_tourism" model="mis.customer.industry">
+            <field name="name">Hospitality and Tourism</field>
+            <field name="prefix">HOS</field>
+        </record>
+        <record id="waste_management" model="mis.customer.industry">
+            <field name="name">Waste Management</field>
+            <field name="prefix">WST</field>
+        </record>
+        <record id="manufacturing" model="mis.customer.industry">
+            <field name="name">Manufacturing</field>
+            <field name="prefix">MFG</field>
+        </record>
+    </data>
+</odoo>

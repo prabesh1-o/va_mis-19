@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_device_installation_inherits_mis_device_sim_form" model="ir.ui.view">
+            <field name="name">mis.device.installation.inherit.mis_device.sim.form</field>
+            <field name="model">mis.device.sim</field>
+            <field name="inherit_id" ref="mis_device.device_sims_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="return_action_to_open" type="object" class="oe_stat_button" context="{'xml_id':'mis_installation_mis_device.mis_sim_device_history_action'}" icon="fa-microchip">
+                        <field name="device_history_count" widget="statinfo" nolabel="1"/>
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Device</span>
+                            <span class="o_stat_text">History</span>
+                        </div>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

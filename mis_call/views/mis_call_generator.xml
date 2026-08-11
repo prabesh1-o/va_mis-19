@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mis_call_generator_list_view" model="ir.ui.view">
+            <field name="name">mis.call.generator.list</field>
+            <field name="model">mis.call.generator</field>
+            <field name="arch" type="xml">
+                <list string="Generate Calls" create="false">
+                    <field name="name"/>
+                    <field name="campaign_id"/>
+                    <field name="created_by"/>
+                    <field name="create_date" string="Created At"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="mis_call_generator_form_view" model="ir.ui.view">
+            <field name="name">mis.call.generator.form</field>
+            <field name="model">mis.call.generator</field>
+            <field name="arch" type="xml">
+                <form string="Generate Calls">
+                    <header>
+                        <!-- ✅ Use field-based condition instead of context.get() -->
+                        <button
+                            name="action_show_assigned_calls"
+                            type="object"
+                            class="oe_highlight"
+                            string="View Calls"
+                            invisible="not assigned_call_ids"
+                        />
+                    </header>
+                    <sheet>
+                        <!-- ✅ modifiers replaced with inline invisible -->
+                        <div class="alert alert-info mb-0" role="alert"
+                             style="background-color: #ffefb8;"
+                             invisible="not flag">
+                            The calls have already been created for selected one or more records.
+                        </div>
+                        <div>
+                            <group>
+                                <field name="assigned_call_ids" invisible="1"/>
+                                <field name="flag" invisible="1"/>
+                                <field name="name"/>
+                                <field name="campaign_id"/>
+                                <field name="deadline_date"/>
+                                <field name="assigned_by"/>
+                                <field name="assignee"/>
+                                <field name="created_by" readonly="1"/>
+                            </group>
+                            <notebook>
+                                <page name="Description" string="Description">
+                                    <field name="description"/>
+                                </page>
+                            </notebook>
+                        </div>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_call_generator_action_window">
+            <field name="name">Generate Call</field>
+            <field name="res_model">mis.call.generator</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem
+            name="Generate Call"
+            id="mis_call_generator_menuitem"
+            parent="mis_call.calls_menuitem"
+            action="mis_call_generator_action_window"
+            sequence="4"
+        />
+    </data>
+</odoo>

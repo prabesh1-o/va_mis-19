@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record model="ir.module.category" id="mis_installation_management">
+            <field name="name">MIS Device Installation</field>
+            <field name="description">MIS Device Installation related modules</field>
+            <field name="sequence">12</field>
+        </record>
+
+        <record model="ir.module.category" id="mis_device_installation_management">
+            <field name="name">MIS Device Installation</field>
+            <field name="description">MIS Device Installation</field>
+            <field name="parent_id" ref="mis_installation_management"/>
+        </record>
+
+        <record id="privilege_device_installation" model="res.groups.privilege">
+            <field name="name">Device Installation</field>
+            <field name="sequence">10</field>
+            <field name="category_id" ref="mis_device_installation_management"/>
+        </record>
+
+        <!-- User: read own document Only -->
+        <record id="group_mis_device_installation_user_readonly" model="res.groups">
+            <field name="name">User: Read Only</field>
+            <field name="privilege_id" ref="privilege_device_installation" />
+            <field name="comment">The user will have readonly access to their records.</field>
+        </record>
+
+        <!-- User: own document  -->
+        <record id="group_mis_device_installation_user_own_documents" model="res.groups">
+            <field name="name">User: Own Documents</field>
+            <field name="implied_ids" eval="[(4, ref('group_mis_device_installation_user_readonly'))]" />
+            <field name="privilege_id" ref="privilege_device_installation" />
+            <field name="comment">The user will have create,read,update access to their own records.</field>
+        </record>
+
+        <record id="group_able_to_read_installation_and_sent_attachment" model="res.groups">
+            <field name="name">Able to read installation and send attachment</field>
+            <field name="comment">The users can read installation and send attachment</field>
+            <field name="implied_ids" eval="[(4, ref('group_mis_device_installation_user_readonly'))]" />
+        </record>
+
+        <record id="group_mis_device_installation_all_documents" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="privilege_id" ref="privilege_device_installation" />
+            <field name="implied_ids" eval="[(4, ref('group_mis_device_installation_user_own_documents'))]" />
+            <field name="comment">The user will have create,read,update access for all records</field>
+        </record>
+
+        <record id="group_mis_device_installation_administrator" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="privilege_id" ref="privilege_device_installation" />
+            <field name="implied_ids" eval="[(4, ref('group_mis_device_installation_all_documents'))]" />
+            <field name="comment">The user will have all access to all records</field>
+            <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+        </record>
+    </data>
+</odoo>

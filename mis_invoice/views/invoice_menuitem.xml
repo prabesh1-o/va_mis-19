@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_unpaid_invoice_type" model="ir.actions.act_window">
+        <field name="name">Unpaid Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="view_id" ref="account.view_move_tree"/>
+        <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+        <field name="domain">[('move_type', '=', 'out_invoice'), ('state', 'in', ['draft', 'posted']), ('payment_state', 'not in', ['paid', 'in_payment'])]</field>
+        <field name="context">{'default_move_type': 'out_invoice', 'search_default_unpaid': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Create a customer invoice
+            </p>
+            <p>
+            Create invoices, register payments and keep track of the discussions with your customers.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_paid_invoice_type" model="ir.actions.act_window">
+        <field name="name">Paid Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="view_id" ref="account.view_move_tree"/>
+        <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+        <field name="domain">[('move_type', '=', 'out_invoice')]</field>
+        <field name="context">{'default_move_type': 'out_invoice', 'search_default_closed': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Create a customer invoice
+            </p>
+            <p>
+            Create invoices, register payments and keep track of the discussions with your customers.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="mis_invoice_menu" name="Invoices" parent="va_mis.mis_root_menu" sequence="8" groups="va_mis.group_mis_admin,va_mis.group_mis_account,va_mis.group_mis_sales">
+        <menuitem id="mis_sale_unpaid_invoice_menu" name="Invoices" action="action_unpaid_invoice_type" sequence="1"/>
+        <menuitem id="mis_sale_invoice_menu" name="Paid Invoices" action="action_paid_invoice_type" sequence="2"/>
+        <menuitem id="mis_sale_customer_menu" name="Invoiced Customer" action="account.res_partner_action_customer" sequence="3"/>
+    </menuitem>
+</odoo>

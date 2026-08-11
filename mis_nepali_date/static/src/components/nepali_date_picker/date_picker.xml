@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<templates>
+    <t t-name="mis_nepali_date.NepaliDatePickerField" owl="1">
+        <div class="position-relative">
+            <input type="text" class="o_input" id="nepali_date" t-att-value="dateValue" t-on-blur="(e) => onBlur(e)"/>
+        </div>
+    </t>
+</templates>

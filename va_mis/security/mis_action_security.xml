@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.module.category" id="mis_user_action_access">
+        <field name="name">MIS Action</field>
+        <field name="description">User access for actions</field>
+    </record>
+
+    <record id="privilege_access_user_actions" model="res.groups.privilege">
+        <field name="name">Mis User Action</field>
+        <field name="sequence">10</field>
+        <field name="category_id" ref="va_mis.mis_user_action_access"/>
+    </record>
+
+
+
+    <record id="group_able_to_create_employee" model="res.groups">
+        <field name="name">Able to create employee</field>
+        <field name="comment">Users can create employees</field>
+        <field name="privilege_id" ref = "va_mis.privilege_access_user_actions" />
+        
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]" />
+    </record>
+    <record id="group_able_to_create_customer" model="res.groups">
+        <field name="name">Able to create customer</field>
+        <field name="comment">Users can create customer</field>
+        <field name="privilege_id" ref = "va_mis.privilege_access_user_actions" />
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]" />
+    </record>
+    <record id="group_able_to_only_view_records" model="res.groups">
+        <field name="name">Able to only view records</field>
+        <field name="privilege_id" ref = "va_mis.privilege_access_user_actions" />
+    </record>
+</odoo>

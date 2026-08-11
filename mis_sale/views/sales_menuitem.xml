@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="mis_sale_menu" name="Sales" parent="va_mis.mis_root_menu" sequence="6" groups="va_mis.group_mis_admin,va_mis.group_mis_account,va_mis.group_mis_sales">
+        <menuitem id="mis_sale_quotation_menu" name="Quotation" action="sale.action_quotations_with_onboarding" sequence="1"/>
+        <menuitem id="mis_sale_order_menu" name="Sales Order" action="sale.action_orders" sequence="2"/>
+        <menuitem id="mis_sale_order_to_invoice_menu" name="Order To Invoice" action="sale.action_orders_to_invoice" sequence="3"/>
+        <menuitem id="mis_invoiced_sale_order_menu" name="Order Fully Invoiced" action="mis_invoiced_sale_order" sequence="4"/>
+        <menuitem id="mis_sale_team_menu" name="Sales Team" action="sales_team.crm_team_action_sales" sequence="5"/>
+    </menuitem>
+</odoo>

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mis_warranty_user_readonly,mis.warranty.user.readonly,model_mis_warranty,group_mis_warranty_user_readonly,1,0,0,0
+access_mis_warranty_own,mis.warranty.user.own,model_mis_warranty,group_mis_warranty_user_own_documents,1,1,1,0
+access_mis_warranty_all,mis.warranty.all,model_mis_warranty,group_mis_warranty_all_documents,1,1,1,0
+access_mis_warranty_admin,mis.warranty.admin,model_mis_warranty,group_mis_warranty_administrator,1,1,1,1
+
+access_mis_warranty_package_user,mis.warranty.user,model_mis_warranty_package,group_mis_warranty_package_user,1,0,0,0
+access_mis_warranty_admin,mis.warranty.admin,model_mis_warranty_package,group_mis_warranty_package_administrator,1,1,1,1
+
+access_mis_warranty_type_user,mis.warranty.user,model_mis_warranty_type,group_mis_warranty_type_user,1,0,0,0
+access_mis_warranty_admin,mis.warranty.admin,model_mis_warranty_type,group_mis_warranty_type_administrator,1,1,1,1

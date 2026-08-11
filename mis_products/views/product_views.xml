@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id='mis_product_list_view' model='ir.ui.view'>
+            <field name="name">mis.product.list</field>
+            <field name="model">mis.product</field>
+            <field name="arch" type="xml">
+                <list string="Products" export_xlsx="false">
+                    <field name="name" />
+                    <field name="product_type" />
+                    <field name="price" />
+                    <field name="discount_percentage" />
+                    <field name="discounted_price" />
+                </list>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="mis_product_kanban_view">
+            <field name="name">mis.product.kanban</field>
+            <field name="model">mis.product</field>
+            <field name="arch" type="xml">
+                <kanban string="Products" class="o_kanban_product_template" sample="1">
+                    <field name="name"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <field name="image" preview_image="logo" widget="image" options="{'zoom': true, 'zoom_delay': 1000}" />
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <div class="o_kanban_record_top mb-0">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <div class="d-flex justify-content-between">
+                                                    <t t-if="record.name.raw_value">
+                                                        <field name="name" />
+                                                    </t>
+                                                    <t t-if="record.discount_percentage.raw_value">
+                                                        <div name="discount_percentage">
+                                                            <span class="badge bg-danger rounded-pill">
+                                                                <span class="h6 p-1 text-white">
+                                                                    <small>
+                                                                        <field name="discount_percentage"/>
+                                                                        <span>% off</span>
+                                                                    </small>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                    <div name="product_type">
+                                        <t t-if="record.product_type.raw_value">
+                                            <field name="product_type"/>
+                                        </t>
+                                    </div>
+                                    <div name="product_price" class="mt-1">
+                                        <strong>Price: </strong>
+                                        <field name="price" widget="monetary"/>
+                                    </div>
+                                    <t t-if="record.discounted_price.raw_value">
+                                        <div name="discounted_price">
+                                            <strong>Discounted Price: </strong>
+                                            <span>
+                                                <field name="discounted_price" widget="monetary"/>
+                                            </span>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id='mis_product_view_form' model='ir.ui.view'>
+            <field name="name">mis.product.form</field>
+            <field name="model">mis.product</field>
+            <field name="arch" type="xml">
+                <form string="Products">
+                    <header>
+                        <field name="state" widget="statusbar" options="{'clickable': 1}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box"> </div>
+                        <field name="image" widget='image' class="oe_avatar" options="{'size': [100, 100]}" />
+                        <div class="oe_title col-6">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Name" />
+                            </h1>
+                        </div>
+                        <group class="col-6">
+                            <field name="product_type" />
+                            <field name="has_imei"/>
+                            <field name="is_product"/>
+                            <field name="price" widget="monetary"/>
+                            <field name="discount_percentage"/>
+                            <label for="start_date" string="Discount Allowed Date" invisible ="not discount_percentage"/>
+                            <div name="dates" class="o_row" invisible ="not discount_percentage">
+                                <field name="start_date" widget="daterange" options='{"related_end_date": "end_date"}' invisible ="not discount_percentage"/>
+                                <i class="fa fa-long-arrow-right mx-2 oe_edit_only" aria-label="Arrow icon" title="Arrow" invisible ="not discount_percentage" />
+                                <i class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow" invisible="not start_date and not end_date"/>
+                                <field name="end_date" widget="daterange" options='{"related_start_date": "start_date"}' invisible="not discount_percentage"/>
+                            </div>
+                            <field name="discounted_price" widget="monetary" invisible="not discount_percentage"/>
+                        </group>
+                        <notebook>
+                            <page string="Description" name="description">
+                                <field name="description" nolabel="1" placeholder="Write here any other information related to this Product" />
+                            </page>
+                            <page string="Models" name="model">
+                                <field name="product_model_ids" nolabel="1">
+                                    <list string="device_models" editable="bottom" no_open="True">
+                                        <field name="name"/>
+                                        <field name="manufacturer_id"/>
+                                        <field name="model_protocol"/>
+                                        <field name="model_port"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!-- Chatter -->
+                    <chatter>
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </chatter>
+                </form>
+            </field>
+        </record>
+
+        <record id="mis_product_search" model="ir.ui.view">
+            <field name="name">mis.product.search</field>
+            <field name="model">mis.product</field>
+            <field name="arch" type="xml">
+                <search string="Products">
+                    <field name="name" string="Product" />
+                    <field name="product_type" string="Product Type"/>
+                    <filter name="is_product" string="Product" domain="[('is_product','=',True)]" />
+                    <filter name="active_state" string="Active Product" domain="[('state','=','active')]" />
+                    <filter name="inactive_state" string="Inactive Product" domain="[('state','=','inactive')]" />
+                    <filter name="group_product_type" string="Product Type" context="{'group_by': 'product_type'}" />
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}" />
+
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="mis_product_action">
+            <field name="name">Products</field>
+            <field name="res_model">mis.product</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="context">{'search_default_is_product': 1}</field>
+        </record>
+        <menuitem id="mis_product_parent_menu" name="Products" parent="va_mis.mis_root_menu" sequence="4"/>
+        <menuitem id="mis_product_menu" name="Products" action="mis_product_action" parent="mis_product_parent_menu" sequence="1"/>
+    </data>
+</odoo>

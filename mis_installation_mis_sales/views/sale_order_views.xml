@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_installation_inherit_sales_order" model="ir.ui.view">
+        <field name="name">mis_installaton.inherits.form.mis_sale</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="priority">18</field>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//button[@name='action_view_invoice']" position="before">
+                    <field name="installation_ids" invisible="1"/>
+                    <button type="object" name="action_view_installation" class="oe_stat_button" icon="fa-microchip" invisible="installation_count == 0">
+                        <field name="installation_count" widget="statinfo" string="Installation"/>
+                    </button>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

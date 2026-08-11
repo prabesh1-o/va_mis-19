@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_installation_form_inherit_device" model="ir.ui.view">
+        <field name="name">mis.installation.form.inherit.device</field>
+        <field name="model">mis.device.installation</field>
+        <field name="priority">14</field>
+        <field name="inherit_id" ref="mis_device_installation.mis_installation_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//group[@name='installation']" position="before">
+                    <widget name="web_ribbon" title="Configured" bg_color="bg-success" invisible="configured_status != 'configured'"/>
+                    <widget name="web_ribbon" title="Partially Configured" bg_color="bg-warning"  invisible="configured_status != 'partial'"/>
+                    <field name="configured_status" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='installation_line_ids']/list/field[@name='employee_ids']" position="after">
+                    <field name="is_configured" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='installation_line_ids']/form/group/group[@name='installation_information']" position="before">
+                    <group string="Device Information" name="device_information"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <menuitem id="mis_device_installation.mis_installation_menu" name="Installation" parent="mis_device.device_category_menu_item" sequence="2">
+        <menuitem id="mis_device_installation.mis_installation_active_menu" name="Installations" action="mis_device_installation.mis_installation_action" sequence="1"/>
+        <menuitem id="mis_device_installation.mis_installation_inactive_menu" name="Archieved Installations" action="mis_device_installation.mis_installation_inactive_action" sequence="2"/>
+    </menuitem>
+</odoo>
