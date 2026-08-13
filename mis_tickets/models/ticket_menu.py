@@ -50,13 +50,13 @@ class MisTicketMenu(models.Model):
         )
         if self == completed_menu:
             action["views"] = [
-                (False, "tree"),
+                (False, "list"),
                 (False, "kanban"),
                 (False, "form"),
             ]
-            action["view_mode"] = "tree,kanban,form"
+            action["view_mode"] = "list,kanban,form"
         else:
-            action["view_mode"] = "kanban,tree,form"
+            action["view_mode"] = "kanban,list,form"
         action["context"] = context
         return action
 

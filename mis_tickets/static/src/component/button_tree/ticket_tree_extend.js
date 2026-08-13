@@ -49,7 +49,7 @@ export class TicketListController extends ListController {
   }
 }
 
-registry.category("views").add("button_in_tree", {
+registry.category("views").add("button_in_list", {
   ...listView,
   Controller: TicketListController,
   buttonTemplate: "button_ticket.ListView.Buttons",
