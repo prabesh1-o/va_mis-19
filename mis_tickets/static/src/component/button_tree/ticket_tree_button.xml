@@ -1,10 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<odoo>
-    <t t-name="button_ticket.ListView.Buttons" t-inherit="web.ListView.Buttons">
-        <xpath expr="//*[@class='btn btn-primary o_list_button_add']" position="after">
-            <button type="button" t-if="state.showButton" class="btn btn-primary" style="margin-left: 10px;" t-on-click="OnHideClick">
-                Hide completed
-            </button>
-        </xpath>
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="button_ticket.ListView.Buttons">
+        <button
+            t-if="state.showButton"
+            type="button"
+            class="btn btn-primary ms-2"
+            t-on-click="OnHideClick">
+            Hide completed
+        </button>
     </t>
-</odoo>
+
+</templates>
