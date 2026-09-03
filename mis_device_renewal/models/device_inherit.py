@@ -82,7 +82,7 @@ class MisDevice(models.Model):
         store=True,
     )
 
-    @api.depends("renewal_price", "expiry_date_type", "expiration_time","renewal_package_id")
+    @api.depends("renewal_price", "exp_expiration_date", "renewal_package_id")
     def _compute_current_renewal_price(self):
         """
         Computes the `current_renewal_price` for each device based on its expiry type.
@@ -94,7 +94,7 @@ class MisDevice(models.Model):
         for device in self:
             today = datetime.now().date()
             if device.expiry_date_type == "manual":
-                if device.exp_expiration_date and device.exp_expiration_date < today:
+                if device.exp_expiration_date < today:
                     raise UserError(_("Expiry date cannot be set before today."))
                 renewal_package = device.renewal_package_id
                 if renewal_package and device.expiration_time:
@@ -113,10 +113,8 @@ class MisDevice(models.Model):
                     device.current_renewal_price = self._compute_manual_renewal_charge(
                         renewal_price_per_day, today
                     )
-                device.current_renewal_price = device.renewal_price
             else:
                 device.current_renewal_price = device.renewal_price
-
     def _compute_manual_renewal_charge(self, unit_price, today):
         """
         Calculates the manual renewal charge based on the difference in expiration dates and grace period.
