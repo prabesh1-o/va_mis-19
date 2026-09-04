@@ -99,7 +99,7 @@ class MisDeviceWarranty(models.Model):
                     0,
                     0,
                     {
-                        "name": order.device_id.product_id.name,
+                        # "name": order.device_id.product_id.name,
                         "company_id": company.id,
                         "product_id": order.device_id.product_id.product_product_id.id,
                         "warehouse_id": warehouse.id,
