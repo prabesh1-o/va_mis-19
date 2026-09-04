@@ -59,8 +59,19 @@ class AccountPaymentRegister(models.TransientModel):
 
     def action_create_payments(self):
         res = super(AccountPaymentRegister, self).action_create_payments()
-        invoices = self.env["account.move"].browse(self._context.get("active_ids", []))
+
+        if self.env.context.get("active_model") == "account.move.line":
+            move_lines = self.env["account.move.line"].browse(
+                    self.env.context.get("active_ids", [])
+            )
+            invoices = move_lines.mapped("move_id")
+        else:
+            invoices = self.env["account.move"].browse(
+            self.env.context.get("active_ids", [])
+            )
+
         for invoice in invoices:
             if invoice.payment_state == "paid":
                 invoice.npa = False
+
         return res
