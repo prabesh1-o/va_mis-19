@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2022-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -19,9 +19,7 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-
 import time
-
 from odoo import api, models, _
 from odoo.exceptions import UserError
 
@@ -40,13 +38,16 @@ class ReportJournal(models.AbstractModel):
         query_get_clause = self._get_query_get_clause(data)
         params = [tuple(move_state), tuple(journal_ids)] + query_get_clause[2]
         query = 'SELECT "account_move_line".id FROM ' + query_get_clause[
-            0] + ', account_move am, account_account acc WHERE "account_move_line".account_id = acc.id AND "account_move_line".move_id=am.id AND am.state IN %s AND "account_move_line".journal_id IN %s AND ' + \
+            0] + (', account_move am, account_account acc WHERE '
+                  '"account_move_line".account_id = acc.id AND '
+                  '"account_move_line".move_id=am.id AND am.state IN %s AND '
+                  '"account_move_line".journal_id IN %s AND ') + \
                 query_get_clause[1] + ' ORDER BY '
         if sort_selection == 'date':
             query += '"account_move_line".date'
         else:
             query += 'am.name'
-        query += ', "account_move_line".move_id, acc.code'
+        query += ', "account_move_line".move_id'
         self.env.cr.execute(query, tuple(params))
         ids = (x[0] for x in self.env.cr.fetchall())
         return self.env['account.move.line'].browse(ids)
@@ -61,7 +62,8 @@ class ReportJournal(models.AbstractModel):
             2]
         self.env.cr.execute('SELECT SUM(debit) FROM ' + query_get_clause[
             0] + ', account_move am '
-                 'WHERE "account_move_line".move_id=am.id AND am.state IN %s AND "account_move_line".journal_id IN %s AND ' +
+                 'WHERE "account_move_line".move_id=am.id AND am.state IN %s'
+                 ' AND "account_move_line".journal_id IN %s AND ' +
                             query_get_clause[1] + ' ',
                             tuple(params))
         return self.env.cr.fetchone()[0] or 0.0

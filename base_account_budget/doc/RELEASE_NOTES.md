@@ -1,13 +1,11 @@
-## Module <kit_account_budget>
+## Module <base_account_budget>
 
-#### 06.10.2021
-#### Version 16.0.1.0.0
+#### 13.1009.2025
+#### Version 19.0.1.0.0
 #### ADD
-- Initial commit for base_account_budget
+- Initial commit for Budget Management
 
-### 18.07.2024
-### Version 16.0.1.0.1
-### UPDT
-
-- Bug Fix-Fixed the issue when creating a new budget line.
-
+#### 09.06.2026
+#### Version 19.0.1.0.1
+##### UPDT
+Bug Fix-Resolved the Achievement field issues

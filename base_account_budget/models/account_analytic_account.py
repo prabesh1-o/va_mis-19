@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2019-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -19,11 +19,14 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class AccountAnalyticAccount(models.Model):
+    """Inherits the AccountAnalytic model to add new budget line field that
+    connect with the budget line modules"""
     _inherit = "account.analytic.account"
 
-    budget_line = fields.One2many('budget.lines', 'analytic_account_id',
+    budget_line = fields.One2many('budget.lines',
+                                  'analytic_account_id',
                                   'Budget Lines')

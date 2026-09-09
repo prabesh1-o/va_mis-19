@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2022-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -19,9 +19,7 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-
 import time
-
 from odoo import api, models, _
 from odoo.exceptions import UserError
 
@@ -41,7 +39,12 @@ class ReportPartnerLedger(models.AbstractModel):
                   tuple(data['computed']['account_ids'])] + \
                  query_get_data[2]
         query = """
-            SELECT "account_move_line".id, "account_move_line".date, j.code, acc.code as a_code, acc.name as a_name, "account_move_line".ref, m.name as move_name, "account_move_line".name, "account_move_line".debit, "account_move_line".credit, "account_move_line".amount_currency,"account_move_line".currency_id, c.symbol AS currency_code
+            SELECT "account_move_line".id, "account_move_line".date, j.code,
+             acc.name as a_name, "account_move_line".ref, 
+             m.name as move_name, "account_move_line".name, 
+             "account_move_line".debit, "account_move_line".credit, 
+             "account_move_line".amount_currency,
+             "account_move_line".currency_id, c.symbol AS currency_code
             FROM """ + query_get_data[0] + """
             LEFT JOIN account_journal j ON ("account_move_line".journal_id = j.id)
             LEFT JOIN account_account acc ON ("account_move_line".account_id = acc.id)
@@ -100,17 +103,20 @@ class ReportPartnerLedger(models.AbstractModel):
     @api.model
     def _get_report_values(self, docids, data=None):
         if not data.get('form'):
-            raise UserError(
-                _("Form content is missing, this report cannot be printed."))
+            raise UserError(_("Form content is missing, this report cannot be printed."))
 
         data['computed'] = {}
 
         obj_partner = self.env['res.partner']
         query_get_data = self.env['account.move.line'].with_context(
             data['form'].get('used_context', {}))._query_get()
+
+        # move state
         data['computed']['move_state'] = ['draft', 'posted']
         if data['form'].get('target_move', 'all') == 'posted':
             data['computed']['move_state'] = ['posted']
+
+        # account types
         result_selection = data['form'].get('result_selection', 'customer')
         if result_selection == 'supplier':
             data['computed']['ACCOUNT_TYPE'] = ['liability_payable']
@@ -119,18 +125,23 @@ class ReportPartnerLedger(models.AbstractModel):
         else:
             data['computed']['ACCOUNT_TYPE'] = ['liability_payable', 'asset_receivable']
 
+        # fetch account ids
         self.env.cr.execute("""
             SELECT a.id
             FROM account_account a
             WHERE a.account_type IN %s
-            AND NOT a.deprecated""",
-                            (tuple(data['computed']['ACCOUNT_TYPE']),))
-        data['computed']['account_ids'] = [a for (a,) in
-                                           self.env.cr.fetchall()]
-        params = [tuple(data['computed']['move_state']),
-                  tuple(data['computed']['account_ids'])] + query_get_data[2]
-        reconcile_clause = "" if data['form'][
-            'reconciled'] else ' AND "account_move_line".full_reconcile_id IS NULL '
+            AND a.active""",
+                            (tuple(data['computed']['ACCOUNT_TYPE']),)
+                            )
+        data['computed']['account_ids'] = [a for (a,) in self.env.cr.fetchall()]
+
+        # prevent empty tuple issue
+        account_ids = tuple(data['computed']['account_ids']) or (0,)
+        params = [tuple(data['computed']['move_state']), account_ids] + query_get_data[2]
+
+        reconcile_clause = "" if data['form']['reconciled'] else \
+            ' AND "account_move_line".full_reconcile_id IS NULL '
+
         query = """
             SELECT DISTINCT "account_move_line".partner_id
             FROM """ + query_get_data[0] + """, account_account AS account, account_move AS am
@@ -139,12 +150,15 @@ class ReportPartnerLedger(models.AbstractModel):
                 AND am.id = "account_move_line".move_id
                 AND am.state IN %s
                 AND "account_move_line".account_id IN %s
-                AND NOT account.deprecated
+                AND account.active
                 AND """ + query_get_data[1] + reconcile_clause
+
         self.env.cr.execute(query, tuple(params))
         partner_ids = [res['partner_id'] for res in self.env.cr.dictfetchall()]
+
         partners = obj_partner.browse(partner_ids)
         partners = sorted(partners, key=lambda x: (x.ref or '', x.name or ''))
+
         return {
             'doc_ids': partner_ids,
             'doc_model': self.env['res.partner'],

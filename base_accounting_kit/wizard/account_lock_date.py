@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2019-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -29,23 +29,21 @@ class AccountUpdateLockDate(models.TransientModel):
 
     company_id = fields.Many2one(comodel_name='res.company', string="Company",
                                  required=True)
-    period_lock_date = fields.Date(string="Lock Date for Non-Advisers",
-                                   help="Only users with the 'Adviser' role can edit accounts prior to "
-                                        "and inclusive of this date. Use it for period locking inside an "
-                                        "open fiscal year, for example.")
-    fiscalyear_lock_date = fields.Date(string="Lock Date",
+    sale_lock_date = fields.Date(string="Sales Lock Date", help='Prevents creating and modifying invoices up to the date.')
+    purchase_lock_date = fields.Date(string="Purchase Lock date", help='Prevents creating and modifying bills up to the date.')
+    hard_lock_date = fields.Date(string="Lock Everyone",
                                        help="No users, including Advisers, can edit accounts prior to and "
                                             "inclusive of this date. Use it for fiscal year locking for "
                                             "example.")
-
     @api.model
     def default_get(self, field_list):
-        res = super(AccountUpdateLockDate, self).default_get(field_list)
+        res = super().default_get(field_list)
         company = self.env.company
         res.update({
             'company_id': company.id,
-            'period_lock_date': company.period_lock_date,
-            'fiscalyear_lock_date': company.fiscalyear_lock_date,
+            'sale_lock_date': company.sale_lock_date,
+            'purchase_lock_date': company.purchase_lock_date,
+            'hard_lock_date': company.hard_lock_date,
         })
         return res
 
@@ -60,6 +58,7 @@ class AccountUpdateLockDate(models.TransientModel):
         self.ensure_one()
         self._check_execute_allowed()
         self.company_id.sudo().write({
-            'period_lock_date': self.period_lock_date,
-            'fiscalyear_lock_date': self.fiscalyear_lock_date,
+            'sale_lock_date': self.sale_lock_date,
+            'purchase_lock_date': self.purchase_lock_date,
+            'hard_lock_date': self.hard_lock_date,
         })

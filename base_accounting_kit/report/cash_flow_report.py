@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2022-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -19,9 +19,7 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-
 import time
-
 from odoo import api, models, _
 from odoo.exceptions import UserError
 
@@ -92,7 +90,7 @@ class ReportFinancial(models.AbstractModel):
             elif report.type == 'account_type':
                 # it's the sum the leaf accounts with such an account type
                 accounts = self.env['account.account'].search(
-                    [('account_type', 'in', report.account_type_ids)])
+                    [('account_type', '=', report.account_type_ids)])
                 res[report.id]['account'] = self._compute_account_balance(
                     accounts)
                 for value in res[report.id]['account'].values():
@@ -157,21 +155,21 @@ class ReportFinancial(models.AbstractModel):
                 # the rest of the loop is used to display the details of the financial report, so it's not needed here.
                 continue
             if res[report.id].get('account'):
-                # if res[report.id].get('debit'):
                 sub_lines = []
                 for account_id, value in res[report.id]['account'].items():
-                    # if there are accounts to display, we add them to the lines with a level equals to their level in
-                    # the COA + 1 (to avoid having them with a too low level that would conflicts with the level of data
+                    # if there are accounts to display, we add them to the
+                    # lines with a level equals to their level in
+                    # the COA + 1 (to avoid having them with a too low level
+                    # that would conflicts with the level of data
                     # financial reports for Assets, liabilities...)
                     flag = False
                     account = self.env['account.account'].browse(account_id)
-
                     vals = {
                         'name': account.code + ' ' + account.name,
                         'balance': value['balance'] * int(report.sign) or 0.0,
                         'type': 'account',
                         'level': report.display_detail == 'detail_with_hierarchy' and 4,
-                        'account_type': account.internal_type,
+                        'account_type': account.account_type,
                     }
                     if data['debit_credit']:
                         vals['debit'] = value['debit']

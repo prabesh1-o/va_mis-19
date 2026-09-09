@@ -16,7 +16,9 @@
     transform: translate(-100%) rotate(-45deg);
     white-space: nowrap;
 }
-
+.bold_date {
+    font-weight: bold;
+}
 
 
 
@@ -212,7 +214,6 @@
 }
 
 .accounts-dashboard-wrap .info-box .info-box-icon {
-
     border-radius: .25rem;
     -ms-flex-align: center;
     align-items: center;
@@ -1177,3 +1178,100 @@ width: 33.33333333%;
 width: 33.33333333% !important;
 }
 }*/
+.selected-row {
+    background-color: whitesmoke;
+}
+.row-clicked {
+    background-color: whitesmoke;
+}
+
+.o_bank_reconcile_stats_buttons{
+    display: flex;
+    flex-flow: row nowrap;
+    margin-bottom: 5px;
+    margin-top: -$o-sheet-vpadding;
+    white-space: nowrap;
+    border-bottom: 1px solid $border-color;
+    height: fit-content;
+    min-height: $o-statbutton-height;
+    .o_bank_reconcile_status_buttons_aside_left{
+        flex-grow: 0;
+        display: flex !important;
+        flex-flow: row nowrap;
+        border-right: 1px solid $border-color;
+
+        .btn {
+            margin-right: $o-statbutton-spacing;
+        }
+    }
+}
+.form_view_class{
+    width: 83% !important;
+}
+.form_bank{
+    width: 1500px !important;
+}
+.statement_button {
+    margin-left: 180px !important;
+    position: absolute;
+    height: 4px;
+    margin: 0;
+    padding: 2px 0 0 0;
+    border: 0;
+    z-index: 2;
+    background-color: transparent;
+}
+
+.statement_button .btn-sm {
+    position: relative;
+    padding-top: 0;
+    padding-bottom: 0;
+    top: -13px;
+    visibility: hidden;
+}
+
+.statement_button:hover .btn-sm {
+    display: inline-block;
+    visibility: visible;
+}
+#kanban_date{
+    width:20%;
+    overflow-wrap: break-word;
+}
+#partner{
+    flex:1 60%;
+    width:60%;
+    margin-top: -20px;
+}
+.o_custom_class.o_kanban_ungrouped .o_kanban_record{
+    width:500px;
+}
+
+#row1_statement{
+    margin-left: 196px;
+    margin-top: -18px;
+}
+#kanban_amount{
+    margin-top:-15px;
+    margin-left: 80px;
+}
+#payment_ref{
+    margin-bottom: 20px;
+}
+.bank_reconcile_model_dropdown .dropdown-toggle{
+    border: none;
+    box-shadow: none;
+    background-color: white;
+    margin-left: 195px;
+}
+.new-div{
+    background-color: #71639e;
+    height: 70px;
+    width: 7px;
+    margin-left: 500px;
+    margin-top: -71px;
+}
+.to_check{
+    margin-right: 10px !important;
+    margin-bottom: 10px !important;
+}

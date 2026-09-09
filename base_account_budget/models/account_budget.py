@@ -24,39 +24,24 @@ from odoo.exceptions import ValidationError
 
 
 class AccountBudgetPost(models.Model):
+    """Model used to create the Budgetary Position for the account"""
     _name = "account.budget.post"
     _order = "name"
     _description = "Budgetary Position"
 
     name = fields.Char('Name', required=True)
     account_ids = fields.Many2many('account.account', 'account_budget_rel',
-                                   'budget_id', 'account_id', 'Accounts',
-                                   domain=[('active', '=', True)])
+                                   'budget_id', 'account_id', 'Accounts')
     budget_line = fields.One2many('budget.lines', 'general_budget_id',
                                   'Budget Lines')
     company_id = fields.Many2one('res.company', 'Company', required=True,
-                                 default=lambda self: self.env[
-                                     'res.company']._company_default_get(
-                                     'account.budget.post'))
+                                 default=lambda self: self.env.user.company_id)
 
-    def _check_account_ids(self, vals):
-        for val in vals:
-            if 'account_ids' in val:
-                account_ids = val['account_ids']
-            else:
-                account_ids = self.account_ids
-            if not account_ids:
-                raise ValidationError(
-                    _('The budget must have at least one account.'))
-
-    @api.model_create_multi
-    def create(self, vals):
-        self._check_account_ids(vals)
-        return super(AccountBudgetPost, self).create(vals)
-
-    def write(self, vals):
-        self._check_account_ids(vals)
-        return super(AccountBudgetPost, self).write(vals)
+    @api.constrains('account_ids')
+    def _check_account_ids(self):
+        for record in self:
+            if not record.account_ids:
+                raise ValidationError("The budget must have at least one account!")
 
 
 class Budget(models.Model):
@@ -64,14 +49,11 @@ class Budget(models.Model):
     _description = "Budget"
     _inherit = ['mail.thread']
 
-    name = fields.Char('Budget Name', required=True,
-                       states={'done': [('readonly', True)]})
+    name = fields.Char('Budget Name', required=True)
     creating_user_id = fields.Many2one('res.users', 'Responsible',
                                        default=lambda self: self.env.user)
-    date_from = fields.Date('Start Date', required=True,
-                            states={'done': [('readonly', True)]})
-    date_to = fields.Date('End Date', required=True,
-                          states={'done': [('readonly', True)]})
+    date_from = fields.Date('Start Date', required=True)
+    date_to = fields.Date('End Date', required=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('cancel', 'Cancelled'),
@@ -79,14 +61,10 @@ class Budget(models.Model):
         ('validate', 'Validated'),
         ('done', 'Done')
     ], 'Status', default='draft', index=True, required=True, readonly=True,
-        copy=False)
+        copy=False, tracking=True)
     budget_line = fields.One2many('budget.lines', 'budget_id', 'Budget Lines',
-                                  states={'done': [('readonly', True)]},
                                   copy=True)
-    company_id = fields.Many2one('res.company', 'Company', required=True,
-                                 default=lambda self: self.env[
-                                     'res.company']._company_default_get(
-                                     'account.budget.post'))
+    company_id = fields.Many2one('res.company', 'Company', required=True, default=lambda self: self.env.company)
 
     def action_budget_confirm(self):
         self.write({'state': 'confirm'})
@@ -132,30 +110,34 @@ class BudgetLines(models.Model):
     def _compute_practical_amount(self):
         for line in self:
             result = 0.0
-            acc_ids = line.general_budget_id.account_ids.ids
+            acc_ids = line.general_budget_id.account_ids.ids  # Get the account IDs
             date_to = self.env.context.get('wizard_date_to') or line.date_to
             date_from = self.env.context.get(
                 'wizard_date_from') or line.date_from
             if line.analytic_account_id.id:
-                self.env.cr.execute("""
+                query = """
                     SELECT SUM(amount)
                     FROM account_analytic_line
-                    WHERE account_id=%s
-                        AND date between %s AND %s
-                        AND general_account_id=ANY(%s)""",
-                                    (line.analytic_account_id.id, date_from,
-                                     date_to, acc_ids,))
+                    WHERE account_id = %s
+                        AND date BETWEEN %s AND %s
+                        AND general_account_id = ANY(%s)
+                """
+                params = (line.analytic_account_id.id, date_from, date_to,
+                          '{' + ','.join(map(str,
+                                             acc_ids)) + '}')  # Convert acc_ids to SQL array format
+                self.env.cr.execute(query, params)
                 result = self.env.cr.fetchone()[0] or 0.0
             line.practical_amount = result
 
     def _compute_theoretical_amount(self):
         today = fields.Datetime.now()
         for line in self:
-            # Used for the report
-
+            if not line.date_from or not line.date_to:
+                line.theoretical_amount = 0
+                continue
             if self.env.context.get(
                     'wizard_date_from') and self.env.context.get(
-                    'wizard_date_to'):
+                'wizard_date_to'):
                 date_from = fields.Datetime.from_string(
                     self.env.context.get('wizard_date_from'))
                 date_to = fields.Datetime.from_string(
@@ -178,40 +160,45 @@ class BudgetLines(models.Model):
                     elapsed_timedelta = date_to - date_from
                     if elapsed_timedelta.days > 0:
                         theo_amt = (
-                                           elapsed_timedelta.total_seconds() / line_timedelta.total_seconds()) * line.planned_amount
+                                               elapsed_timedelta.total_seconds() / line_timedelta.total_seconds()) * line.planned_amount
             else:
                 if line.paid_date:
                     if fields.Datetime.from_string(
                             line.date_to) <= fields.Datetime.from_string(
-                            line.paid_date):
+                        line.paid_date):
                         theo_amt = 0.00
                     else:
                         theo_amt = line.planned_amount
                 else:
-                    line_timedelta = fields.Datetime.from_string(
-                        line.date_to) - fields.Datetime.from_string(
-                        line.date_from)
-                    elapsed_timedelta = fields.Datetime.from_string(today) - (
-                        fields.Datetime.from_string(line.date_from))
-
-                    if elapsed_timedelta.days < 0:
+                    # Convert all dates to Date objects for consistent arithmetic
+                    date_from = fields.Date.from_string(line.date_from) if isinstance(line.date_from, str) else line.date_from
+                    date_to = fields.Date.from_string(line.date_to) if isinstance(line.date_to, str) else line.date_to
+                    today = fields.Date.today()
+                    
+                    if today < date_from:
                         # If the budget line has not started yet, theoretical amount should be zero
                         theo_amt = 0.00
-                    elif line_timedelta.days > 0 and fields.Datetime.from_string(
-                            today) < fields.Datetime.from_string(
-                            line.date_to):
-                        # If today is between the budget line date_from and date_to
-                        theo_amt = (
-                                           elapsed_timedelta.total_seconds() / line_timedelta.total_seconds()) * line.planned_amount
-                    else:
+                    elif today > date_to:
+                        # If today is after the budget line end date, use full amount
                         theo_amt = line.planned_amount
-
+                    else:
+                        # Calculate days using consistent Date objects
+                        total_days = (date_to - date_from).days + 1
+                        days_over = (today - date_from).days + 1
+                        # If today is between the budget line date_from and date_to
+                        theo_amt = line.planned_amount / max(1, total_days) * days_over
             line.theoretical_amount = theo_amt
 
+    @api.depends('theoretical_amount', 'practical_amount')
     def _compute_percentage(self):
         for line in self:
-            if line.theoretical_amount != 0.00:
-                line.percentage = float((
-                                                    line.practical_amount or 0.0) / line.theoretical_amount) * 100
+            theoretical = line.theoretical_amount or 0.0
+            practical = line.practical_amount or 0.0
+
+            if theoretical != 0:
+                percentage = (abs(practical) / abs(theoretical)) * 100
             else:
-                line.percentage = 0.00
+                percentage = 0.0
+
+            line.percentage = max(0.0, percentage)
+
