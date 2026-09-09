@@ -8,6 +8,8 @@
                 <list js_class="button_in_list" string="Devices" multi_edit="1" export_xlsx="false">
                     <field name="ticket_id"/>
                     <field name="customer_id"/>
+                    <field name="create_date" string="Created On"/>
+                    <field name="completed_stage_start_date" string="Completed Date"/>
                     <field name="device_imei" optional="hide"/>
                     <field name="employee_ids" widget="many2many_avatar_user" />
                     <field name="ticket_menu_id" invisible="1"/>
