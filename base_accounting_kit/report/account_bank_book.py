@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2022-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -20,8 +20,7 @@
 #
 #############################################################################
 from datetime import time
-
-from odoo import models, api, _
+from odoo import api, models, _
 from odoo.exceptions import UserError
 
 
@@ -39,7 +38,7 @@ class ReportBankBook(models.AbstractModel):
         if init_balance:
             init_tables, init_where_clause, init_where_params = move_line.with_context(
                 date_from=self.env.context.get('date_from'), date_to=False,
-                initial_bal=True)._query_get()
+                initial_bal=True, strict_range=True)._query_get()
             init_wheres = [""]
             if init_where_clause.strip():
                 init_wheres.append(init_where_clause.strip())
@@ -114,8 +113,9 @@ class ReportBankBook(models.AbstractModel):
         # Calculate the debit, credit and balance for Accounts
         account_res = []
         for account in accounts:
+            account_company = self.env.company
             currency = account.currency_id and \
-                       account.currency_id or account.company_id.currency_id
+                       account.currency_id or account_company.currency_id
             res = dict((fn, 0.0) for fn in ['credit', 'debit', 'balance'])
             res['code'] = account.code
             res['name'] = account.name
@@ -131,7 +131,6 @@ class ReportBankBook(models.AbstractModel):
             if display_account == 'not_zero' and not currency.is_zero(
                     res['balance']):
                 account_res.append(res)
-
         return account_res
 
     @api.model
@@ -157,7 +156,7 @@ class ReportBankBook(models.AbstractModel):
             journals = self.env['account.journal'].search([('type', '=', 'bank')])
             accounts = []
             for journal in journals:
-                accounts.append(journal.company_id.account_journal_payment_credit_account_id.id)
+                accounts.append(journal.default_account_id.id)
             accounts = self.env['account.account'].search([('id', 'in', accounts)])
 
         accounts_res = self.with_context(data['form'].get('used_context', {}))._get_account_move_entry(

@@ -1,6 +1,25 @@
 # -*- coding: utf-8 -*-
-
-from odoo import api, fields, models, tools
+#############################################################################
+#
+#    Cybrosys Technologies Pvt. Ltd.
+#
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
+#
+#    You can modify it under the terms of the GNU LESSER
+#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
+#
+#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
+#    (LGPL v3) along with this program.
+#    If not, see <http://www.gnu.org/licenses/>.
+#
+#############################################################################
+from odoo import fields, models, tools
 
 
 class AssetAssetReport(models.Model):
@@ -26,8 +45,8 @@ class AssetAssetReport(models.Model):
     company_id = fields.Many2one('res.company', string='Company', readonly=True)
 
     def init(self):
-        tools.drop_view_if_exists(self._cr, 'asset_asset_report')
-        self._cr.execute("""
+        tools.drop_view_if_exists(self.env.cr, 'asset_asset_report')
+        self.env.cr.execute("""
             create or replace view asset_asset_report as (
                 select
                     min(dl.id) as id,
@@ -58,10 +77,14 @@ class AssetAssetReport(models.Model):
                     a.company_id as company_id
                 from account_asset_depreciation_line dl
                     left join account_asset_asset a on (dl.asset_id=a.id)
-                    left join (select min(d.id) as id,ac.id as ac_id from account_asset_depreciation_line as d inner join account_asset_asset as ac ON (ac.id=d.asset_id) group by ac_id) as dlmin on dlmin.ac_id=a.id
+                    left join (select min(d.id) as id,ac.id as ac_id from 
+                    account_asset_depreciation_line as d inner join 
+                    account_asset_asset as ac ON (ac.id=d.asset_id) group by 
+                    ac_id) as dlmin on dlmin.ac_id=a.id
                 where a.active is true 
                 group by
                     dl.amount,dl.asset_id,dl.depreciation_date,dl.name,
-                    a.date, dl.move_check, a.state, a.category_id, a.partner_id, a.company_id,
+                    a.date, dl.move_check, a.state, a.category_id, 
+                    a.partner_id, a.company_id,
                     a.value, a.id, a.salvage_value, dlmin.id
         )""")

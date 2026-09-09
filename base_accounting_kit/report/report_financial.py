@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2022-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -25,22 +25,6 @@ from odoo import api, fields, models
 # ---------------------------------------------------------
 # Account Financial Report
 # ---------------------------------------------------------
-class AccountTypes(models.Model):
-    _name = "account.account.type"
-    _description = "Account Types"
-
-    name = fields.Char(string='Account Type', required=True, translate=True)
-    type = fields.Selection([
-        ('other', 'Regular'),
-        ('receivable', 'Receivable'),
-        ('payable', 'Payable'),
-        ('liquidity', 'Liquidity'),
-    ], required=True, default='other',
-        help="The 'Internal Type' is used for features available on " \
-             "different types of accounts: liquidity type is for cash or bank accounts" \
-             ", payable/receivable is for vendor/customer accounts.")
-
-
 class AccountFinancialReport(models.Model):
     _name = "account.financial.report"
     _description = "Account Report"
@@ -92,9 +76,6 @@ class AccountFinancialReport(models.Model):
     account_report_id = fields.Many2one(
         'account.financial.report',
         'Report Value')
-    # account_type_ids = fields.Many2many(
-    #     'account.account.type',
-    #     'Account Types')
     account_type_ids = fields.Selection(
         selection=[
             ("asset_receivable", "Receivable"),
@@ -116,15 +97,10 @@ class AccountFinancialReport(models.Model):
             ("expense_direct_cost", "Cost of Revenue"),
             ("off_balance", "Off-Balance Sheet"),
         ],
-        string="Type",
+        string="Account Type",
         help="These types are defined according to your country. The type contains more information " \
              "about the account and its specificities."
     )
-    # account_type_ids = fields.Many2many(
-    #     'account.account.template',
-    #     'account_account_financial_report_type',
-    #     'report_id', 'account_type_id',
-    #     'Account Types')
 
     sign = fields.Selection(
         [("-1", 'Reverse balance sign'), ("1", 'Preserve balance sign')],

@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2019-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -19,55 +19,49 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-from datetime import datetime, date
-
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
-from odoo import models, fields, api, _
-from odoo.exceptions import UserError
-
-
-class FilterRecurringEntries(models.Model):
-    _inherit = 'account.move'
-
-    recurring_ref = fields.Char()
+from odoo import api, models, fields
 
 
 class RecurringPayments(models.Model):
+    """Created the module for recurring payments"""
     _name = 'account.recurring.payments'
     _description = 'Accounting Recurring Payment'
 
-    def _get_next_schedule(self):
-        if self.date:
-            recurr_dates = []
-            today = datetime.today()
-            start_date = datetime.strptime(str(self.date), '%Y-%m-%d')
-            while start_date <= today:
-                recurr_dates.append(str(start_date.date()))
-                if self.recurring_period == 'days':
-                    start_date += relativedelta(days=self.recurring_interval)
-                elif self.recurring_period == 'weeks':
-                    start_date += relativedelta(weeks=self.recurring_interval)
-                elif self.recurring_period == 'months':
-                    start_date += relativedelta(months=self.recurring_interval)
-                else:
-                    start_date += relativedelta(years=self.recurring_interval)
-            self.next_date = start_date.date()
+    @api.depends('date', 'recurring_period', 'recurring_interval')
+    def _compute_next_date(self):
+        """Compute the next scheduled date based on the recurring settings."""
+        for rec in self:
+            rec.next_date = False
+            if rec.date and rec.recurring_interval:
+                today = fields.Date.context_today(rec)
+                start_date = rec.date
+                while start_date <= today:
+                    if rec.recurring_period == 'days':
+                        start_date += relativedelta(days=rec.recurring_interval)
+                    elif rec.recurring_period == 'weeks':
+                        start_date += relativedelta(
+                            weeks=rec.recurring_interval)
+                    elif rec.recurring_period == 'months':
+                        start_date += relativedelta(
+                            months=rec.recurring_interval)
+                    else:
+                        start_date += relativedelta(
+                            years=rec.recurring_interval)
+                rec.next_date = start_date
 
-    name = fields.Char('Name')
+    name = fields.Char(string='Name')
     debit_account = fields.Many2one('account.account', 'Debit Account',
-                                    required=True,
-                                    domain="['|', ('company_id', '=', False), "
-                                           "('company_id', '=', company_id)]")
+                                    required=True)
     credit_account = fields.Many2one('account.account', 'Credit Account',
-                                     required=True,
-                                     domain="['|', ('company_id', '=', False), "
-                                            "('company_id', '=', company_id)]")
+                                     required=True)
     journal_id = fields.Many2one('account.journal', 'Journal', required=True)
     analytic_account_id = fields.Many2one('account.analytic.account',
                                           'Analytic Account')
-    date = fields.Date('Starting Date', required=True, default=date.today())
-    next_date = fields.Date('Next Schedule', compute=_get_next_schedule,
+    date = fields.Date('Starting Date', required=True,
+                       default=fields.Date.context_today)
+    next_date = fields.Date('Next Schedule', compute='_compute_next_date',
                             readonly=True, copy=False)
     recurring_period = fields.Selection(selection=[('days', 'Days'),
                                                    ('weeks', 'Weeks'),
@@ -94,11 +88,14 @@ class RecurringPayments(models.Model):
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        if self.partner_id.property_account_receivable_id:
+        """Onchange partner field for updating the credit account value"""
+        if self.partner_id.property_account_payable_id:
             self.credit_account = self.partner_id.property_account_payable_id
 
     @api.model
     def _cron_generate_entries(self):
+        """Generate recurring entries based on the defined schedule
+        and create corresponding accounting moves."""
         data = self.env['account.recurring.payments'].search(
             [('state', '=', 'running')])
         entries = self.env['account.move'].search(
@@ -142,21 +139,24 @@ class RecurringPayments(models.Model):
         for line in child_ids:
             tmpl_id = line.tmpl_id
             recurr_code = str(tmpl_id.id) + '/' + str(line.date)
+            analytic = (
+                {str(tmpl_id.analytic_account_id.id): 100}
+                if tmpl_id.analytic_account_id else False)
             line_ids = [(0, 0, {
                 'account_id': tmpl_id.credit_account.id,
                 'partner_id': tmpl_id.partner_id.id,
                 'credit': line.amount,
-                # 'analytic_account_id': tmpl_id.analytic_account_id.id,
+                'analytic_distribution': analytic,
             }), (0, 0, {
                 'account_id': tmpl_id.debit_account.id,
                 'partner_id': tmpl_id.partner_id.id,
                 'debit': line.amount,
-                # 'analytic_account_id': tmpl_id.analytic_account_id.id,
+                'analytic_distribution': analytic,
             })]
             vals = {
                 'date': line.date,
                 'recurring_ref': recurr_code,
-                'company_id': self.env.company.id,
+                'company_id': tmpl_id.company_id.id,
                 'journal_id': tmpl_id.journal_id.id,
                 'ref': line.template_name,
                 'narration': 'Recurring entry',
@@ -164,16 +164,4 @@ class RecurringPayments(models.Model):
             }
             move_id = self.env['account.move'].create(vals)
             if tmpl_id.journal_state == 'posted':
-                move_id.post()
-
-
-class GetAllRecurringEntries(models.TransientModel):
-    _name = 'account.recurring.entries.line'
-    _description = 'Account Recurring Entries Line'
-
-    date = fields.Date('Date')
-    template_name = fields.Char('Name')
-    amount = fields.Float('Amount')
-    tmpl_id = fields.Many2one('account.recurring.payments', string='id')
-
-
+                move_id.action_post()

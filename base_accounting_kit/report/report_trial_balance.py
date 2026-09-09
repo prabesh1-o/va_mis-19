@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2022-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -19,9 +19,7 @@
 #    If not, see <http://www.gnu.org/licenses/>.
 #
 #############################################################################
-
 import time
-
 from odoo import api, models, _
 from odoo.exceptions import UserError
 
@@ -56,8 +54,11 @@ class ReportTrialBalance(models.AbstractModel):
         filters = " AND ".join(wheres)
         # compute the balance, debit and credit for the provided accounts
         request = (
-                    "SELECT account_id AS id, SUM(debit) AS debit, SUM(credit) AS credit, (SUM(debit) - SUM(credit)) AS balance" + \
-                    " FROM " + tables + " WHERE account_id IN %s " + filters + " GROUP BY account_id")
+                    "SELECT account_id AS id, SUM(debit) AS debit, "
+                    "SUM(credit) AS credit, (SUM(debit) - SUM(credit)) "
+                    "AS balance" +
+                    " FROM " + tables + " WHERE account_id IN %s " +
+                    filters + " GROUP BY account_id")
         params = (tuple(accounts.ids),) + tuple(where_params)
         self.env.cr.execute(request, params)
         for row in self.env.cr.dictfetchall():
@@ -66,7 +67,9 @@ class ReportTrialBalance(models.AbstractModel):
         account_res = []
         for account in accounts:
             res = dict((fn, 0.0) for fn in ['credit', 'debit', 'balance'])
-            currency = account.currency_id and account.currency_id or account.company_id.currency_id
+            account_company = self.env.company
+            currency = (account.currency_id and account.currency_id or
+                        account_company.currency_id)
             res['code'] = account.code
             res['name'] = account.name
             if account.id in account_result:

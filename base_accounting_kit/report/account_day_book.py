@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2022-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -21,8 +21,7 @@
 #############################################################################
 import time
 from datetime import timedelta, datetime
-
-from odoo import models, api, _
+from odoo import api, models, _
 from odoo.exceptions import UserError
 
 
@@ -42,19 +41,25 @@ class DayBookPdfReport(models.AbstractModel):
         else:
             target_move = ''
         sql = ('''
-                SELECT l.id AS lid, acc.name as accname, l.account_id AS account_id, l.date AS ldate, j.code AS lcode, l.currency_id, 
-                l.amount_currency, l.ref AS lref, l.name AS lname, COALESCE(l.debit,0) AS debit, COALESCE(l.credit,0) AS credit, 
-                COALESCE(SUM(l.debit),0) - COALESCE(SUM(l.credit), 0) AS balance,
-                m.name AS move_name, c.symbol AS currency_code, p.name AS partner_name
+                SELECT l.id AS lid, acc.name as accname, l.account_id AS 
+                account_id, l.date AS ldate, j.code AS lcode, l.currency_id, 
+                l.amount_currency, l.ref AS lref, l.name AS lname,
+                 COALESCE(l.debit,0) AS debit, COALESCE(l.credit,0) AS credit, 
+                COALESCE(SUM(l.debit),0) - COALESCE(SUM(l.credit), 0) AS 
+                balance,
+                m.name AS move_name, c.symbol AS currency_code, p.name 
+                AS partner_name
                 FROM account_move_line l
                 JOIN account_move m ON (l.move_id=m.id)
                 LEFT JOIN res_currency c ON (l.currency_id=c.id)
                 LEFT JOIN res_partner p ON (l.partner_id=p.id)
                 JOIN account_journal j ON (l.journal_id=j.id)
                 JOIN account_account acc ON (l.account_id = acc.id) 
-                WHERE l.account_id IN %s AND l.journal_id IN %s ''' + target_move + ''' AND l.date = %s
+                WHERE l.account_id IN %s AND l.journal_id IN %s '''
+               + target_move + ''' AND l.date = %s
                 GROUP BY l.id, l.account_id, l.date,
-                     j.code, l.currency_id, l.amount_currency, l.ref, l.name, m.name, c.symbol, p.name , acc.name
+                     j.code, l.currency_id, l.amount_currency, l.ref, 
+                     l.name, m.name, c.symbol, p.name , acc.name
                      ORDER BY l.date DESC
         ''')
         params = (

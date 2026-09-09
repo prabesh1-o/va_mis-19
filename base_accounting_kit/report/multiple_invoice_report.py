@@ -1,6 +1,25 @@
 # -*- coding: utf-8 -*-
-
-from odoo import models, api
+#############################################################################
+#
+#    Cybrosys Technologies Pvt. Ltd.
+#
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
+#
+#    You can modify it under the terms of the GNU LESSER
+#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
+#
+#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
+#    (LGPL v3) along with this program.
+#    If not, see <http://www.gnu.org/licenses/>.
+#
+#############################################################################
+from odoo import api, models
 
 
 class ReportInvoiceMultiple(models.AbstractModel):
@@ -33,6 +52,5 @@ class ReportInvoiceMultiple(models.AbstractModel):
         rslt['body_txt_position'] = inv.journal_id.body_text_position
         rslt['txt_align'] = inv.journal_id.text_align
         rslt['layout'] = new_layout
-
         rslt['report_type'] = data.get('report_type') if data else ''
         return rslt

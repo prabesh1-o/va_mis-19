@@ -3,7 +3,7 @@
 #
 #    Cybrosys Technologies Pvt. Ltd.
 #
-#    Copyright (C) 2022-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Copyright (C) 2025-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
 #    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
 #
 #    You can modify it under the terms of the GNU LESSER
@@ -20,20 +20,15 @@
 #
 #############################################################################
 import re
-
 from odoo import api, models, fields
 
 
 class FinancialReport(models.TransientModel):
     _name = "financial.report"
-    _inherit = "account.report"
+    _inherit = "account.common.report"
     _description = "Financial Reports"
 
     name = fields.Char(string="Financial Report", default="Financial Report", required=True, translate=True)
-
-    target_move = fields.Selection([('posted', 'All Posted Entries'),
-                                    ('all', 'All Entries'),
-                                    ], string='Target Moves', required=True, default='posted')
 
     view_format = fields.Selection([
         ('vertical', 'Vertical'),
@@ -56,9 +51,9 @@ class FinancialReport(models.TransientModel):
     @api.model
     def _get_account_report(self):
         reports = []
-        if self._context.get('active_id'):
+        if self.env.context.get('active_id'):
             menu = self.env['ir.ui.menu'].browse(
-                self._context.get('active_id')).name
+                self.env.context.get('active_id')).name
             reports = self.env['account.financial.report'].search([
                 ('name', 'ilike', menu)])
         return reports and reports[0] or False
@@ -71,8 +66,6 @@ class FinancialReport(models.TransientModel):
         string='Account Reports',
         required=True)
 
-    date_from = fields.Date(string='Start Date')
-    date_to = fields.Date(string='End Date')
     debit_credit = fields.Boolean(
         string='Display Debit/Credit Columns',
         default=True,
@@ -82,11 +75,6 @@ class FinancialReport(models.TransientModel):
              " Because it is space consuming,"
              " we do not allow to use it "
              "while doing a comparison.")
-    company_id = fields.Many2one(
-        'res.company',
-        string='Company',
-        index=True,
-        default=lambda self: self.env.company.id)
 
     def view_report_pdf(self):
         """This function will be executed when we click the view button
@@ -140,6 +128,57 @@ class FinancialReport(models.TransientModel):
         return self.env.ref(
             'base_accounting_kit.financial_report_pdf').report_action(self,
                                                                       data)
+
+    def _financial_report_data(self):
+        """Build the ``data`` dict used by both the PDF and xlsx exports."""
+        data = dict()
+        data['ids'] = self.env.context.get('active_ids', [])
+        data['model'] = self.env.context.get('active_model', 'ir.ui.menu')
+        data['form'] = self.read(
+            ['date_from', 'enable_filter', 'debit_credit', 'date_to',
+             'account_report_id', 'target_move', 'view_format',
+             'company_id'])[0]
+        used_context = self._build_contexts(data)
+        data['form']['used_context'] = dict(
+            used_context,
+            lang=self.env.context.get('lang') or 'en_US')
+        return data
+
+    def action_print_xlsx(self):
+        """Export the financial report (P&L / Balance Sheet) to xlsx."""
+        self.ensure_one()
+        data = self._financial_report_data()
+        report_lines = self.get_account_lines(data['form'])
+        columns = [{'label': 'Name', 'width': 45}]
+        if self.debit_credit:
+            columns += [{'label': 'Debit', 'width': 18, 'num': True},
+                        {'label': 'Credit', 'width': 18, 'num': True}]
+        columns.append({'label': 'Balance', 'width': 18, 'num': True})
+        if self.enable_filter:
+            columns.append(
+                {'label': 'Comparison', 'width': 18, 'num': True})
+        rows = []
+        for line in report_lines:
+            is_report = line.get('type') == 'report'
+            cells = [line.get('name')]
+            if self.debit_credit:
+                cells += [line.get('debit', 0.0), line.get('credit', 0.0)]
+            cells.append(line.get('balance', 0.0))
+            if self.enable_filter:
+                cells.append(line.get('balance_cmp', 0.0))
+            rows.append({
+                'cells': cells,
+                'bold': is_report,
+                'indent': 0 if is_report else 1,
+            })
+        table = {
+            'title': self.account_report_id.name or 'Financial Report',
+            'meta': self._xlsx_meta(data['form']),
+            'columns': columns,
+            'rows': rows,
+        }
+        return self._xlsx_action(
+            self.account_report_id.name or 'Financial Report', table)
 
     def _compute_account_balance(self, accounts):
         """ compute the balance, debit
@@ -262,14 +301,11 @@ class FinancialReport(models.TransientModel):
 
         for report in child_reports:
             r_name = str(report.name)
-            # r_name = r_name.replace(" ", "-") + "-"
             r_name = re.sub('[^0-9a-zA-Z]+', '', r_name)
             if report.parent_id:
                 p_name = str(report.parent_id.name)
                 p_name = re.sub('[^0-9a-zA-Z]+', '', p_name) + str(
                     report.parent_id.id)
-                # p_name = p_name.replace(" ", "-") +
-                #  "-" + str(report.parent_id.id)
             else:
                 p_name = False
             vals = {
@@ -332,20 +368,23 @@ class FinancialReport(models.TransientModel):
                     if data['debit_credit']:
                         vals['debit'] = value['debit']
                         vals['credit'] = value['credit']
-                        if not account.company_id.currency_id.is_zero(
-                                vals['debit']) or \
-                                not account.company_id.currency_id.is_zero(
-                                    vals['credit']):
+                        for company in account.company_ids:
+                            if not company.currency_id.is_zero(
+                                    vals['debit']) or \
+                                    not company.currency_id.is_zero(
+                                        vals['credit']):
+                                flag = True
+                    for company in account.company_ids:
+                        if not company.currency_id.is_zero(
+                                vals['balance']):
                             flag = True
-                    if not account.company_id.currency_id.is_zero(
-                            vals['balance']):
-                        flag = True
                     if data['enable_filter']:
                         vals['balance_cmp'] = value['comp_bal'] * int(
                             report.sign)
-                        if not account.company_id.currency_id.is_zero(
-                                vals['balance_cmp']):
-                            flag = True
+                        for company in account.company_ids:
+                            if not company.currency_id.is_zero(
+                                    vals['balance_cmp']):
+                                flag = True
                     if flag:
                         sub_lines.append(vals)
                 lines += sorted(sub_lines,
@@ -359,19 +398,24 @@ class FinancialReport(models.TransientModel):
             if i['type'] == 'account':
                 account = i['account']
                 if form['target_move'] == 'posted':
-                    search_query = "select aml.id, am.id as j_id, aml.account_id, aml.date," \
-                                   " aml.name as label, am.name, " \
-                                   + "(aml.debit-aml.credit) as balance, aml.debit, aml.credit, aml.partner_id " \
-                                   + " from account_move_line aml join account_move am " \
-                                     "on (aml.move_id=am.id and am.state=%s) " \
-                                   + " where aml.account_id=%s"
+                    search_query = ("select aml.id, am.id as j_id, "
+                                    "aml.account_id, aml.date, aml.name as "
+                                    "label, am.name, (aml.debit-aml.credit) as "
+                                    "balance, aml.debit, aml.credit, "
+                                    "aml.partner_id  from "
+                                    "account_move_line aml "
+                                    "join account_move am on (aml.move_id=am.id"
+                                    " and am.state=%s) where aml.account_id=%s")
                     vals = [form['target_move']]
                 else:
-                    search_query = "select aml.id, am.id as j_id, aml.account_id, aml.date, " \
-                                   "aml.name as label, am.name, " \
-                                   + "(aml.debit-aml.credit) as balance, aml.debit, aml.credit, aml.partner_id " \
-                                   + " from account_move_line aml join account_move am on (aml.move_id=am.id) " \
-                                   + " where aml.account_id=%s"
+                    search_query = ("select aml.id, am.id as j_id, "
+                                    "aml.account_id, aml.date, aml.name as "
+                                    "label, am.name, (aml.debit-aml.credit) as "
+                                    "balance, aml.debit, aml.credit, "
+                                    "aml.partner_id from account_move_line aml"
+                                    " join account_move am on "
+                                    "(aml.move_id=am.id) where "
+                                    "aml.account_id=%s")
                     vals = []
                 if form['date_from'] and form['date_to']:
                     search_query += " and aml.date>=%s and aml.date<=%s"
