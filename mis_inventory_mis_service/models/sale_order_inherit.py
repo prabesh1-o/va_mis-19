@@ -57,7 +57,7 @@ class SaleOrder(models.Model):
                         {
                             "product": product,
                             "qty": line.product_uom_qty,
-                            "uom": line.product_uom,
+                            "uom": line.product_uom_id,
                             "sale_line": line,
                             "description": line.name,
                             "reference": False,
@@ -81,7 +81,6 @@ class SaleOrder(models.Model):
                     0,
                     0,
                     {
-                        "name": vals["description"],
                         "origin": origin,
                         "product_id": vals["product"].id,
                         "product_uom_qty": vals["qty"],
@@ -127,12 +126,10 @@ class SaleOrder(models.Model):
 
     def _create_delivery_order(self):
         for order in self:
-            delivery_order = self._prepare_delivery_order(
+            self._prepare_delivery_order(
                 is_reseller=False,
                 order=order,
             )
-            if delivery_order:
-                order.picking_ids += delivery_order
 
     def action_confirm(self):
         """
