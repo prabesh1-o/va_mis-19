@@ -19,7 +19,7 @@ class MisTicket(models.Model):
         return self.stage_find(ticket_menu_id, [("fold", "=", False)])
 
     ticket_id = fields.Char(string="Ticket Id.")
-    description = fields.Html(string="Description", tracking=True, sanitize=True)
+    description = fields.Html(string="Description", sanitize=True)
     priority = fields.Selection(
         [("0", "Low"), ("3", "Average"), ("9", "High")],
         default="0",
