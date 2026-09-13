@@ -44,8 +44,8 @@ class MisDevice(models.Model):
                     self.env.context, default_device_id=self.id, group_by=False
                 ),
                 domain=[("device_id", "=", self.id)],
-                view_mode="tree,kanban,form",
-                views=[(False, "tree"), (False, "kanban"), (False, "form")],
+                view_mode="list,kanban,form",
+                views=[(False, "list"), (False, "kanban"), (False, "form")],
             )
             return res
         return False
