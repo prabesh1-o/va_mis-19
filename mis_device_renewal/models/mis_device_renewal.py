@@ -618,7 +618,7 @@ class MisDeviceRenewal(models.Model):
                             )
                         else:
                             if is_billed_customer:
-                                self._validate_device_payment(device)
+                                # self._validate_device_payment(device)
                                 device_renewal_history.search(
                                     [("device_id", "in", self.device_ids.ids)],
                                     order="create_date desc",
