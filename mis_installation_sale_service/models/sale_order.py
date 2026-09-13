@@ -60,7 +60,7 @@ class SaleOrder(models.Model):
         return {
             "service_id": line.product_template_id.service_id.id,
             "installation_price": line.price_reduce_taxexcl,
-            "has_tax_installation": bool(line.tax_id),
+            "has_tax_installation": bool(line.tax_ids),
             "renewal_price": line.renewal_price,
         }
 
