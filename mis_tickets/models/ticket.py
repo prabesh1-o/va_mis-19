@@ -239,11 +239,19 @@ class MisTicket(models.Model):
         return tickets
 
     def _create_assignment_notification(self, vals):
+        employee_ids = []
+
+        for command in vals.get("employee_ids",[]):
+            if command[0] == 6:
+                employee_ids.extend(command[2])
+            elif command[0] == 4:
+                employee_ids.append(command[1])
+
+
         employee_ids = [
-            id
-            for employee in vals.get("employee_ids", [])
-            for id in employee[2]
-            if id not in self.employee_ids.ids
+            employee_id
+            for employee_id in employee_ids
+            if employee_id not in self.employee_ids.ids
         ]
         recipient = self.env["hr.employee"].browse(employee_ids).user_id
         if recipient:
@@ -281,22 +289,31 @@ class MisTicket(models.Model):
     def _schedule_activities(self, vals):
         """
         Schedule activities for newly assigned employees in a ticket.
-
-        Args:
-            vals (dict): Contains updates for an existing ticket.
         """
         for ticket in self:
+            employee_ids = []
+
+            for command in vals.get("employee_ids", []):
+                if command[0] == 6:
+                    # Replace all employees
+                    employee_ids.extend(command[2])
+                elif command[0] == 4:
+                    # Add one employee
+                    employee_ids.append(command[1])
+
             employee_ids = [
-                id
-                for employee in vals.get("employee_ids", [])
-                for id in employee[2]
-                if id not in ticket.employee_ids.ids
+                employee_id
+                for employee_id in employee_ids
+                if employee_id not in ticket.employee_ids.ids
             ]
+
             summary = _(f"Complain {ticket.ticket_id} has been assigned.")
+
             user_ids = self.env["hr.employee"].browse(employee_ids).user_id
+
             for user_id in user_ids:
                 if user_id:
-                    self.activity_schedule(
+                    ticket.activity_schedule(
                         "mail.mail_activity_data_todo",
                         user_id=user_id.id,
                         summary=summary,
@@ -305,14 +322,15 @@ class MisTicket(models.Model):
     def write(self, vals):
         for rec in self:
             if "employee_ids" in vals:
-                self._create_assignment_notification(vals)
-                self._schedule_activities(vals)
+                rec._create_assignment_notification(vals)
+                rec._schedule_activities(vals)
+
             if "stage_id" in vals:
                 new_stage = self.env["mis.ticket.stage"].browse(vals["stage_id"])
                 if new_stage.is_completed:
                     vals["completed_stage_start_date"] = fields.Datetime.now()
-        ticket = super().write(vals)
-        return ticket
+
+        return super().write(vals)
 
 
 class MisTicketStage(models.Model):

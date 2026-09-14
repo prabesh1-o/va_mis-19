@@ -85,5 +85,9 @@ class ResUsers(models.Model):
             "sticky": sticky,
         }
 
-        notifications = [[partner, "web.notify", [bus_message]] for partner in target]
-        self.env["bus.bus"]._sendmany(notifications)
+        for partner in target:
+            self.env["bus.bus"]._sendone(
+                partner,
+                "web.notify",
+                bus_message,
+            )
