@@ -14,5 +14,5 @@ class HrEmployee(models.Model):
 
     def action_self_attendance_toggle(self):
         self.ensure_one()
-        self._attendance_action_change()
+        self.sudo()._attendance_action_change()
         return True
