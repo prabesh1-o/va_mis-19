@@ -63,7 +63,7 @@ class MisDevice(models.Model):
         return {
             "name": "Customers",
             "type": "ir.actions.act_window",
-            "view_mode": "kanban,tree,form",
+            "view_mode": "kanban,list,form",
             "res_model": "res.partner",
             "domain": [("id", "in", partner_ids)],
         }
