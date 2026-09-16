@@ -166,6 +166,7 @@
                             <!--Tax
                             totals-->
                             <t t-set="tax_totals" t-value="o.tax_totals" />
+                            <t t-set="currency" t-value="o.currency_id" />
                             <t t-call="account.document_tax_totals" />
 
                             <!--Payments-->
