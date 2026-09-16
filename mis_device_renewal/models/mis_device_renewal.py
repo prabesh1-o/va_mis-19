@@ -341,6 +341,7 @@ class MisDeviceRenewal(models.Model):
                             "name": f"Renewal({service.name})",
                             "quantity": count,
                             "price_unit": price,
+                            "tax_ids": [(6, 0, devices.mapped("tax_id").ids)],
                         },
                     )
                     for price, count in prices_count.items()
